@@ -1,0 +1,18 @@
+.header {
+    margin: 0;
+    background-color: hsla(240, 63%, 35%, 0.7);
+    height: 60px;
+}
+
+.logo {
+    text-decoration: none;
+    color: orangered;
+    font-weight: bold;
+    font-size: 20px;
+    padding-left: 20px;
+    margin-top: 10px;
+}
+
+.logo:hover {
+    color: hsla(16, 100%, 50%, 0.774);
+}
