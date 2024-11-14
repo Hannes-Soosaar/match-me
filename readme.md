@@ -15,16 +15,16 @@
 1. Clone the repository: 
 ```git clone https://gitea.kood.tech/karl-hendrikkahn/match-me.git```.
 2. Install backend dependencies (for Go):
-```cd backend```
-```go mod tidy```
+```cd backend```,
+```go mod tidy```.
 3. Install frontend dependencies:
-```cd frontend```
-```npm install```
+```cd frontend```,
+```npm install```.
 4. Start the database, backend, and frontend servers all at the same time by running ```make start``` in the project root directory.
 5. Close the backend and frontend servers by pressing ```Ctrl+C``` in the terminal.
 6. Close the database server with ```make stop-db```.
 
 #### Other helpful commands
-Check if the docker container is running with ```docker ps```.
-Stop the database server by running ```make stop-db``` in the project root directory.
-Reset the database with ```make reset-db``` in the project root directory.
+Check if the docker container is running with ```docker ps```.<br>
+Stop the database server by running ```make stop-db``` in the project root directory.<br>
+Reset the database with ```make reset-db``` in the project root directory.<br>
