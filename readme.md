@@ -26,5 +26,5 @@
 
 #### Other helpful commands
 Check if the docker container is running with ```docker ps```.<br>
-Stop the database server by running ```make stop-db``` in the project root directory.<br>
+Start only the database server by running ```make start-db``` in the project root directory.<br>
 Reset the database with ```make reset-db``` in the project root directory.<br>
