@@ -4,7 +4,7 @@ start:
 # Start frontend and backend at the same time
 	./frontend/node_modules/.bin/concurrently --kill-others-on-fail \
 		"make start-db"\
-		"sh -c 'cd backend && go run main.go'"\
+		"sh -c 'sleep 3 && cd backend && go run main.go'"\
 		"cd frontend && npm start" 
 
 make-executable:
