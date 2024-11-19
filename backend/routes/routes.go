@@ -9,7 +9,8 @@ import (
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
 
-	router.HandleFunc("/login", handlers.GetLoginPage).Methods("GET")
+	router.HandleFunc("/login", handlers.LoginHandler).Methods("POST")
+	router.HandleFunc("/register", handlers.RegisterHandler).Methods("POST")
 
 	return router
 }

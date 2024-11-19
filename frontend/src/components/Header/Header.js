@@ -8,6 +8,9 @@ function Header() {
             <Link to='/' className="logo">
                 Match me
             </Link>
+            <Link to='/login' className="signup">
+                Sign up/login
+            </Link>
         </header>
     )
 }

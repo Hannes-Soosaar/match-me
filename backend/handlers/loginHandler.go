@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func GetLoginPage(w http.ResponseWriter, r *http.Request) {
+func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Login page!", "text/plain")
 
 	fmt.Fprintln(w, "Welcome to the login page!")

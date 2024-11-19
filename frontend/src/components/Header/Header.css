@@ -1,0 +1,23 @@
+.header {
+    margin: 0;
+    background-color: #FF6969;
+    height: 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.logo,
+.signup {
+    text-decoration: none;
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: 20px;
+    margin-bottom: 4px;
+}
+
+.logo:hover,
+.signup:hover {
+    color: hsla(0, 0%, 96%, 0.7);
+}
