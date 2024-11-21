@@ -6,6 +6,8 @@ import (
 	"match_me_backend/db"
 	"match_me_backend/routes"
 	"net/http"
+
+	"github.com/joho/godotenv"
 )
 
 func main() {
@@ -13,6 +15,11 @@ func main() {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	fmt.Println("Backend server started with database connection verified.")
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
 
 	router := routes.InitRoutes()
 

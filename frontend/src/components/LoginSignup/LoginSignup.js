@@ -8,9 +8,15 @@ const LoginSignup = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [login, setLogin] = useState(false);
+    const [register, setRegister] = useState(false);
 
     const handleSubmit = async (e, isLoginState) => {
         e.preventDefault();
+        setLoading(true);
+        setErrorMessage(null);
 
         const url = isLoginState ? '/login' : '/register';
 
@@ -21,20 +27,21 @@ const LoginSignup = () => {
 
         try {
             const response = await axios.post(url, payload);
-            console.log('Response:', response.data);
-            alert(response.data.message)
-        } catch (error) {
-            if (error.response) {
-                const errorMessage = error.response.data.error
 
-                if (error.response.status === 400) {
-                    alert(errorMessage)
-                } else if (error.response.status === 409) {
-                    alert(errorMessage);
-                } else {
-                    alert(errorMessage)
-                }
+            if (isLoginState) {
+                localStorage.setItem('token', response.data.token)
+                alert('Login successful')
+            } else {
+                alert('Sign-up successful, please log in')
             }
+        } catch (error) {
+            const errorMessage = error.response?.data?.error || 'An error occurred, please try again.'
+            setErrorMessage(errorMessage)
+            alert(errorMessage)
+        } finally {
+            setLoading(false);
+            setLogin(false);
+            setRegister(false);
         }
     };
 
@@ -69,15 +76,17 @@ const LoginSignup = () => {
                         className='submit'
                         onClick={(e) => {
                             handleSubmit(e, false);
+                            setRegister(true)
                         }}>
-                        Sign Up
+                        {loading && register ? 'Signing up...' : 'Sign up'}
                     </div>
                     <div
                         className='submit'
                         onClick={(e) => {
                             handleSubmit(e, true);
+                            setLogin(true)
                         }}>
-                        Log In
+                        {loading && login ? 'Logging in...' : 'Log In'}
                     </div>
                 </div>
             </div>
