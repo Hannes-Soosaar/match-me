@@ -16,7 +16,7 @@ const LoginSignup = () => {
     const handleSubmit = async (e, isLoginState) => {
         e.preventDefault();
         setLoading(true);
-        setErrorMessage(null);
+        //setErrorMessage(null);
 
         const url = isLoginState ? '/login' : '/register';
 
@@ -30,14 +30,17 @@ const LoginSignup = () => {
 
             if (isLoginState) {
                 localStorage.setItem('token', response.data.token)
-                alert('Login successful')
+                //alert('Login successful') - probably don't need alerts, just use errorMessage to send a message and then redirect
+                setErrorMessage('Login successful')
+                window.location.href = '/dashboard';
             } else {
-                alert('Sign-up successful, please log in')
+                //alert('Sign-up successful, please log in')
+                setErrorMessage('Sign-up successful, please log in')
             }
         } catch (error) {
+            setErrorMessage(null);
             const errorMessage = error.response?.data?.error || 'An error occurred, please try again.'
             setErrorMessage(errorMessage)
-            alert(errorMessage)
         } finally {
             setLoading(false);
             setLogin(false);
@@ -49,7 +52,7 @@ const LoginSignup = () => {
         <div>
             <div className='login-container'>
                 <div className='login-header'>
-                    <div className='login-text'>Sign Up or Log In</div>
+                    <div className='login-text'>{errorMessage ? errorMessage : 'Sign Up or Log In'}</div>
                 </div>
                 <div className='inputs'>
                     <div className='input'>
