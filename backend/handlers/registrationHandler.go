@@ -8,7 +8,7 @@ import (
 	"regexp"
 )
 
-type User struct {
+type RegLoginUser struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
@@ -20,7 +20,7 @@ type ErrorResponse struct {
 }
 
 func RegisterHandler(w http.ResponseWriter, r *http.Request) {
-	var user User
+	var user RegLoginUser
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 

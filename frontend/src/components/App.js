@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Header from './Header/Header';
 import Landing from './Landing/Landing';
 import LoginSignup from './LoginSignup/LoginSignup';
+import Dashboard from './Dashboard/Dashboard';
 
 function App() {
 
@@ -18,6 +19,9 @@ function App() {
           <Route
             path='/login'
             element={!isAuthenticated ? <LoginSignup /> : <Navigate to="/" />} />
+          <Route
+            path='/dashboard'
+            element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
         </Routes>
       </div>
     </BrowserRouter>

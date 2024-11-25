@@ -10,7 +10,7 @@ import (
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
-	var user User
+	var user RegLoginUser
 
 	err := json.NewDecoder(r.Body).Decode(&user)
 
