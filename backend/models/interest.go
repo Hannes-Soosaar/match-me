@@ -4,6 +4,6 @@ package models
 // The interest name as pre-made
 
 type Interests struct {
-	ID int `json:"id"`
+	ID           int    `json:"id"`
 	InterestName string `json:"interestName"`
 }

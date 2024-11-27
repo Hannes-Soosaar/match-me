@@ -1,10 +1,7 @@
 package models
 
 type MultipleChoiceQuestion struct {
-	ID int `json:"id"`
+	ID        int      `json:"id"`
 	Questions []string `json:"questions"`
-	Answer int 	`json:"answer"`
+	Answer    int      `json:"answer"`
 }
-
-
-
