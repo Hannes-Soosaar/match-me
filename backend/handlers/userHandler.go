@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"match_me_backend/db"
 	"net/http"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -45,11 +46,16 @@ func GetMeHandler(w http.ResponseWriter, r *http.Request) {
 }
 =======
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request){
-	queryToken := r.URL.Query().Get("token")
-	if queryToken != "" {
-		fmt.Println("Token from query:", queryToken)
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		return
 	}
-	fmt.Println("Running the function")
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+	fmt.Println("Extracted JWT:", token)
+
+	w.Write([]byte("Access granted."))
 }
 
 
