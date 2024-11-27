@@ -16,11 +16,11 @@ reset-db: make-executable
 
 # Starts the database // HS removed the hyphen to make it work in WSL2 
 start-db:
-	docker-compose up -d
+	docker compose up -d
 
 # Stops the database // HS removed the hyphen to make it work in WSL2 
 stop-db:
-	docker-compose down
+	docker compose down
 
 backend:
-	docker-compose up -d && cd backend && go run .
+	cd backend && go run .
