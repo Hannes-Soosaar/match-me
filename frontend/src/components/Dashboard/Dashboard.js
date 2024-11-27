@@ -9,7 +9,7 @@ const Landing = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const token = localStorage.getItem('authToken');
+                const token = localStorage.getItem('token');
                 if (!token) {
                     setError('No token found'); // Handle missing token
                     setLoading(false);

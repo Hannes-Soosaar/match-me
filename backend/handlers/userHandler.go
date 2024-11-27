@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"match_me_backend/auth"
 	"match_me_backend/db"
 	"net/http"
 	"strings"
@@ -53,9 +54,21 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 	fmt.Println("Extracted JWT:", token)
-		user.ID = 9001;
-		user.Username ="test"
-		user.ProfilePicture ="my picture"
-	w.Write([]byte("Access granted."))
-	json.NewEncoder(w).Encode(user)
+
+	currentUserID, err := auth.ExtractUserIDFromToken(token) // ERROR HERE
+
+	if err != nil {
+		fmt.Println("Error", err)
+		return
+	}
+
+	fmt.Println("Extracted userId:", currentUserID)
+	// how to get the id from the token.
+
+	user.ID = 9001
+	user.Username = "test"
+	user.ProfilePicture = "my picture"
+	w.Write([]byte("Access granted.")) // did not work.
+	json.NewEncoder(w).Encode(user)    // did not send back
 }
+
