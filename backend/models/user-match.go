@@ -1,5 +1,7 @@
 package models
 
+import "time"
+
 // There will be a function to calculate a score for two users.
 // how to page
 // how many scores should we calculate
@@ -10,5 +12,5 @@ type UsersMatches struct {
 	UserID1   int     `json:"userId1"`
 	UserID2   int     `json:"userId2"`
 	MatchScore     int  `json:"MatchScore"`
-	CreatedAt float64 `json:"createdAt"`
+	CreatedAt time.Time `json:"createdAt"`
 }
