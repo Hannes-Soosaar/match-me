@@ -43,17 +43,19 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 func GetMeHandler(w http.ResponseWriter, r *http.Request) {
 
 }
-func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request){
+
+func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
+	var user UserResponse
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized", http.StatusUnauthorized)
 		return
 	}
-
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 	fmt.Println("Extracted JWT:", token)
-
+		user.ID = 9001;
+		user.Username ="test"
+		user.ProfilePicture ="my picture"
 	w.Write([]byte("Access granted."))
+	json.NewEncoder(w).Encode(user)
 }
-
-
