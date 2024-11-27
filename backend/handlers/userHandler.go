@@ -40,11 +40,9 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
-<<<<<<< HEAD
 func GetMeHandler(w http.ResponseWriter, r *http.Request) {
 
 }
-=======
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request){
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
@@ -59,4 +57,3 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request){
 }
 
 
->>>>>>> refs/remotes/origin/main
