@@ -35,4 +35,24 @@ CREATE TABLE connections (
  1,
  'Peeter123',
  'I am a gamer'
- );/*
+ );*/
+
+CREATE TABLE interests (
+    id SERIAL PRIMARY KEY,
+    interest_name VARCHAR(50) NOT NULL,
+),
+
+/* The JSNOB is  a new type not used before needs testing*/
+
+CREATE TABLE multiple_choice_questions (
+    id SERIAL PRIMARY KEY,          -- Unique identifier for each question
+    questions JSONB NOT NULL,       -- Array of questions stored as JSON
+    answer INT NOT NULL             -- Index of the correct answer
+);
+
+-- INSERT INTO multiple_choice_questions (questions, answer)
+-- VALUES (
+--     '["Option A", "Option B", "Option C", "Option D"]'::jsonb,
+--     2
+-- );
+
