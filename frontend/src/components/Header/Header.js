@@ -12,9 +12,12 @@ function Header() {
 
     return (
         <header className="header">
-            <Link to='/' className="logo">
-                Match me
-            </Link>
+            {!isAuthenticated ? (
+                <Link to='/' className="logo">
+                    Match me
+                </Link>) : (<Link to='/dashboard' className="logo">
+                    Match me
+                </Link>)}
             {!isAuthenticated ? (
                 <Link to='/login' className='signup'>
                     Sign up/Login

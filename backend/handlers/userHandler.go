@@ -38,3 +38,7 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(user)
 }
+
+func GetMeHandler(w http.ResponseWriter, r *http.Request) {
+
+}
