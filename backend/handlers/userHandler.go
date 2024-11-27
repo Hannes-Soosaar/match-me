@@ -38,3 +38,13 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(user)
 }
+
+func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request){
+	queryToken := r.URL.Query().Get("token")
+	if queryToken != "" {
+		fmt.Println("Token from query:", queryToken)
+	}
+	fmt.Println("Running the function")
+}
+
+
