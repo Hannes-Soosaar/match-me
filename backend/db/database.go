@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"fmt"
+	"match_me_backend/models"
 
 	_ "github.com/lib/pq"
 )
@@ -25,16 +26,28 @@ func InitDB() error {
 	return nil
 }
 
-type User struct {
-	ID       int    `json:"id"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
 
-func GetUserByEmail(email string) (*User, error) {
+func CloseDB() {
+	if DB != nil {
+		err := DB.Close()
+		if err != nil {
+			fmt.Printf("Error closing database: %v\n", err)
+		} else {
+			fmt.Println("Database connection closed successfully")
+		}
+	}
+}
+// moved it to the sturcure defind in models.
+// type User struct {
+// 	ID       int    `json:"id"`
+// 	Email    string `json:"email"`
+// 	Password string `json:"password"`
+// }
+
+func GetUserByEmail(email string) (*models.User, error) {
 	query := "SELECT id, email, password_hash FROM users WHERE email = $1"
 
-	var user User
+	var user models.User
 	err := DB.QueryRow(query, email).Scan(&user.ID, &user.Email, &user.Password)
 	if err != nil {
 		if err == sql.ErrNoRows {
