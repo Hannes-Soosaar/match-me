@@ -13,6 +13,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/register", handlers.RegisterHandler).Methods("POST")
 	router.HandleFunc("/users/{id}", handlers.GetUserHandler).Methods("GET")
 	router.HandleFunc("/me", handlers.GetCurrentUserHandler).Methods("GET")
+	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
 	return router
 }
