@@ -8,5 +8,6 @@ package models
 type UserInterests struct {
 	ID         int `json:"id"`
 	UserID     int `json:"userId"`
-	InterestID int `json:"answer"`
+	InterestID int `json:"interestId"`
+	Status string `json:"status"`
 }

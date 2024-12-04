@@ -18,6 +18,8 @@ type UserResponse struct {
 	ProfilePicture string `json:"profile_picture"`
 }
 
+
+//TODO: move to  db user_queries
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
