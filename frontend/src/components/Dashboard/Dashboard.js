@@ -24,6 +24,7 @@ const Landing = () => {
                 });
 
                 setUserData(response.data); // Store the user data
+                console.log(userData)
             } catch (err) {
                 setError(err.response ? err.response.data : 'An error occurred');
             } finally {
@@ -45,12 +46,21 @@ const Landing = () => {
     }
 
     // Render the dashboard if the response is successful
-    return (
-        <div style={{ textAlign: 'center' }}>
-            <h1>Welcome, {userData.username || 'User'}</h1>
-            <p>This is your dashboard.</p>
-        </div>
-    );
+    if (userData.id === 0 || userData.username === '' || userData.profile_picture === '') {
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <h1>Welcome!</h1>
+                <p>Please create your profile using the form below.</p>
+            </div>
+        )
+    } else {
+        return (
+            <div style={{ textAlign: 'center' }}>
+                <h1>Welcome, {userData.username || 'User'}</h1>
+                <p>This is your dashboard.</p>
+            </div>
+        )
+    }
 };
 
 export default Landing;

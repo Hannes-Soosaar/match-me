@@ -56,7 +56,7 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 	fmt.Println("Extracted JWT:", token)
 
-	currentUserID, err := auth.ExtractUserIDFromToken(token) // ERROR HERE
+	currentUserID, err := auth.ExtractUserIDFromToken(token)
 
 	if err != nil {
 		fmt.Println("Error", err)
@@ -64,10 +64,10 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Println("Extracted userId:", currentUserID)
-	// how to get the id from the token.
 
 	user.ID = 9001
 	user.Username = "test"
 	user.ProfilePicture = "my picture"
-	json.NewEncoder(w).Encode(user) // did not send back
+
+	json.NewEncoder(w).Encode(user)
 }
