@@ -47,7 +47,7 @@ const Landing = () => {
     // Render the dashboard if the response is successful
     return (
         <div style={{ textAlign: 'center' }}>
-            <h1>Welcome, {userData.name || 'User'}</h1>
+            <h1>Welcome, {userData.username || 'User'}</h1>
             <p>This is your dashboard.</p>
         </div>
     );

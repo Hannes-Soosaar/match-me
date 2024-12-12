@@ -18,8 +18,7 @@ type UserResponse struct {
 	ProfilePicture string `json:"profile_picture"`
 }
 
-
-//TODO: move to  db user_queries
+// TODO: move to  db user_queries
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -70,7 +69,5 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	user.ID = 9001
 	user.Username = "test"
 	user.ProfilePicture = "my picture"
-	w.Write([]byte("Access granted.")) // did not work.
-	json.NewEncoder(w).Encode(user)    // did not send back
+	json.NewEncoder(w).Encode(user) // did not send back
 }
-

@@ -36,13 +36,13 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	jwtSecret := os.Getenv("JWT_SECRET")
+	var jwtSecret = os.Getenv("JWT_SECRET")
 	if jwtSecret == "" {
 		sendErrorResponse(w, "JWT_SECRET not set in environment", http.StatusInternalServerError)
 		return
 	}
 
-	token, err := auth.GenerateJWT(existingUser.ID, jwtSecret)
+	token, err := auth.GenerateJWT(existingUser.ID)
 	if err != nil {
 		sendErrorResponse(w, "Error generating JWT", http.StatusInternalServerError)
 		return
@@ -53,4 +53,4 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 //User-Match Handler
-	// Compare Scores
+// Compare Scores
