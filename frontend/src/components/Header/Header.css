@@ -9,7 +9,8 @@
 }
 
 .logo,
-.signup {
+.signup,
+.nav-link {
     text-decoration: none;
     color: whitesmoke;
     font-weight: bold;
@@ -17,7 +18,19 @@
     margin-bottom: 4px;
 }
 
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+}
+
 .logo:hover,
-.signup:hover {
+.signup:hover,
+.nav-link:hover {
     color: hsla(0, 0%, 96%, 0.7);
 }

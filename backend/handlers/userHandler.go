@@ -65,9 +65,9 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("Extracted userId:", currentUserID)
 
-	user.ID = 9001
-	user.Username = "test"
-	user.ProfilePicture = "my picture"
+	// user.ID = 9001
+	// user.Username = "test"
+	// user.ProfilePicture = "my picture"
 
 	json.NewEncoder(w).Encode(user)
 }

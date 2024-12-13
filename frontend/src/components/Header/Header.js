@@ -7,35 +7,49 @@ function Header() {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        localStorage.removeItem('profileExists');
         window.location.href = '/login';
     }
 
     return (
         <header className="header">
-            {!isAuthenticated ? (
+            <div className="nav-left">
                 <Link to='/' className="logo">
                     Match me
-                </Link>) : (<Link to='/dashboard' className="logo">
-                    Match me
-                </Link>)}
-            {!isAuthenticated ? (
-                <Link to='/login' className='signup'>
-                    Sign up/Login
                 </Link>
-            ) : (
-                <Link
-                    to='#'
-                    className='signup'
-                    onClick={(e) => {
-                        e.preventDefault();
-                        handleLogout();
-                    }}
-                >
-                    Logout
-                </Link>
-            )}
+                {isAuthenticated && (
+                    <>
+                        <Link to="/dashboard" className="nav-link">
+                            Dashboard
+                        </Link>
+                        <Link to="/profile" className="nav-link">
+                            Profile
+                        </Link>
+                    </>
+                )}
+            </div>
+
+
+            <div className="nav-right">
+                {!isAuthenticated ? (
+                    <Link to="/login" className="signup">
+                        Sign up/Login
+                    </Link>
+                ) : (
+                    <Link
+                        to="#"
+                        className="signup"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            handleLogout();
+                        }}
+                    >
+                        Logout
+                    </Link>
+                )}
+            </div>
         </header>
-    )
+    );
 }
 
 export default Header;

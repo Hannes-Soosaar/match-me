@@ -5,23 +5,30 @@ import Header from './Header/Header';
 import Landing from './Landing/Landing';
 import LoginSignup from './LoginSignup/LoginSignup';
 import Dashboard from './Dashboard/Dashboard';
+import Profile from './Profile/Profile';
 
 function App() {
 
   const isAuthenticated = !!localStorage.getItem('token');
+  const profileNotExist = localStorage.getItem('profileExists') !== 'doesNotExist';
 
   return (
     <BrowserRouter>
       <div>
         <Header />
         <Routes>
-          <Route exact path='/' element={<Landing />} />
+          <Route exact
+            path='/'
+            element={isAuthenticated && profileNotExist ? <Navigate to="/profile" /> : <Landing />} />
           <Route
             path='/login'
             element={!isAuthenticated ? <LoginSignup /> : <Navigate to="/" />} />
           <Route
             path='/dashboard'
             element={isAuthenticated ? <Dashboard /> : <Navigate to="/" />} />
+          <Route
+            path='/profile'
+            element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
         </Routes>
       </div>
     </BrowserRouter>
