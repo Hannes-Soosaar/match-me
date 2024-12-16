@@ -4,6 +4,7 @@ CREATE TABLE users (
     password_hash VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -12,12 +13,14 @@ CREATE TABLE profiles (
     profile_picture TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
 CREATE TABLE bio_points (
     id SERIAL PRIMARY KEY,
     profile_id INT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
     question VARCHAR(50) NOT NULL,
     answer TEXT NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS connections (
     id SERIAL PRIMARY KEY,
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -40,7 +43,6 @@ CREATE TABLE IF NOT EXISTS connections (
 CREATE TABLE IF NOT EXISTS categories(
     id SERIAL PRIMARY KEY,
     category VARCHAR(255) NOT NULL
-
 );
 
 INSERT INTO categories (category)
@@ -115,8 +117,6 @@ VALUES
 (8,'Chinese')
 ;
 
-
-
 /* The JSNOB is  a new type not used before needs testing*/
 
 CREATE TABLE multiple_choice_questions (
@@ -130,6 +130,3 @@ CREATE TABLE multiple_choice_questions (
 --     '['Option A', 'Option B', 'Option C', 'Option D']'::jsonb,
 --     2
 -- );
-
-
-
