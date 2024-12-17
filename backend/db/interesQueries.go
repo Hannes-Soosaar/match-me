@@ -7,11 +7,14 @@ func GetInterestByUserId(userID int) (*models.Interests, error) {
 	return &models.Interests{}, nil
 }
 
+//TODO Marko
+
 // This function will get the Interest based on a query from the FE sending back the category and interest Id
 
 func AddInterestToUser(interestID int, userID int) error {
 	return nil
 }
+
 //Gets all the interest for FE rendering
 func GetAllInterest() (*[]models.Interests, error) {
 	return nil, nil

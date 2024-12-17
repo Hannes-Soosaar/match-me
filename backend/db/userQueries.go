@@ -22,7 +22,6 @@ func GetUserByEmail(email string) (*models.User, error) {
 }
 
 //Rename to AddUser
-
 func SaveUser(email string, password_hash string) error {
 	query := "INSERT INTO users (email, password_hash) VALUES ($1, $2)"
 	_, err := DB.Exec(query, email, password_hash)
@@ -68,10 +67,12 @@ func AddUserConnection(userID1 int, userID2 int)(error){
 	return nil
 }
 
+//Change the "satus" of a connection
 func ModifyUserConnection(userID int )(error){
 	return nil
 }
 
+//!This need to have two ID's
 func RemoveUserConnection(userID int) (error){
 	return nil 
 }

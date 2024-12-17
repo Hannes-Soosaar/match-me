@@ -15,7 +15,7 @@ type Profiles struct {
 
 // CREATE TABLE profiles (
 //     id SERIAL PRIMARY KEY,
-//     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+//     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,  //If there are no foreign key constraints it will not cascade 
 //     username VARCHAR(20) NOT NULL UNIQUE,
 //     about_me TEXT,
 //     profile_picture TEXT,
