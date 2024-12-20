@@ -76,6 +76,21 @@
     margin: 0 30px;
 }
 
+.input-profile-pic img {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.input-profile-pic img:hover {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
 .submit-container {
     display: flex;
     gap: 30px;
