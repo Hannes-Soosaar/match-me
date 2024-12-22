@@ -74,6 +74,7 @@ func ModifyUserConnection(userID int )(error){
 
 //!This need to have two ID's
 func RemoveUserConnection(userID int) (error){
+	// GET the logged in userID from session to avoid potential 
 	return nil 
 }
 

@@ -31,3 +31,24 @@ VALUES
 ('Vibe'), --7
 ('Language') --8
 ;
+
+
+
+
+CREATE TABLE IF NOT EXISTS user_matches(
+    id SERIAL PRIMARY KEY,
+    user_id_1 INTEGER,
+    user_id_2 INTEGER,
+    match_score INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+CREATE TABLE user_interests (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    interest_id INTEGER,
+    status  VARCHAR(20)
+);
+
+SELECT * FROM users;
