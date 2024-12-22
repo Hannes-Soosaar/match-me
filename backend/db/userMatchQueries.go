@@ -5,7 +5,8 @@ import (
 	"match_me_backend/models"
 )
 
-// Get all the user matches
+//TODO:
+
 func GetAllUserMatches() ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches"
 	rows, err := DB.Query(query)
@@ -26,4 +27,11 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 		return nil, fmt.Errorf("error during row iterations: %w", err)
 	}
 	return userMatches, nil
+}
+
+func updateUserMatchScore(currentUserID, userID2, userScore int) error {
+	// Get all the matches where either user ID1 or user ID2 is the same as currentUserID
+	// query := "SELECT id FROM user_matches WHERE user_id_1 =?"
+
+	return nil
 }

@@ -1,23 +1,9 @@
--- INSERT INTO profiles (
---         user_id,
---         username,
---         about_me,
---         profile_picture
---     )
--- VALUES (
---         1,
---         'Peeter123',
---         'I am a gamer',
---         'picture path'
---     );
 
 SELECT * FROM users WHERE id = 1;
-
 
 CREATE TABLE IF NOT EXISTS categories(
     id SERIAL PRIMARY KEY,
     category VARCHAR(255) NOT NULL
-
 );
 
 INSERT INTO categories (category)
@@ -31,9 +17,6 @@ VALUES
 ('Vibe'), --7
 ('Language') --8
 ;
-
-
-
 
 CREATE TABLE IF NOT EXISTS user_matches(
     id SERIAL PRIMARY KEY,
@@ -50,5 +33,3 @@ CREATE TABLE user_interests (
     interest_id INTEGER,
     status  VARCHAR(20)
 );
-
-SELECT * FROM users;

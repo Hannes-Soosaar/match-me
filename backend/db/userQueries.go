@@ -6,7 +6,6 @@ import (
 	"match_me_backend/models"
 )
 
-
 func GetUserByEmail(email string) (*models.User, error) {
 	query := "SELECT id, email, password_hash FROM users WHERE email = $1"
 	var user models.User
@@ -45,7 +44,6 @@ func GetUserConnectionsByUserID(userID int) (*[]models.UserConnections, error) {
 	query := "SELECT * FROM users WHERE id = $1" // TODO: need to add check for status 
 	rows, err := DB.Query(query, userID)
 	var connections []models.UserConnections
-
 	if err != nil {
 		return nil, fmt.Errorf("error executing query: %w", err)
 	}
@@ -72,8 +70,7 @@ func ModifyUserConnection(userID int )(error){
 	return nil
 }
 
-//!This need to have two ID's
-func RemoveUserConnection(userID int) (error){
+func RemoveUserConnection(currentUserID, userID2 int) (error){
 	// GET the logged in userID from session to avoid potential 
 	return nil 
 }
