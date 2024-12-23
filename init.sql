@@ -1,30 +1,45 @@
+CREATE EXTENSION IF NOT EXISTS postgis;
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
+    uuid UUID UNIQUE NOT NULL, 
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(100) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    user_city VARCHAR(50),
+	register_location GEOGRAPHY(POINT, 4326), 
+	browser_location GEOGRAPHY(POINT, 4326)
 );
 
 CREATE TABLE profiles (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    username VARCHAR(20) NOT NULL UNIQUE,
+    uuid UUID UNIQUE NOT NULL,
+    username VARCHAR(20) UNIQUE,
     about_me TEXT,
     profile_picture TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    birthdate DATE
 );
 
 CREATE TABLE bio_points (
     id SERIAL PRIMARY KEY,
-    profile_id INT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL,
     question VARCHAR(50) NOT NULL,
     answer TEXT NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS sessions (
+	id SERIAL PRIMARY KEY,
+	session_guid UUID UNIQUE,
+	user_id UUID
+);
+
 CREATE TABLE IF NOT EXISTS connections (
     id SERIAL PRIMARY KEY,
-    user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    connected_user_id INT NOT NULL REFERENCES USERS(ID) ON DELETE CASCADE
+    user_id UUID NOT NULL ,
+    connected_user_id UUID NOT NULL
 );
 /*INSERT INTO users (email, password_hash)
  VALUES ('test1@example.com', '$2b$10$hashfortest1'),
@@ -59,7 +74,7 @@ VALUES
 
 CREATE TABLE IF NOT EXISTS interests (
     id SERIAL PRIMARY KEY,
-    category_id INTEGER NOT NULL,
+    categoryID VARCHAR(255) NOT NULL,
     interest VARCHAR(255) NOT NULL
 );
 
@@ -72,7 +87,6 @@ VALUES
 (1,'MOBA'),
 (1,'Turn Based'),
 (1,'Simulation'),
-(1,'RPG'),
 (1,'A-RPG'),
 (1,'Survival'),
 (1,'PVP'),
@@ -117,9 +131,6 @@ VALUES
 (8,'Chinese')
 ;
 
-
-
-
 /* The JSNOB is  a new type not used before needs testing*/
 
 CREATE TABLE multiple_choice_questions (
@@ -133,31 +144,3 @@ CREATE TABLE multiple_choice_questions (
 --     '['Option A', 'Option B', 'Option C', 'Option D']'::jsonb,
 --     2
 -- );
-
-
-
--- type UsersMatches struct {
--- 	ID         int       `json:"id"`
--- 	UserID1    int       `json:"userId1"`
--- 	UserID2    int       `json:"userId2"`
--- 	MatchScore int       `json:"MatchScore"`
--- 	CreatedAt  time.Time `json:"createdAt"`
--- }
-
-
--- if there is a need to do time zone management we should use TIMESTAMPTZ
-CREATE TABLE IF NOT EXISTS user_matches(
-    id SERIAL PRIMARY KEY,
-    user_id_1 INTEGER,
-    user_id_2 INTEGER,
-    match_score INTEGER,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE TABLE user_interests (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER,
-    interest_id INTEGER,
-    status  VARCHAR(20)
-);
