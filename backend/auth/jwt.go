@@ -10,7 +10,7 @@ import (
 
 var jwtSecret = os.Getenv("JWT_SECRET")
 
-func GenerateJWT(userID int) (string, error) {
+func GenerateJWT(userID string) (string, error) {
 	claims := jwt.MapClaims{
 		"sub": userID,
 		"exp": time.Now().Add(time.Hour * 24).Unix(),
@@ -56,4 +56,3 @@ func ExtractUserIDFromToken(tokenString string) (string, error) {
 
 	return userID, nil // Return the user ID as a string
 }
-
