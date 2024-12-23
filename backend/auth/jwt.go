@@ -28,7 +28,7 @@ func GenerateJWT(userID int) (string, error) {
 }
 
 // Function to extract the user ID from the JWT token
-func ExtractUserIDFromToken(tokenString string) (int, error) {
+func ExtractUserIDFromToken(tokenString string) (string, error) {
 	// Parse the token
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// Validate the token signing method
@@ -39,20 +39,21 @@ func ExtractUserIDFromToken(tokenString string) (int, error) {
 	})
 
 	if err != nil || !token.Valid {
-		return 0, fmt.Errorf("invalid token: %v", err)
+		return "", fmt.Errorf("invalid token: %v", err)
 	}
 
 	// Extract the claims
 	claims, ok := token.Claims.(jwt.MapClaims)
 	if !ok {
-		return 0, fmt.Errorf("unable to parse claims")
+		return "", fmt.Errorf("unable to parse claims")
 	}
 
-	// Extract the userID from claims
-	userID, ok := claims["sub"].(float64)
+	// Extract the userID from claims directly as string
+	userID, ok := claims["sub"].(string)
 	if !ok {
-		return 0, fmt.Errorf("sub not found in claims")
+		return "", fmt.Errorf("sub not found in claims or is not a string")
 	}
 
-	return int(userID), nil // Return the user ID as an integer
+	return userID, nil // Return the user ID as a string
 }
+
