@@ -3,9 +3,10 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
+	"log"
 	"match_me_backend/auth"
 	"match_me_backend/db"
+	"match_me_backend/models"
 	"net/http"
 	"strings"
 
@@ -13,7 +14,7 @@ import (
 )
 
 type UserResponse struct {
-	ID             int    `json:"id"`
+	ID             string `json:"id"`
 	Username       string `json:"username"`
 	ProfilePicture string `json:"profile_picture"`
 }
@@ -23,22 +24,19 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
 
-	var user UserResponse
-
-	err := db.DB.QueryRow(`	SELECT u.id, p.username, p.profile_picture
-							FROM users u
-							JOIN profiles p ON u.id = p.user_id
-							WHERE u.id = $1`, userID).Scan(&user.ID, &user.Username, &user.ProfilePicture)
-
-	if err == sql.ErrNoRows {
-		http.Error(w, "User/Profile not found", http.StatusNotFound)
-		return
-	} else if err != nil {
-		http.Error(w, "Internal server error", http.StatusInternalServerError)
-		fmt.Printf("error: %v\n", err)
+	user, err := db.GetUserByID(userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "User/Profile not found", http.StatusNotFound)
+			log.Printf("User/Profile not found for uuid=%s: %v", userID, err)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error fetching user/profile for uuid=%s: %v", userID, err)
+		}
 		return
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
@@ -47,27 +45,37 @@ func GetMeHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
-	var user UserResponse
+	var user *models.ProfileInformation
+
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
+		log.Printf("Unauthorized: Missing or invalid token")
 		return
 	}
+
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	fmt.Println("Extracted JWT:", token)
+	log.Println("JWT token extracted successfully.")
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
-
 	if err != nil {
-		fmt.Println("Error", err)
+		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
+		log.Printf("Error extracting user ID from token: %v", err)
 		return
 	}
 
-	fmt.Println("Extracted userId:", currentUserID)
+	user, err = db.GetUserInformation(currentUserID)
+	if err != nil {
+		if err.Error() == "user not found" {
+			http.Error(w, "User not found", http.StatusNotFound)
+			log.Printf("User with ID %v not found", currentUserID)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error fetching user information: %v", err)
+		}
+		return
+	}
 
-	// user.ID = 9001
-	// user.Username = "test"
-	// user.ProfilePicture = "my picture"
-
+	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
