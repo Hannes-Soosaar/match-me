@@ -14,6 +14,19 @@ import (
 )
 
 func main() {
+	// Open or create a log file
+	logFile, err := os.OpenFile("server.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	if err != nil {
+		log.Fatalf("Failed to open log file: %v", err)
+	}
+	defer logFile.Close()
+
+	// Set log output to the file
+	log.SetOutput(logFile)
+
+	// Log server start
+	log.Println("Server is starting")
+
 	if err := db.InitDB(); err != nil {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
@@ -21,7 +34,7 @@ func main() {
 
 	defer db.CloseDB()
 
-	err := godotenv.Load()
+	err = godotenv.Load()
 	if err != nil {
 		log.Fatalf("Error loading .env file")
 	}
@@ -42,6 +55,5 @@ func main() {
 		db.CloseDB()
 		os.Exit(0)
 	}()
-
 
 }
