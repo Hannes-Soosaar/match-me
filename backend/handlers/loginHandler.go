@@ -44,7 +44,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if existingUser == nil || !auth.ComparePasswords(existingUser.Password, user.Password) {
+	if existingUser == nil || !auth.ComparePasswords(existingUser.PasswordHash, user.Password) {
 		sendErrorResponse(w, "Email or password is incorrect", http.StatusUnauthorized)
 		log.Println("Email or password is incorrect")
 		return
