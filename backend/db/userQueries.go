@@ -16,7 +16,7 @@ var ErrUserNotFound = errors.New("user not found")
 func GetUserByEmail(email string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash FROM users WHERE email = $1"
 	var user models.User
-	err := DB.QueryRow(query, email).Scan(&user.ID, &user.Email, &user.Password)
+	err := DB.QueryRow(query, email).Scan(&user.ID, &user.Email, &user.PasswordHash)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("no user found with that email")
@@ -31,7 +31,7 @@ func GetUserByEmail(email string) (*models.User, error) {
 func GetUserByUsername(username string) (*models.User, error) {
 	query := "SELECT u.uuid, u.email, u.password_hash FROM users u JOIN profiles p ON u.uuid = p.uuid WHERE p.username = $1"
 	var user models.User
-	err := DB.QueryRow(query, username).Scan(&user.ID, &user.Email, &user.Password)
+	err := DB.QueryRow(query, username).Scan(&user.ID, &user.Email, &user.PasswordHash)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, fmt.Errorf("no user found with that user")
@@ -48,7 +48,7 @@ func GetUserByID(userID string) (*models.User, error) {
 	var user models.User
 
 	row := DB.QueryRow(query, userID)
-	if err := row.Scan(&user.ID, &user.Email, &user.Password); err != nil {
+	if err := row.Scan(&user.ID, &user.Email, &user.PasswordHash); err != nil {
 		if err == sql.ErrNoRows {
 			log.Printf("user not found: %v", err)
 			return nil, fmt.Errorf("user not found: %w", err)

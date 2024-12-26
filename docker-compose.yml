@@ -1,7 +1,7 @@
 
 services:
   db:
-    image: postgres:15 # Specify the PostgreSQL version
+    image: postgis/postgis:15-3.3 # Specify the PostgreSQL version
     container_name: postgres_db
     environment:
       POSTGRES_USER: MatchMeDev

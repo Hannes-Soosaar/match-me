@@ -7,6 +7,7 @@ import LoginSignup from './LoginSignup/LoginSignup';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
 
+
 function App() {
 
   const isAuthenticated = !!localStorage.getItem('token');
@@ -29,9 +30,12 @@ function App() {
           <Route
             path='/profile'
             element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
+          <Route
+            path='/matches'
+            element={isAuthenticated ? <Profile /> : <Navigate to="/matches" />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 }
 
