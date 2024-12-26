@@ -25,6 +25,12 @@ function Header() {
                         <Link to="/profile" className="nav-link">
                             Profile
                         </Link>
+                        <Link to="/matches" className="nav-link">
+                            Matches
+                        </Link>
+                        <Link to="/connections" className="nav-link">
+                            Buddies 
+                        </Link>
                     </>
                 )}
             </div>

@@ -166,7 +166,6 @@ CREATE TABLE IF NOT EXISTS user_matches(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-
 CREATE TABLE user_interests (
     id SERIAL PRIMARY KEY,
     user_id INTEGER,

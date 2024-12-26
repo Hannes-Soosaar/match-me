@@ -2,12 +2,12 @@ package db
 
 import (
 	"fmt"
+	"log"
 	"match_me_backend/models"
 )
 
-//TODO: HS get all the categories to show up.
-
-func GetAllCategories() ([]models.Category, error) {
+func GetAllCategories() (*[]models.Category, error) {
+	log.Println("Getting all categories")
 	query := "SELECT id, category FROM categories"
 	rows, err := DB.Query(query)
 	if err != nil {
@@ -26,5 +26,5 @@ func GetAllCategories() ([]models.Category, error) {
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("error during row iterations: %w", err)
 	}
-	return categories, nil
+	return &categories, nil
 }
