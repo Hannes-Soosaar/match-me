@@ -17,6 +17,17 @@ func SetUsername(userID, username string) error {
 	return nil
 }
 
+func GetUsername(userID string) string {
+	var queriedUsername string
+	userQuery := "SELECT username FROM profiles WHERE uuid = $1"
+	err := DB.QueryRow(userQuery, userID).Scan(queriedUsername)
+	if err != nil {
+		log.Printf("Error updating username for uuid=%s: %v", userID, err)
+		return ""
+	}
+	return queriedUsername
+}
+
 func SetCity(userID, city, longitude, latitude string) error {
 	userQuery := `
 	UPDATE users 
@@ -34,6 +45,17 @@ func SetCity(userID, city, longitude, latitude string) error {
 	return nil
 }
 
+func GetCity(userID string) string { //Need to work on coordinates
+	var queriedCity string
+	userQuery := "SELECT city FROM users WHERE uuid = $1"
+	err := DB.QueryRow(userQuery, userID).Scan(queriedCity)
+	if err != nil {
+		log.Printf("Error updating city for uuid=%s: %v", userID, err)
+		return ""
+	}
+	return queriedCity
+}
+
 func SetAbout(userID, about string) error {
 	userQuery := "UPDATE profiles SET about_me = $1 WHERE uuid = $2"
 	_, err := DB.Exec(userQuery, about, userID)
@@ -45,6 +67,17 @@ func SetAbout(userID, about string) error {
 	return nil
 }
 
+func GetAbout(userID string) string {
+	var queriedAbout string
+	userQuery := "SELECT about_me FROM profiles WHERE uuid = $1"
+	err := DB.QueryRow(userQuery, userID).Scan(queriedAbout)
+	if err != nil {
+		log.Printf("Error updating city for uuid=%s: %v", userID, err)
+		return ""
+	}
+	return queriedAbout
+}
+
 func SetBirthdate(userID string, birthdate time.Time) error {
 	userQuery := "UPDATE profiles SET birthdate = $1 WHERE uuid = $2"
 	_, err := DB.Exec(userQuery, birthdate, userID)
@@ -54,4 +87,34 @@ func SetBirthdate(userID string, birthdate time.Time) error {
 	}
 
 	return nil
+}
+
+func GetBirthdate(userID string) (string, int) {
+	var queriedBirthdate string
+	userQuery := "SELECT birthdate FROM profiles WHERE uuid = $1"
+	err := DB.QueryRow(userQuery, userID).Scan(queriedBirthdate)
+	if err != nil {
+		log.Printf("Error updating city for uuid=%s: %v", userID, err)
+		return "", 0
+	}
+	var age int
+	if queriedBirthdate != "" {
+		birthdayTime, err := time.Parse("2006-01-02T15:04:05Z", queriedBirthdate)
+		if err != nil {
+
+			log.Printf("Error parsing birthday for user_id %s: %v", userID, err)
+			return "", 0
+		}
+
+		currentYear := time.Now().Year()
+		age = currentYear - birthdayTime.Year()
+		if birthdayTime.After(time.Now().AddDate(-age, 0, 0)) {
+			age--
+		}
+	} else {
+
+		age = 0
+	}
+
+	return queriedBirthdate, age
 }
