@@ -6,6 +6,7 @@ import Landing from './Landing/Landing';
 import LoginSignup from './LoginSignup/LoginSignup';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
+import Matches from './Matches/Matches';
 
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <Header />
+        <Header/>
         <Routes>
           <Route exact
             path='/'
@@ -32,7 +33,7 @@ function App() {
             element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
           <Route
             path='/matches'
-            element={isAuthenticated ? <Profile /> : <Navigate to="/matches" />} />
+            element={isAuthenticated ? <Matches/> : <Navigate to="/" />} />
         </Routes>
       </div>
     </BrowserRouter >
