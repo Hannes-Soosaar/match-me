@@ -12,7 +12,6 @@ const Matches = () => {
     const [data, setData] = useState([])
 
 // Substitue data with API call in the future.
-
     const users = [
         {
             imagePath: '/images/user1.jpg',
