@@ -1,1 +1,10 @@
 postman
+
+
+SELECT ST_Distance(
+  ST_SetSRID(ST_MakePoint(lon1, lat1), 4326),
+  ST_SetSRID(ST_MakePoint(lon2, lat2), 4326)
+) AS distance
+FROM your_table;
+
+As the SQL calculation for distance
