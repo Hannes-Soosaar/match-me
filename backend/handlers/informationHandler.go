@@ -15,9 +15,9 @@ type PostUsernameRequest struct {
 }
 
 type PostCitynameRequest struct {
-	City      string `json:"city"`
-	Longitude string `json:"longitude"`
-	Latitude  string `json:"latitude"`
+	City   string `json:"city"`
+	Nation string `json:"country"`
+	Region string `json:"state"`
 }
 
 type PostAboutRequest struct {
@@ -103,14 +103,14 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Ensure that City, Longitude, and Latitude are provided and not empty
-	if body.City == "" || body.Longitude == "" || body.Latitude == "" {
+	if body.City == "" || body.Region == "" || body.Nation == "" {
 		http.Error(w, "City details cannot be empty", http.StatusBadRequest)
 		log.Printf("Error: City, Longitude, or Latitude cannot be empty")
 		return
 	}
 
 	// Call the db function to set the city details for the user
-	err = db.SetCity(currentUserID, body.City, body.Longitude, body.Latitude)
+	err = db.SetCity(currentUserID, body.Nation, body.Region, body.City)
 	if err != nil {
 		http.Error(w, "Error setting the City", http.StatusInternalServerError)
 		log.Printf("Error setting the City: %v", err)

@@ -28,15 +28,17 @@ func GetUsername(userID string) string {
 	return queriedUsername
 }
 
-func SetCity(userID, city, longitude, latitude string) error {
+func SetCity(userID, nation, region, city string) error {
 	userQuery := `
 	UPDATE users 
 	SET 
 		user_city = $1, 
-		register_location = ST_SetSRID(ST_MakePoint($2, $3), 4326) 
+		user_nation = $2,
+		user_region = $3
+		
 	WHERE uuid = $4
 `
-	_, err := DB.Exec(userQuery, city, longitude, latitude, userID)
+	_, err := DB.Exec(userQuery, city, nation, region, userID)
 	if err != nil {
 		log.Printf("Error updating city for uuid=%s: %v", userID, err)
 		return fmt.Errorf("could not update city: %w", err)

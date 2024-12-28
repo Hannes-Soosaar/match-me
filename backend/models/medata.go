@@ -16,7 +16,9 @@ type GetUsername struct {
 }
 
 type GetCity struct {
-	City string `json:"user_city"`
+	City   string `json:"user_city"`
+	Nation string `json:"user_nation"`
+	Region string `json:"user_region"`
 }
 
 type GetAbout struct {

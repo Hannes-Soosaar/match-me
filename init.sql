@@ -2,18 +2,20 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL, 
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(100) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     user_city VARCHAR(50),
+    user_nation VARCHAR(50),
+    user_region VARCHAR(50),
 	register_location GEOGRAPHY(POINT, 4326), 
 	browser_location GEOGRAPHY(POINT, 4326)
 );
 
-CREATE TABLE profiles (
+CREATE TABLE IF NOT EXISTS profiles (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
     username VARCHAR(20) UNIQUE,
@@ -23,7 +25,7 @@ CREATE TABLE profiles (
     birthdate DATE
 );
 
-CREATE TABLE bio_points (
+CREATE TABLE IF NOT EXISTS bio_points (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     question VARCHAR(50) NOT NULL,
@@ -133,7 +135,7 @@ VALUES
 
 /* The JSNOB is  a new type not used before needs testing*/
 
-CREATE TABLE multiple_choice_questions (
+CREATE TABLE IF NOT EXISTS multiple_choice_questions (
     id SERIAL PRIMARY KEY,          -- Unique identifier for each question
     questions JSONB NOT NULL,       -- Array of questions stored as JSON
     answer INT NOT NULL             -- Index of the correct answer
@@ -166,7 +168,7 @@ CREATE TABLE IF NOT EXISTS user_matches(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE TABLE user_interests (
+CREATE TABLE IF NOT EXISTS user_interests (
     id SERIAL PRIMARY KEY,
     user_id INTEGER,
     interest_id INTEGER,
