@@ -22,9 +22,9 @@ func GetTestResultHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 
-	// fmt.Printf("all categories are: %v /n", allCategories)
-	// fmt.Printf("all categories interest are: %v /n", allInterests)
-	fmt.Printf("all categories interest are: %v /n", interestResponseBody)
+	// fmt.Printf("all categories are: %v \n", allCategories)
+	// fmt.Printf("all categories interest are: %v \n", allInterests)
+	fmt.Printf("all categories interest are: %v \n", interestResponseBody)
 	fmt.Println("getting results")
 
 	json.NewEncoder(w).Encode(interestResponseBody)
