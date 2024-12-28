@@ -1,5 +1,15 @@
+
+FE- Display of all user interest.
+
 Get to show all profiles 
+- TODO: use the matches as base for showing all profile
+
 Get to show all matches
+- FE for matches is ready
+- TODO: backend for matches
+
 Design Dashboard
+
 Start work on websockets
 Start a photo server.
+TODO: store photos in the public folder so it can be accessed via standard ENV option.

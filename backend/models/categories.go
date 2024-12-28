@@ -1,8 +1,8 @@
 package models
 
 type Category struct {
-	ID       int    `json:"id"`
-	Category string `json:"CategoryName"`
+	ID           int    `json:"id"`
+	CategoryName string `json:"category_name"`
 }
 
 //! Below is some information for quick access.
@@ -11,8 +11,6 @@ type Category struct {
 //     id SERIAL PRIMARY KEY,
 //     category VARCHAR(255) NOT NULL
 // );
-
-
 
 // const (
 // 	GENRE         = 1

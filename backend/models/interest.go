@@ -5,5 +5,6 @@ package models
 
 type Interests struct {
 	ID           int    `json:"id"`
+	CategoryID   int    `json:"categoryID"`
 	InterestName string `json:"interestName"`
 }
