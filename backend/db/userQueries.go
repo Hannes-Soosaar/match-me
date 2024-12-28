@@ -119,8 +119,8 @@ func GetUserConnectionsByUserID(userID int) (*[]models.UserConnections, error) {
 func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	query := `
         SELECT 
-            p.username, u.email, u.created_at, u.user_city, 
-            p.about_me, p.birthdate
+            p.username, u.email, u.created_at, u.user_city, u.user_nation, u.user_region, 
+            p.about_me, p.birthdate, p.profile_picture
         FROM 
             users u 
         JOIN 
@@ -136,16 +136,22 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	var email sql.NullString
 	var created sql.NullTime
 	var city sql.NullString
+	var nation sql.NullString
+	var region sql.NullString
 	var about sql.NullString
 	var birthdate sql.NullTime
+	var picture sql.NullString
 
 	err := DB.QueryRow(query, userID).Scan(
 		&username,
 		&email,
 		&created,
 		&city,
+		&nation,
+		&region,
 		&about,
 		&birthdate,
+		&picture,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -156,36 +162,66 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 		return nil, fmt.Errorf("error querying user by ID: %w", err)
 	}
 
+	// Calculate age if birthdate is valid
+	var age int
+	if birthdate.Valid {
+		birthdayTime := birthdate.Time
+		currentTime := time.Now()
+		age = currentTime.Year() - birthdayTime.Year()
+		// Adjust age if the birthday hasn't occurred yet this year
+		if birthdayTime.After(currentTime.AddDate(-age, 0, 0)) {
+			age--
+		}
+	}
+
 	// Check if any fields are NULL and assign them to appropriate defaults
-	userInfo.Username = username.String
-	if !username.Valid {
-		userInfo.Username = "" // If the value is NULL, set it to an empty string or whatever default you want
+	userInfo.Username = ""
+	if username.Valid {
+		userInfo.Username = username.String
 	}
 
-	userInfo.Email = email.String
-	if !email.Valid {
-		userInfo.Email = "" // Default to empty string if NULL
+	userInfo.Email = ""
+	if email.Valid {
+		userInfo.Email = email.String
 	}
 
-	userInfo.Created = created.Time
-	if !created.Valid {
-		userInfo.Created = time.Time{} // Default to zero time if NULL
+	userInfo.Created = time.Time{}
+	if created.Valid {
+		userInfo.Created = created.Time
 	}
 
-	userInfo.City = city.String
-	if !city.Valid {
-		userInfo.City = "" // Default to empty string if NULL
+	userInfo.City = ""
+	if city.Valid {
+		userInfo.City = city.String
 	}
 
-	userInfo.About = about.String
-	if !about.Valid {
-		userInfo.About = "" // Default to empty string if NULL
+	userInfo.Nation = ""
+	if nation.Valid {
+		userInfo.Nation = nation.String
 	}
 
-	userInfo.Birthdate = birthdate.Time
-	if !birthdate.Valid {
-		userInfo.Birthdate = time.Time{} // Default to zero time if NULL
+	userInfo.Region = ""
+	if region.Valid {
+		userInfo.Region = region.String
 	}
+
+	userInfo.About = ""
+	if about.Valid {
+		userInfo.About = about.String
+	}
+
+	userInfo.Birthdate = time.Time{}
+	if birthdate.Valid {
+		userInfo.Birthdate = birthdate.Time
+	}
+
+	userInfo.Picture = ""
+	if picture.Valid {
+		userInfo.Picture = picture.String
+	}
+
+	// Set calculated age
+	userInfo.Age = fmt.Sprintf("%d", age) // Convert age to string for userInfo
 
 	return &userInfo, nil
 }

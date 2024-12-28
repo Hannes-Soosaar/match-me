@@ -19,6 +19,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/city", handlers.PostCity).Methods("POST")
 	router.HandleFunc("/about", handlers.PostAbout).Methods("POST")
 	router.HandleFunc("/birthdate", handlers.PostBirthdate).Methods("POST")
+	router.HandleFunc("/picture", handlers.PostProfilePictureHandler).Methods("POST")
 
 	router.HandleFunc("/browserlocation", handlers.BrowserHandler).Methods("POST")
 

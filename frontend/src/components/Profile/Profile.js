@@ -114,7 +114,7 @@ const Profile = () => {
                 const picData = new FormData();
                 picData.append('profilePic', profilePic);
 
-                await axios.post('/me', picData, {
+                await axios.post('/picture', picData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                         Authorization: `Bearer ${authToken}`,

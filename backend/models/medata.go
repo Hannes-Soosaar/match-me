@@ -7,8 +7,12 @@ type ProfileInformation struct {
 	Email     string    `json:"email"`
 	Created   time.Time `json:"created_at"`
 	City      string    `json:"user_city"`
+	Nation    string    `json:"user_nation"`
+	Region    string    `json:"user_region"`
 	About     string    `json:"about_me"`
 	Birthdate time.Time `json:"birthdate"`
+	Age       string    `json:"age"`
+	Picture   string    `json:"profile_picture"`
 }
 
 type GetUsername struct {
