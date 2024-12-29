@@ -115,3 +115,28 @@
     color: hsla(0, 0%, 96%, 0.8);
     background: hsl(0, 100%, 71%, 0.8);
 }
+
+.inputGroup {
+    height: 100px;
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: flex-start; 
+}
+
+.inputField {
+    display: flex;
+    align-items: center; 
+    gap: 10px; 
+}
+
+.inputField h6 {
+    margin: 0; 
+    font-weight: bold;
+    width: 80px; 
+    text-align: right; 
+}
+
+select {
+    width: 200px; 
+}

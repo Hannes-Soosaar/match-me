@@ -23,7 +23,6 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 
@@ -82,7 +81,6 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("Profile picture saved with filename: %s", randomFileName)
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(fmt.Sprintf("Profile picture uploaded successfully! Saved as %s", randomFileName)))
 }

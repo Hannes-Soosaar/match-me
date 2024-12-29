@@ -37,7 +37,6 @@ func PostUsername(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
@@ -83,7 +82,6 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 
 	// Extract the token from the Authorization header
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	// Extract the user ID from the JWT token
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
@@ -132,7 +130,6 @@ func PostAbout(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
@@ -178,7 +175,6 @@ func PostBirthdate(w http.ResponseWriter, r *http.Request) {
 
 	// Extract the token by trimming the 'Bearer ' prefix
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	// Extract the user ID from the token
 	currentUserID, err := auth.ExtractUserIDFromToken(token)

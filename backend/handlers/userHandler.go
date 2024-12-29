@@ -56,7 +56,6 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
@@ -91,12 +90,10 @@ func GetCurrentUserID(r *http.Request) (string, error) {
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-	log.Println("JWT token extracted successfully.")
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		return "", err
 	}
-	log.Println("Extracted currentUserID", currentUserID);
 	return currentUserID, nil
 }

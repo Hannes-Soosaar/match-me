@@ -35,13 +35,14 @@ const Profile = () => {
                 // Populate fields with data, or leave them empty if not provided
                 setUsername(data.username || '');
                 setAboutMe(data.about_me || '');
-                setCountryId(data.user_nation || 0);
-                setStateId(data.user_state || 0);
+                setCountryId(null);
+                setStateId(null);
                 setFormData({
                     country: data.user_nation || '',
                     state: data.user_region || '',
                     city: data.user_city || '',
                 });
+
 
                 // Handle profile picture (default or from backend)
                 if (data.profilePic) {
@@ -133,7 +134,6 @@ const Profile = () => {
     };
 
     const onCountryChange = (country) => {
-        console.log('Selected country:', country);
         if (country?.id && country?.name) {
             setCountryId(country.id); // Update country ID
             setFormData((prevData) => ({
@@ -148,7 +148,6 @@ const Profile = () => {
     };
 
     const onStateChange = (state) => {
-        console.log('Selected state:', state);
         if (state?.id && state?.name) {
             setStateId(state.id); // Update state ID
             setFormData((prevData) => ({
@@ -162,11 +161,10 @@ const Profile = () => {
     };
 
     const handleCitySelect = (city) => {
-        console.log('Selected city:', city);
         if (city?.name) {
             setFormData((prevData) => ({
                 ...prevData,
-                city: city.name, // Store city name
+                city: city.name,
             }));
         } else {
             console.error('Invalid city data received:', city);
@@ -216,7 +214,7 @@ const Profile = () => {
                             required
                         />
                     </div>
-                    <div className='profile-text'>Upload a profile picture*</div>
+                    <div className='profile-text'>Upload a profile picture</div>
                     <div className='input-profile-pic'>
                         <label htmlFor="file-input" className="profile-pic-label">
                             {previewPic ? (
@@ -234,29 +232,37 @@ const Profile = () => {
                         />
                     </div>
                 </div>
+                <div className='profile-text'>Choose your prefered location</div>
                 <div className="inputGroup">
-                    <h6>Country</h6>
-                    <CountrySelect
-                        onChange={onCountryChange}
-                        placeHolder="Select Country"
-                        defaultValue={{ id: countryId, name: formData.country }}
-                    />
-                    <h6>State</h6>
-                    <StateSelect
-                        countryid={countryId}
-                        onChange={onStateChange}
-                        placeHolder="Select State"
-                        defaultValue={{ id: stateId, name: formData.state }}
-                    />
-                    <h6>City</h6>
-                    <CitySelect
-                        countryid={countryId}
-                        stateid={stateId}
-                        onChange={handleCitySelect}
-                        placeHolder="Select City"
-                        defaultValue={{ name: formData.city }}
-                    />
-                </div>
+    <div className="inputField">
+        <h6>Country:</h6>
+        <CountrySelect
+            onChange={onCountryChange}
+            placeHolder="Select Country"
+        />
+    </div>
+
+    <div className="inputField">
+        <h6>State:</h6>
+        <StateSelect
+            countryid={countryId}
+            onChange={onStateChange}
+            placeHolder="Select State"
+            disabled={countryId == null} // Disable if no country selected
+        />
+    </div>
+
+    <div className="inputField">
+        <h6>City:</h6>
+        <CitySelect
+            countryid={countryId}
+            stateid={stateId}
+            onChange={handleCitySelect}
+            placeHolder="Select City"
+            disabled={countryId == null || stateId == null} // Disable if no country or state selected
+        />
+    </div>
+</div>
                 <div className='submit-container'>
                     <button
                         className='submit'
