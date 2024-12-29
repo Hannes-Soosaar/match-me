@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './InterestSection.css';
 
 const InterestSection = () => {
 
@@ -22,7 +23,6 @@ useEffect(() => {
         } catch (error) {
             console.error('Error fetching Interest data:', error);
         }
-       
 
 // Get the user Interest data
         try{
@@ -35,7 +35,6 @@ useEffect(() => {
             if (response2.data.length !== 0) {
                 setUserInterests(response2.data);
             }
-           
         }
         catch (error) {
             console.error('Error fetching UserInterest data:', error);
@@ -86,7 +85,8 @@ return (
                   <button
                     key={interest.id}
                     onClick={() => handleInterestClick(interest.id)}
-                  >
+                    className={userInterests.includes(interest.id) ? 'selected' : 'unselected'}
+                 >
                     {interest.interestName}
                   </button>
                 ))}

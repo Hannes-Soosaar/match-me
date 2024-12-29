@@ -1,0 +1,14 @@
+.selected {
+    background-color: hsla(276, 94%, 75%, 0.5);
+    }
+
+.unselected {
+    background-color: hsla(0, 0%, 55%, 0.3);
+    }
+
+  button{
+    margin: 5px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid black;
+  }
