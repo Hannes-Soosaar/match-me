@@ -6,8 +6,8 @@ package models
 // From the front end we send back the user ID and selected InterestID.
 
 type UserInterests struct {
-	ID         int `json:"id"`
-	UserID     int `json:"userId"`
-	InterestID int `json:"interestId"`
-	Status string `json:"status"`
+	ID         int    `json:"id"`
+	UserID     string `json:"userId"`
+	InterestID int    `json:"interestId"`
+	Status     string `json:"status"`
 }

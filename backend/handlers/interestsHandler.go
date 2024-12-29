@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"match_me_backend/db"
 	"net/http"
@@ -11,30 +10,31 @@ import (
 func GetUserInterests(w http.ResponseWriter, r *http.Request) {
 
 	userID, err := GetCurrentUserID(r)
+
 	if err != nil {
 		log.Println("Error:", err)
-	}	
-	// need to get the user ID.
-	 userInterestIDs,err := db.GetAllUserInterestIDs(userID);
+	}
+	
+	userInterestIDs, err := db.GetAllUserInterestIDs(userID)
 
-	 if err != nil {	
+	if err != nil {
 		log.Println("Error in GetUserInterestsId's", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode("GetUserInterests")
+	json.NewEncoder(w).Encode(userInterestIDs)
 }
 
 func GetInterests(w http.ResponseWriter, r *http.Request) {
-	// allCategories, err := db.GetAllCategories()
-	interests,err := db.GetAllInterest()
+
+	interests, err := db.GetInterestResponseBody()
 
 	if err != nil {
 		log.Println("Error getting interest response ", err)
 	}
-
+	log.Println("Interests:", interests)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode("GetInterests")
+	json.NewEncoder(w).Encode(interests)
 }

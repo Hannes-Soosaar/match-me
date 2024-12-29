@@ -17,10 +17,12 @@ useEffect(() => {
                     Authorization: `Bearer ${authToken}`,
                 },
             });
+            console.log(response1.data)
             setCategories(response1.data);
         } catch (error) {
             console.error('Error fetching Interest data:', error);
         }
+       
 
 // Get the user Interest data
         try{
@@ -30,7 +32,10 @@ useEffect(() => {
                     Authorization: `Bearer ${authToken}`,
                 },
             });
-            setUserInterests(response2.data);
+            if (response2.data.length !== 0) {
+                setUserInterests(response2.data);
+            }
+           
         }
         catch (error) {
             console.error('Error fetching UserInterest data:', error);
@@ -41,24 +46,40 @@ useEffect(() => {
 
 }, [authToken]);
 
+
+const handleInterestClick = (interestId) => {
+    console.log(`Interest ID clicked: ${interestId}`);
+  };
+
 return (
     <div>
-        <h1>Interest Section</h1>
-        <div>
-            <h2>Categories</h2>
-            <ul>
-                {categories.map((category) => (
-                    // Sub this with the Interest Button component 
-                    <li key={category.id}>{category.name} : {category.interest}</li>
+      <h1>Interest Section</h1>
+      <div>
+        <h2>Categories</h2>
+        <ul>
+          {categories.map((category) => (
+            <li key={category.category_id}>
+              <h3>{category.category}</h3>
+              <div>
+                {category.interests.map((interest) => (
+                  <button
+                    key={interest.id}
+                    onClick={() => handleInterestClick(interest.id)}
+                  >
+                    {interest.interestName}
+                  </button>
                 ))}
-            </ul>  
-            <h2>User Interests</h2>
-            <ul>
-                {userInterests.map((userInterest) => (
-                    <li key={userInterest.id}>{userInterest.interestId}</li>
-                ))} 
-            </ul>
-    </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <h2>User Interests</h2>
+        <ul>
+          {userInterests.map((userInterest) => (
+            <li key={userInterest.interestId}>{userInterest.interestId}</li>
+          ))}
+        </ul>
+      </div>
     </div>
 );
 

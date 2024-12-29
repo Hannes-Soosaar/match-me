@@ -97,6 +97,6 @@ func GetCurrentUserID(r *http.Request) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
+	log.Println("Extracted currentUserID", currentUserID);
 	return currentUserID, nil
 }

@@ -15,7 +15,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/me", handlers.GetCurrentUserHandler).Methods("GET")
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 	router.HandleFunc("/userInterests", handlers.GetUserInterests).Methods("GET")
-	router.HandleFunc("/Interests", handlers.GetInterests).Methods("GET")
+	router.HandleFunc("/interests", handlers.GetInterests).Methods("GET")
 	router.HandleFunc("/username", handlers.PostUsername).Methods("POST")
 	// router.HandleFunc("/match", handlers.UserMatches).Methods("GET")
 	router.HandleFunc("/city", handlers.PostCity).Methods("POST")
