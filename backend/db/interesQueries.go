@@ -5,7 +5,6 @@ import (
 	"match_me_backend/models"
 )
 
-
 // type UserInterestResponse struct {
 // 	CategoryName string             `json:"category"`
 // 	CategoryID   int                `json:"category_id"`
@@ -14,19 +13,19 @@ import (
 
 // func GetInterestResponseBody() (*[]UserInterestResponse, error) {
 // 	query := `
-// 		SELECT 
+// 		SELECT
 // 			c.id AS category_id,
 // 			c.category_name,
 // 			i.id AS interest_id,
 // 			i.category_id,
 // 			i.interest_name
-// 		FROM 
+// 		FROM
 // 			categories c
-// 		LEFT JOIN 
+// 		LEFT JOIN
 // 			interests i
-// 		ON 
+// 		ON
 // 			c.id = i.category_id
-// 		ORDER BY 
+// 		ORDER BY
 // 			c.id, i.id
 // 	`
 
@@ -63,7 +62,6 @@ import (
 // 		}
 // 	}
 
-
 // 	var userInterestResponses []UserInterestResponse
 // 	for _, response := range categoryMap {
 // 		userInterestResponses = append(userInterestResponses, *response)
@@ -73,14 +71,11 @@ import (
 // 	return &userInterestResponses, nil
 // }
 
-
 type UserInterestResponse struct {
 	CategoryName string             `json:"category"`
 	CategoryID   int                `json:"category_id"`
 	Interest     []models.Interests `json:"interests"`
 }
-
-
 
 func GetInterestResponseBody() (*[]UserInterestResponse, error) {
 	categories, err := GetAllCategories()
@@ -156,13 +151,20 @@ func GetAllUserInterestIDs(userID string) (*[]int, error) {
 	return &interestIDs, nil
 }
 
-
 func AddInterestToUser(interestID int, userID string) error {
-	query := "INSERT INTO user_interests (user_id, interest_id) VALUES ($1, $2)"
-	_, err := DB.Exec(query, userID, interestID)
+	isInterest, err := GetUserInterestByInterestId(interestID, userID)
 	if err != nil {
-		log.Println("Error adding interest to user")
-		return err
+		log.Println("Error getting user interest by interest id")
+	}
+	if isInterest {
+		RemoveInterestFromUser(interestID, userID)
+	} else {
+		query := "INSERT INTO user_interests (user_id, interest_id) VALUES ($1, $2)"
+		_, err := DB.Exec(query, userID, interestID)
+		if err != nil {
+			log.Println("Error adding interest to user")
+			return err
+		}
 	}
 	return nil
 }
@@ -175,4 +177,18 @@ func RemoveInterestFromUser(interestID int, userID string) error {
 		return err
 	}
 	return nil
+}
+
+func GetUserInterestByInterestId(interestID int, userID string) (bool, error) {
+	query := "SELECT * FROM user_interests WHERE user_id = $1 AND interest_id = $2"
+	rows, err := DB.Query(query, userID, interestID)
+	if err != nil {
+		log.Println("Error getting user interest by interest id")
+		return false, err
+	}
+	defer rows.Close()
+	if rows.Next() {
+		return true, nil
+	}
+	return false, nil
 }

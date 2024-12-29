@@ -49,8 +49,29 @@ useEffect(() => {
 
 const handleInterestClick = (interestId) => {
     console.log(`Interest ID clicked: ${interestId}`);
+
+    try {
+        axios.post('/userInterest', {
+            interestId,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+        })  .then((response) => {
+            window.location.reload(); 
+        }).catch((error) => {
+            console.error('Error adding interest:', error);
+        });
+    } catch (error) {
+        console.error('Error adding interest:', error);
+    }
+
   };
 
+
+//TODO extract the button element to a separate component
+//TODO have different styling for the buttons that have the same interestId as the user already selected.
 return (
     <div>
       <h1>Interest Section</h1>
@@ -69,14 +90,16 @@ return (
                     {interest.interestName}
                   </button>
                 ))}
+
               </div>
             </li>
+
           ))}
         </ul>
         <h2>User Interests</h2>
         <ul>
           {userInterests.map((userInterest) => (
-            <li key={userInterest.interestId}>{userInterest.interestId}</li>
+            <li key={userInterest}>{userInterest}</li>
           ))}
         </ul>
       </div>
