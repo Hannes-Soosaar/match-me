@@ -11,6 +11,8 @@ type UserInterestResponse struct {
 	Interest     []models.Interests `json:"interests"`
 }
 
+
+
 func GetInterestResponseBody() (*[]UserInterestResponse, error) {
 	categories, err := GetAllCategories()
 

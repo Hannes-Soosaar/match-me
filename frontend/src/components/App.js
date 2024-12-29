@@ -7,6 +7,7 @@ import LoginSignup from './LoginSignup/LoginSignup';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
 import Matches from './Matches/Matches';
+import InterestSection from './InterestSection/InterestSection';
 
 
 function App() {
@@ -34,6 +35,9 @@ function App() {
           <Route
             path='/matches'
             element={isAuthenticated ? <Matches/> : <Navigate to="/" />} />
+          <Route
+            path='/connections'
+            element={isAuthenticated ? <InterestSection/> : <Navigate to="/" />} />
         </Routes>
       </div>
     </BrowserRouter >

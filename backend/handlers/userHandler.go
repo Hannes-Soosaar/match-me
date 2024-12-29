@@ -3,6 +3,7 @@ package handlers
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"log"
 	"match_me_backend/auth"
 	"match_me_backend/db"
@@ -78,4 +79,24 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
+}
+
+func GetCurrentUserID(r *http.Request) (string, error) {
+
+	authHeader := r.Header.Get("Authorization")
+
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		log.Printf("Unauthorized: Missing or invalid token")
+		return "", errors.New("Unauthorized: Missing or invalid token in header")
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+	log.Println("JWT token extracted successfully.")
+
+	currentUserID, err := auth.ExtractUserIDFromToken(token)
+	if err != nil {
+		return "", err
+	}
+
+	return currentUserID, nil
 }
