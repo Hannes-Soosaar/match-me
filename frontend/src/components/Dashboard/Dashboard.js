@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import './Dashboard.css';
+import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
 
 const Dashboard = () => {
     const [userData, setUserData] = useState(null); // Store user data
     const [loading, setLoading] = useState(true); // Track loading state for user data
     const [locationLoading, setLocationLoading] = useState(true); // Track loading state for location
     const [error, setError] = useState(null); // Track errors
+    const [profilePic, setProfilePic] = useState(null);
     const [location, setLocation] = useState(null); // Store the user's location
     const navigate = useNavigate();
 
@@ -69,7 +71,17 @@ const Dashboard = () => {
                     },
                 });
 
-                setUserData(response.data); // Store the user data
+                const data = response.data; // Store the user data
+
+                setUserData(data);
+
+                // Handle profile picture (default or from backend)
+                if (data.profile_picture) {
+                    setProfilePic(`/uploads/${data.profile_picture}`); // Assuming it's a URL
+                } else {
+                    setProfilePic(defaultProfilePic); // Use default profile picture
+                }
+
             } catch (err) {
                 setError(err.response ? err.response.data : 'An error occurred');
             } finally {
@@ -110,13 +122,27 @@ const Dashboard = () => {
     }
 
     return (
-        <div style={{ textAlign: 'center' }}>
-            <h1>Welcome, {userData.username || 'User'}</h1>
-            <p>This is your dashboard.</p>
-            {location && (
-                <p>Your location: Latitude {location.latitude}, Longitude {location.longitude}</p>
-            )}
-        </div>
+        <>
+            <div className="card">
+                <div className="profile-pic">
+                    {profilePic ? (
+                        <img src={profilePic} alt="Profile" />
+                    ) : (
+                        <img src={defaultProfilePic} alt="Default Profile" />
+                    )}
+                </div>
+                <h2>{userData?.username}</h2>
+                <p>{userData?.email}</p>
+                <p>{userData?.age}</p>
+                <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
+                <p>{userData?.about_me}</p>
+
+                {/* Check if location is available before rendering */}
+                {location && (
+                    <p>{`Location: ${location.latitude}, ${location.longitude}`}</p>
+                )}
+            </div>
+        </>
     );
 };
 

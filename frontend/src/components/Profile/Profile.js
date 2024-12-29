@@ -9,6 +9,8 @@ const Profile = () => {
     const [countryId, setCountryId] = useState(0);
     const [stateId, setStateId] = useState(0);
     const [username, setUsername] = useState('');
+    const [rawbirthdate, setrawBirthdate] = useState('');
+    const [birthdate, setBirthdate] = useState('');
     const [about, setAboutMe] = useState('');
     const [usernameText, setUsernameText] = useState('');
     const [profilePic, setProfilePic] = useState(null);
@@ -21,8 +23,30 @@ const Profile = () => {
 
     // Retrieve authentication token
     const authToken = localStorage.getItem('token');
+    
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const parsedDate = new Date(date);
+        // Check if date is valid
+        if (isNaN(parsedDate)) return ''; 
+        // Format the date to 'YYYY-MM-DDT00:00:00Z' (assuming the API needs a timestamp with no time component)
+        return parsedDate.toISOString(); 
+    };
+    const formattedBirthdate = formatDate(birthdate);
+
+    const formatDateForInput = (dateString) => {
+        if (!dateString) return '';
+        const parsedDate = new Date(dateString);
+        // Check if the date is valid
+        if (isNaN(parsedDate)) return '';
+        return parsedDate.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+    };
+
+
 
     useEffect(() => {
+        
         const fetchData = async () => {
             try {
                 const response = await axios.get('/me', {
@@ -35,6 +59,7 @@ const Profile = () => {
                 // Populate fields with data, or leave them empty if not provided
                 setUsername(data.username || '');
                 setAboutMe(data.about_me || '');
+                setrawBirthdate(data.birthdate || '')
                 setCountryId(null);
                 setStateId(null);
                 setFormData({
@@ -42,7 +67,6 @@ const Profile = () => {
                     state: data.user_region || '',
                     city: data.user_city || '',
                 });
-
 
                 // Handle profile picture (default or from backend)
                 if (data.profile_picture) {
@@ -63,7 +87,11 @@ const Profile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Validate the location data
+        if (!birthdate) {
+            alert('Please enter a valid birthdate.');
+            return;
+        }
+
         if (!countryId || !stateId || !formData.city) {
             alert('Please select a valid country, state, and city.');
             return;
@@ -76,7 +104,6 @@ const Profile = () => {
         };
 
         try {
-            // Send the username to the /username endpoint
             await axios.post(
                 '/username',
                 { username },
@@ -88,7 +115,6 @@ const Profile = () => {
             );
             console.log('Username updated successfully!');
 
-            // Send the "About Me" text to the /about endpoint
             await axios.post(
                 '/about',
                 { about },
@@ -100,7 +126,17 @@ const Profile = () => {
             );
             console.log('About Me updated successfully!');
 
-            // Send the selected city, state, and region details to /city endpoint
+            await axios.post(
+                '/birthdate',
+                { birthdate: formattedBirthdate },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                }
+            );
+            console.log('About Me updated successfully!');
+
             await axios.post(
                 '/city',
                 payload,
@@ -112,7 +148,6 @@ const Profile = () => {
             );
             console.log('City information updated successfully!');
 
-            // Handle profile picture upload
             if (profilePic) {
                 const picData = new FormData();
                 picData.append('profilePic', profilePic);
@@ -187,7 +222,9 @@ const Profile = () => {
     useEffect(() => {
         const profileNotExist = localStorage.getItem('profileExists') === 'doesNotExist';
         setUsernameText(profileNotExist ? "Choose your username" : "Change your username");
-    }, []);
+        const formattedDate = formatDateForInput(rawbirthdate);
+        setBirthdate(formattedDate);
+    }, [rawbirthdate]);
 
     return (
         <div style={{ textAlign: 'center' }}>
@@ -211,6 +248,15 @@ const Profile = () => {
                             maxLength="500"
                             value={about}
                             onChange={(e) => setAboutMe(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div className='profile-text'>When were you born?</div>
+                    <div className='input'>
+                        <input
+                            type="date"
+                            value={birthdate}
+                            onChange={(e) => setBirthdate(e.target.value)}
                             required
                         />
                     </div>
@@ -238,20 +284,19 @@ const Profile = () => {
         <h6>Country:</h6>
         <CountrySelect
             onChange={onCountryChange}
-            placeHolder="Select Country"
+            placeHolder="Select Country"       
         />
     </div>
-
     <div className="inputField">
         <h6>State:</h6>
         <StateSelect
             countryid={countryId}
             onChange={onStateChange}
             placeHolder="Select State"
-            disabled={countryId == null} // Disable if no country selected
+            disabled={countryId == null}
+
         />
     </div>
-
     <div className="inputField">
         <h6>City:</h6>
         <CitySelect
@@ -259,7 +304,8 @@ const Profile = () => {
             stateid={stateId}
             onChange={handleCitySelect}
             placeHolder="Select City"
-            disabled={countryId == null || stateId == null} // Disable if no country or state selected
+            disabled={countryId == null || stateId == null}
+
         />
     </div>
 </div>
