@@ -45,8 +45,8 @@ const Profile = () => {
 
 
                 // Handle profile picture (default or from backend)
-                if (data.profilePic) {
-                    setPreviewPic(data.profilePic); // Assuming it's a URL
+                if (data.profile_picture) {
+                    setPreviewPic(`/uploads/${data.profile_picture}`); // Assuming it's a URL
                 } else {
                     setPreviewPic(defaultProfilePic);
                 }

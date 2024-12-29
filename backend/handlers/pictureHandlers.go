@@ -74,7 +74,7 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.SetPicturePath(currentUserID, filePath)
+	err = db.SetPicturePath(currentUserID, randomFileName)
 	if err != nil {
 		http.Error(w, "Error setting the username", http.StatusInternalServerError)
 		log.Printf("Error setting the username: %v", err)

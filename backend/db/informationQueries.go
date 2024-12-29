@@ -34,7 +34,7 @@ func SetCity(userID, nation, region, city string) error {
 	SET 
 		user_city = $1, 
 		user_nation = $2,
-		user_region = $3,
+		user_region = $3
 		
 	WHERE uuid = $4
 `

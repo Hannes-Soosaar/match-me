@@ -2,12 +2,17 @@ package routes
 
 import (
 	"match_me_backend/handlers"
+	"net/http"
 
 	"github.com/gorilla/mux"
 )
 
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
+
+	fileDirectory := "../frontend/src/components/Assets" // Modify with your actual directory
+
+	router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(fileDirectory))))
 
 	router.HandleFunc("/login", handlers.LoginHandler).Methods("POST")
 	router.HandleFunc("/register", handlers.RegisterHandler).Methods("POST")
