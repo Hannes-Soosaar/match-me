@@ -11,7 +11,6 @@ type UserInterestResponse struct {
 	Interest     []models.Interests `json:"interests"`
 }
 
-// TODO: This function might benefit from being combined to a response in SQL instead of in Go
 func GetInterestResponseBody() (*[]UserInterestResponse, error) {
 	categories, err := GetAllCategories()
 
@@ -65,26 +64,44 @@ func GetAllInterest() (*[]models.Interests, error) {
 }
 
 // Get all the interest for the user for Matching and or to show what the user has active
-func GetAllUserInterestIDs(userID int) (*[]models.Interests, error) {
-	return nil, nil
+func GetAllUserInterestIDs(userID int) (*[]int, error) {
+	query := "SELECT interest_id FROM user_interest WHERE user_interests.user_id = $1"
+	rows, err := DB.Query(query, userID)
+	if err != nil {
+		log.Println("Error getting all user interests_ids")
+		return nil, err
+	}
+	defer rows.Close()
+	var interestIDs []int
+	for rows.Next() {
+		var interestID int
+		err = rows.Scan(&interestID)
+		if err != nil {
+			log.Println("Error scanning row")
+			return nil, err
+		}
+		interestIDs = append(interestIDs, interestID)
+	}
+	return &interestIDs, nil
 }
 
-// This will return all the Names of the Interest by their ID number
-func GetInterestNameByInterestID(interestIDs []int) ([]string, error) {
-	return nil, nil
-}
-
-// func InitiateInterestsToUser(userID int) error {
-// 	log.Println("Intializing Empty User Interests")
-// 	query := "INSERT INTO user_interests (user_id, interest_id) VALUES ($1, $2)"
-
-// 	return nil
-// }
-
-//TODO Marko
-
-// This function will get the Interest based on a query from the FE sending back the category and interest Id
 
 func AddInterestToUser(interestID int, userID int) error {
+	query := "INSERT INTO user_interests (user_id, interest_id) VALUES ($1, $2)"
+	_, err := DB.Exec(query, userID, interestID)
+	if err != nil {
+		log.Println("Error adding interest to user")
+		return err
+	}
+	return nil
+}
+
+func RemoveInterestFromUser(interestID int, userID int) error {
+	query := "DELETE FROM user_interests WHERE user_id = $1 AND interest_id = $2"
+	_, err := DB.Exec(query, userID, interestID)
+	if err != nil {
+		log.Println("Error removing interest from user")
+		return err
+	}
 	return nil
 }

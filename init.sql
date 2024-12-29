@@ -43,19 +43,6 @@ CREATE TABLE IF NOT EXISTS connections (
     user_id UUID NOT NULL ,
     connected_user_id UUID NOT NULL
 );
-/*INSERT INTO users (email, password_hash)
- VALUES ('test1@example.com', '$2b$10$hashfortest1'),
- ('test2@example.com', '$2b$10$hashfortest2');*/
-/*INSERT INTO profiles (
- user_id,
- username,
- about_me
- )
- VALUES (
- 1,
- 'Peeter123',
- 'I am a gamer'
- );*/
 
 CREATE TABLE IF NOT EXISTS categories(
     id SERIAL PRIMARY KEY,

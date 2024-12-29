@@ -32,6 +32,5 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 func updateUserMatchScore(currentUserID, userID2, userScore int) error {
 	// Get all the matches where either user ID1 or user ID2 is the same as currentUserID
 	// query := "SELECT id FROM user_matches WHERE user_id_1 =?"
-
 	return nil
 }
