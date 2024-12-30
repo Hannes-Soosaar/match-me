@@ -31,7 +31,7 @@ const Profile = () => {
         // Check if date is valid
         if (isNaN(parsedDate)) return '';
         // Format the date to 'YYYY-MM-DDT00:00:00Z' (assuming the API needs a timestamp with no time component)
-        return parsedDate.toISOString('');
+        return parsedDate.toISOString();
     };
     const formattedBirthdate = formatDate(birthdate);
 
@@ -59,7 +59,7 @@ const Profile = () => {
                 // Populate fields with data, or leave them empty if not provided
                 setUsername(data.username || '');
                 setAboutMe(data.about_me || '');
-                setrawBirthdate(data.birthdate || '2000-01-01')
+                setrawBirthdate(data.birthdate || '');
                 setCountryId(null);
                 setStateId(null);
                 setFormData({
