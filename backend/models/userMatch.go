@@ -10,12 +10,15 @@ import "time"
 // Compare multiple choice questions each some questions will give a point if its a match others if the answer is not a match
 // Compare locations if not in specific range the score modified if x0  // only filter if is shown. ?? do we need to even do this in the scores tab?
 // Compare Slider scores each match is 1 point each difference is  1 -0.25 points and if one answer is opposite the score is  there are 4 steps
-//
+// Add status to the UserMatches
+// Add modified at to the UserMatches
 
 type UsersMatches struct {
 	ID         int       `json:"id"`
-	UserID1    string       `json:"userId1"`
-	UserID2    string       `json:"userId2"`
+	UserID1    string    `json:"userId1"`
+	UserID2    string    `json:"userId2"`
 	MatchScore int       `json:"MatchScore"`
-	CreatedAt  time.Time `json:"createdAt"`
+	Status     string    `json:"status"`     //  new, shown, connected, blocked, deleted
+	ModifiedAt time.Time `json:"modifiedAt"` // last time the match was updated
+	CreatedAt  time.Time `json:"createdAt"`  // first time the match was created
 }

@@ -7,8 +7,8 @@ import "time"
 
 type UserConnections struct {
 	ID        int       `json:"id"`
-	UserID1   string       `json:"userId1"`
-	UserID2   string       `json:"userId2"`
+	UserID1   string    `json:"userId1"`
+	UserID2   string    `json:"userId2"`
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"createdAt"`
 }

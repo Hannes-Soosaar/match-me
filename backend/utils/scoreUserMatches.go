@@ -20,3 +20,7 @@ func UpdatedMatchScore() {
 }
 
 // call UserMatchesQueries and update all scores in UserMatches for any new  added user
+
+
+// Check for already connected users
+
