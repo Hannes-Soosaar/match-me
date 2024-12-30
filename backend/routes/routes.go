@@ -10,7 +10,7 @@ import (
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
 
-	fileDirectory := "../frontend/src/components/Assets" // Modify with your actual directory
+	fileDirectory := "../frontend/src/components/Assets"
 
 	router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(fileDirectory))))
 
