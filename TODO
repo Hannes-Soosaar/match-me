@@ -9,7 +9,8 @@ Get to show all matches
 - TODO: backend for matches
 
 Design Dashboard
+- The data is connected and accesible for the user information.
 
 Start work on websockets
-Start a photo server.
-TODO: store photos in the public folder so it can be accessed via standard ENV option.
+
+Start a photo server. TODO: store photos in the public folder so it can be accessed via standard ENV option. - Done - the dir variable in pictureHandlers.go and the fileDirectory variable in routes.go dictate where pictures are stored and which folder is the public folder.
