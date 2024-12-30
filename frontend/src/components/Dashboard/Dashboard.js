@@ -123,24 +123,26 @@ const Dashboard = () => {
 
     return (
         <>
-            <div className="card">
-                <div className="profile-pic">
-                    {profilePic ? (
-                        <img src={profilePic} alt="Profile" />
-                    ) : (
-                        <img src={defaultProfilePic} alt="Default Profile" />
+            <div className="dashboard-container">
+                <div className="dashboard-card">
+                    <div className="dashboard-profile-pic">
+                        {profilePic ? (
+                            <img src={profilePic} alt="Profile" />
+                        ) : (
+                            <img src={defaultProfilePic} alt="Default Profile" />
+                        )}
+                    </div>
+                    <h2>{userData?.username}</h2>
+                    <p>{userData?.email}</p>
+                    <p>{userData?.age}</p>
+                    <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
+                    <p>{userData?.about_me}</p>
+
+                    {/* Check if location is available before rendering */}
+                    {location && (
+                        <p>{`Location: ${location.latitude}, ${location.longitude}`}</p>
                     )}
                 </div>
-                <h2>{userData?.username}</h2>
-                <p>{userData?.email}</p>
-                <p>{userData?.age}</p>
-                <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
-                <p>{userData?.about_me}</p>
-
-                {/* Check if location is available before rendering */}
-                {location && (
-                    <p>{`Location: ${location.latitude}, ${location.longitude}`}</p>
-                )}
             </div>
         </>
     );

@@ -8,8 +8,8 @@ const MatchCard = ({ userProfile }) => {
 
     return (
         <>
-            <div className ="card">
-                <img className="card-image" src={defaultProfilePic}></img> 
+            <div className="match-card">
+                <img className="match-card-image" src={defaultProfilePic}></img>
                 <h2>{`${firstName} ${lastName}`}</h2>
                 <p>{location}</p>
                 <p>{matchScore}</p>

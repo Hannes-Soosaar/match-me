@@ -18,7 +18,7 @@ function App() {
   return (
     <BrowserRouter>
       <div>
-        <Header/>
+        <Header />
         <Routes>
           <Route exact
             path='/'
@@ -34,10 +34,10 @@ function App() {
             element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
           <Route
             path='/matches'
-            element={isAuthenticated ? <Matches/> : <Navigate to="/" />} />
+            element={isAuthenticated ? <Matches /> : <Navigate to="/" />} />
           <Route
             path='/connections'
-            element={isAuthenticated ? <InterestSection/> : <Navigate to="/" />} />
+            element={isAuthenticated ? <InterestSection /> : <Navigate to="/" />} />
         </Routes>
       </div>
     </BrowserRouter >

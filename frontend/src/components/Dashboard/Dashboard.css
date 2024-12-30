@@ -1,38 +1,38 @@
-.card{
-    border: 1 px solid black;
+.dashboard-container {
+    /*Needed in the future for dashboard design*/
+}
+
+.dashboard-card {
+    border: 1px solid black;
     border-radius: 10px;
-    box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.1); 
+    box-shadow: 5px 5px 5px hsla(0, 0%, 0%, 0.1);
     padding: 20px;
-    margin: 10px;
+    margin: 10px auto;
     text-align: center;
-    max-width: 500px;
-    display: inline-block;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     background-color: azure;
 }
 
-.card .card-image{
-    max-width: 60%;
-    height:auto;
+.dashboard-profile-pic {
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
-    margin: bottom 10px;
-
-}
-
-.profile-pic {
-    width: 150px; 
-    height: 150px; 
-    border-radius: 50%; 
-    overflow: hidden; 
+    overflow: hidden;
+    background-color: #f0f0f0;
+    border: 2px solid #ddd;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: center;
-    align-items: center; 
-    background-color: #f0f0f0; 
-    border: 2px solid #ddd; 
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+    align-items: center;
+    /* Center the image inside this container */
 }
 
-.profile-pic img {
-    width: 100%; 
-    height: 100%; 
-    object-fit: cover; 
+.dashboard-profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
