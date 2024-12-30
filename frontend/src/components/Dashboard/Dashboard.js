@@ -45,7 +45,6 @@ const Dashboard = () => {
                 setError(err.response ? err.response.data : 'An error occurred');
             } finally {
                 setLoading(false); // Stop loading for user data
-               
             }
         };
 
@@ -86,12 +85,13 @@ const Dashboard = () => {
                             <img src={defaultProfilePic} alt="Default Profile" />
                         )}
                     </div>
-                    <h2>{userData?.username}</h2>
-                    <p>{userData?.email}</p>
-                    <p>{userData?.age}</p>
-                    <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
-                    <p>{userData?.about_me}</p>
-
+                    <div className="dashboard-text-data">
+                        <h2>{userData?.username}</h2>
+                        <p>{userData?.email}</p>
+                        <p>{userData?.age}</p>
+                        <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
+                        <p>{userData?.about_me}</p>
+                    </div>
 
                 </div>
             </div>

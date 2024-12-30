@@ -36,3 +36,9 @@
     height: 100%;
     object-fit: cover;
 }
+
+.dashboard-text-data {
+    max-width: 300px;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
