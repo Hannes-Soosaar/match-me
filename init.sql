@@ -150,7 +150,7 @@ CREATE TABLE IF NOT EXISTS multiple_choice_questions (
 CREATE TABLE IF NOT EXISTS user_matches(
     id SERIAL PRIMARY KEY,
     user_id_1 UUID NOT NULL,
-    user_id_2 UUID NOT NULL
+    user_id_2 UUID NOT NULL,
     match_score INTEGER,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
