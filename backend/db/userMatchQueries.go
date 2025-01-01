@@ -5,7 +5,7 @@ import (
 	"match_me_backend/models"
 )
 
-//TODO:
+
 
 func GetAllUserMatches() ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches"
@@ -29,6 +29,45 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 	return userMatches, nil
 }
 
+// Need to get all connected matches
+// Need to get all new matches
+// Need to get all online matches
+// Need to get all blocked matches
+
+
+
+func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
+	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE user_id_1 = $1 OR user_id_2 = $1"
+	rows, err := DB.Query(query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+	var userMatches []models.UsersMatches
+	for rows.Next() {
+		var userMatch models.UsersMatches
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.CreatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+		userMatches = append(userMatches, userMatch)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iterations: %w", err)
+	}
+	return userMatches, nil
+}
+
+func GetSecondUserIdFromMatch(userID1 string, matchID int) (string, error) {
+	query := "SELECT user_id_2 FROM user_matches WHERE user_id_1 = $1 AND id = $2"
+	row := DB.QueryRow(query, userID1, matchID)
+	var userID2 string
+	err := row.Scan(&userID2)
+	if err != nil {
+		return "", fmt.Errorf("error scanning row: %w", err)
+	}
+	return userID2, nil
+}
 
 func AddUserMatch(userID1, userID2 string) error {
 query := `

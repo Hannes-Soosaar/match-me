@@ -5,51 +5,33 @@ import './Matches.css'
 import '../MatchCard/MatchCard.jsx'
 import MatchCard from '../MatchCard/MatchCard.jsx';
 
-
+const authToken = localStorage.getItem('token');
 
 const Matches = () => {
 
     const [data, setData] = useState([])
-
-// Substitue data with API call in the future.
-    const users = [
-        {
-            imagePath: '/images/user1.jpg',
-            firstName: 'John',
-            lastName: 'Doe',
-            location: 'New York, USA',
-            matchScore: '85%',
-            description: 'A software developer with a passion for open-source projects.',
-        },
-        {
-            imagePath: '/images/user2.jpg',
-            firstName: 'Jane',
-            lastName: 'Smith',
-            location: 'London, UK',
-            matchScore: '92%',
-            description: 'A creative designer who loves bringing ideas to life.',
-        },
-        {
-            imagePath: '/images/user3.jpg',
-            firstName: 'Carlos',
-            lastName: 'Gonzalez',
-            location: 'Madrid, Spain',
-            matchScore: '78%',
-            description: 'An experienced project manager with a knack for problem-solving.',
-        },
-    ];
-
-
+    const [matches, setMatches] = useState([])
     useEffect(() => {
         const fetchData = async () => {
+
+        //GET
             try {
-                //Change to the correct API
-                const response = await axios.get('/test')
-                setData(response.data);
+                const response = await axios.get('/matches', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+                console.log(response.data);
+                setMatches(response.data);
             }
             catch (error) {
                 console.error('Error fetching data: ', error)
             }
+ 
+        //POST
+
+        //PUT
+
         }
         fetchData();
     }, [])
@@ -63,9 +45,9 @@ const Matches = () => {
                 (<p key={index}>{index + 1} : {Object.values(item)[1]}</p>
                 ))}
             </div>
-            {users.map((user, index) => (
+            {/* {users.map((user, index) => (
             <MatchCard userProfile={user} key={index}></MatchCard>
-            ))}
+            ))} */}
             
         </>
 

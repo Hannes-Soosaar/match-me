@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-
+-- there should be a way to delete a user with out deleting the user's history.
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL, 
@@ -152,6 +152,8 @@ CREATE TABLE IF NOT EXISTS user_matches(
     user_id_1 UUID NOT NULL,
     user_id_2 UUID NOT NULL,
     match_score INTEGER,
+    status VARCHAR(20),
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

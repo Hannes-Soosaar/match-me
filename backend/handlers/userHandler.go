@@ -21,6 +21,7 @@ type UserResponse struct {
 }
 
 // TODO: move to  db user_queries
+
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -39,10 +40,6 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
-}
-
-func GetMeHandler(w http.ResponseWriter, r *http.Request) {
-
 }
 
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
@@ -97,3 +94,7 @@ func GetCurrentUserID(r *http.Request) (string, error) {
 	}
 	return currentUserID, nil
 }
+
+
+//TODO userLogout handler ?
+//TODO Find_User

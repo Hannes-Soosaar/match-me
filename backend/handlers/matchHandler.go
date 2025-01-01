@@ -1,0 +1,86 @@
+package handlers
+
+import (
+	"encoding/json"
+	"log"
+
+	"match_me_backend/db"
+
+	"net/http"
+)
+
+// Handle match requests from the front end
+
+func RemoveMatch(w http.ResponseWriter, r *http.Request) {
+	userID1, err := GetCurrentUserID(r)
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+
+	//Get the match id from the request This needs to be done on the front end
+	db.GetSecondUserIdFromMatch(userID1, 1)
+	//Get the second user id from the match record
+	//Change the match status to removed.
+
+}
+
+func RequestMatch(w http.ResponseWriter, r *http.Request) {
+	GetCurrentUserID(r)
+	//Get the match id from the request
+	//Change the match status to requested.
+}
+
+func ConfirmMatch(w http.ResponseWriter, r *http.Request) {
+	//Get the user id from the token
+	//Get the match id from the request
+	//Change the match status to confirmed.
+}
+
+type MatchResponse struct {
+	MatchID                int    `json:"match_id"`
+	MatchScore             int    `json:"match_score"`
+	Status                 string `json:"status"`
+	MatchedUserName        string `json:"matched_user_name"`
+	MatchedUserPicture     string `json:"matched_user_picture"`
+	MatchedUserDescription string `json:"matched_user_description"`
+	MatchedUserLocation    string `json:"matched_user_location"`
+}
+
+func GetMatches(w http.ResponseWriter, r *http.Request) {
+	
+	userID1, err := GetCurrentUserID(r)
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+	// Based on what the input is here we can filter the output to the front end.
+	userMatches, err := db.GetAllUserMatchesByUserId(userID1)
+	if err != nil {
+		log.Println("Error getting user matches:", err)
+	}
+
+	log.Println("User Matches:", userMatches)
+
+	var matches []MatchResponse
+	var match MatchResponse
+	for _, userMatch := range userMatches {
+		matchProfile, err := db.GetUserInformation(userMatch.UserID2)
+		if err != nil {
+			log.Println("Error getting user information:", err)
+		}
+		match.MatchID = userMatch.ID
+		match.Status = userMatch.Status
+		match.MatchScore = userMatch.MatchScore
+		match.MatchedUserName = matchProfile.Username
+		match.MatchedUserPicture = matchProfile.Picture
+		match.MatchedUserDescription = matchProfile.About
+		match.MatchedUserLocation = matchProfile.Nation
+		matches = append(matches, match)
+		log.Println("Match in loop:", match)
+	}
+
+	log.Println("Matches:", matches)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(matches)
+}

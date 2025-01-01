@@ -15,9 +15,9 @@ import "time"
 
 type UsersMatches struct {
 	ID         int       `json:"id"`
-	UserID1    string    `json:"userId1"`
-	UserID2    string    `json:"userId2"`
-	MatchScore int       `json:"MatchScore"`
+	UserID1    string    `json:"user_id_1"`
+	UserID2    string    `json:"user_id_2"`
+	MatchScore int       `json:"match_score"`
 	Status     string    `json:"status"`     //  new, shown, connected, blocked, deleted
 	ModifiedAt time.Time `json:"modifiedAt"` // last time the match was updated
 	CreatedAt  time.Time `json:"createdAt"`  // first time the match was created
