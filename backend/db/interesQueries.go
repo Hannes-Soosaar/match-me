@@ -3,73 +3,8 @@ package db
 import (
 	"log"
 	"match_me_backend/models"
+	"github.com/lib/pq"
 )
-
-// type UserInterestResponse struct {
-// 	CategoryName string             `json:"category"`
-// 	CategoryID   int                `json:"category_id"`
-// 	Interests    []models.Interests `json:"interests"`
-// }
-
-// func GetInterestResponseBody() (*[]UserInterestResponse, error) {
-// 	query := `
-// 		SELECT
-// 			c.id AS category_id,
-// 			c.category_name,
-// 			i.id AS interest_id,
-// 			i.category_id,
-// 			i.interest_name
-// 		FROM
-// 			categories c
-// 		LEFT JOIN
-// 			interests i
-// 		ON
-// 			c.id = i.category_id
-// 		ORDER BY
-// 			c.id, i.id
-// 	`
-
-// 	rows, err := DB.Query(query)
-// 	if err != nil {
-// 		log.Println("Error executing query:", err)
-// 		return nil, err
-// 	}
-// 	defer rows.Close()
-
-// 	categoryMap := make(map[int]*UserInterestResponse)
-
-// 	for rows.Next() {
-// 		var categoryID int
-// 		var categoryName string
-// 		var interest models.Interests
-
-// 		err = rows.Scan(&categoryID, &categoryName, &interest.ID, &interest.CategoryID, &interest.InterestName)
-// 		if err != nil {
-// 			log.Println("Error scanning row:", err)
-// 			return nil, err
-// 		}
-
-// 		if _, exists := categoryMap[categoryID]; !exists {
-// 			categoryMap[categoryID] = &UserInterestResponse{
-// 				CategoryName: categoryName,
-// 				CategoryID:   categoryID,
-// 				Interests:    []models.Interests{},
-// 			}
-// 		}
-
-// 		if interest.ID != 0 {
-// 			categoryMap[categoryID].Interests = append(categoryMap[categoryID].Interests, interest)
-// 		}
-// 	}
-
-// 	var userInterestResponses []UserInterestResponse
-// 	for _, response := range categoryMap {
-// 		userInterestResponses = append(userInterestResponses, *response)
-// 	}
-
-// 	log.Println("User interest response:", userInterestResponses)
-// 	return &userInterestResponses, nil
-// }
 
 type UserInterestResponse struct {
 	CategoryName string             `json:"category"`
@@ -151,8 +86,39 @@ func GetAllUserInterestIDs(userID string) (*[]int, error) {
 	return &interestIDs, nil
 }
 
+func GetAllUserInterest(userID string) (*[]models.Interests, error) {
+	
+	userIdsPtr, err := GetAllUserInterestIDs(userID)
+	userIds := *userIdsPtr 
+	if err != nil {
+		log.Println("Error getting all user interests_ids")
+		return nil, err
+	}
+	
+
+	query := "SELECT id, categoryID, interest FROM interests WHERE id = ANY($1)"
+	rows, err := DB.Query(query, pq.Array(userIds))
+	if err != nil {
+		log.Println("Error getting all user interests")
+		return nil, err
+	}
+	defer rows.Close()
+	var interests []models.Interests
+	for rows.Next() {
+		var interest models.Interests
+		err = rows.Scan(&interest.ID, &interest.CategoryID, &interest.InterestName)
+		if err != nil {
+			log.Println("Error scanning row")
+			return nil, err
+		}
+		interests = append(interests, interest)
+	}
+	log.Println(interests)
+	return &interests, nil
+}
+
 func AddInterestToUser(interestID int, userID string) error {
-	isInterest, err := GetUserInterestByInterestId(interestID, userID)
+	isInterest, err := UserHasInterestByInterestId(interestID, userID)
 	if err != nil {
 		log.Println("Error getting user interest by interest id")
 	}
@@ -179,7 +145,7 @@ func RemoveInterestFromUser(interestID int, userID string) error {
 	return nil
 }
 
-func GetUserInterestByInterestId(interestID int, userID string) (bool, error) {
+func UserHasInterestByInterestId(interestID int, userID string) (bool, error) {
 	query := "SELECT * FROM user_interests WHERE user_id = $1 AND interest_id = $2"
 	rows, err := DB.Query(query, userID, interestID)
 	if err != nil {

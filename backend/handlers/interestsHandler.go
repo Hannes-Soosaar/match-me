@@ -40,7 +40,6 @@ func GetInterests(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUserInterest(w http.ResponseWriter, r *http.Request) {
-
 	type InterestRequest struct {
 		InterestID int `json:"interestId"`
 	}

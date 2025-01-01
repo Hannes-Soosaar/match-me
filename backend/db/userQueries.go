@@ -226,9 +226,6 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	return &userInfo, nil
 }
 
-func AddUserConnection(userID1 int, userID2 int) error {
-	return nil
-}
 
 // Change the "satus" of a connection
 func ModifyUserConnection(userID int) error {
