@@ -85,6 +85,45 @@ query := `
 	return nil
 }
 
+func AddUserMatchForAllExistingUsers(newUserId string) error {
+
+	
+	existingUserIDs, err := GetAllUsersUuid() // returns a []string
+	if err != nil {
+		return fmt.Errorf("error getting all existing users: %w", err)
+	}
+
+	query := `
+	INSERT INTO user_matches (user_id_1, user_id_2,match_score, status, modified_at, created_at)
+	VALUES ($1, $2, 0,"new",now(), now())
+	ON CONFLICT DO NOTHING;
+	`
+
+	tx, err := DB.Begin()
+	if err != nil {
+		return fmt.Errorf("error starting transaction: %w", err)
+	}
+
+
+	for _, existingUserId := range existingUserIDs {
+		if existingUserId == newUserId {
+			continue
+		}
+
+		_, err := tx.Exec(query, newUserId, existingUserId)
+		if err != nil {
+			tx.Rollback()
+			return fmt.Errorf("error adding user match for user %s: %w", existingUserId, err)
+		}
+	}
+
+	if err := tx.Commit(); err != nil {
+		return fmt.Errorf("error committing transaction: %w", err)
+	}
+
+	return nil
+}
+
 
 // User IDs are passed in as uuid strings
 func UpdateUserMatchScore(currentUserID, userID2 string, userScore int) error {

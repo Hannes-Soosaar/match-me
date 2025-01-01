@@ -28,6 +28,41 @@ func GetUserByEmail(email string) (*models.User, error) {
 	return &user, nil
 }
 
+func GetUserUUIDFromUserEmail(email string) (string, error) {
+	query := "SELECT uuid FROM users WHERE email = $1"
+	var userUUID string
+	err := DB.QueryRow(query, email).Scan(&userUUID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return "", fmt.Errorf("no user found with that email")
+		}
+		return "", fmt.Errorf("error querying the database: %v", err)
+	}
+	return userUUID, nil
+}
+
+func GetAllUsersUuid() ([]string, error) {
+	query := "SELECT uuid FROM users"
+	rows, err := DB.Query(query)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+	var uuids []string
+	for rows.Next() {
+		var uuid string
+		err = rows.Scan(&uuid)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+		uuids = append(uuids, uuid)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iterations: %w", err)
+	}
+	return uuids, nil
+}
+
 func GetUserByUsername(username string) (*models.User, error) {
 	query := "SELECT u.uuid, u.email, u.password_hash FROM users u JOIN profiles p ON u.uuid = p.uuid WHERE p.username = $1"
 	var user models.User
@@ -90,7 +125,7 @@ func SaveUser(email string, password_hash string) error {
 		log.Printf("Error committing transaction: %v", err)
 		return err
 	}
-
+	AddUserMatchForAllExistingUsers(userUUID.String())
 	return nil
 }
 
@@ -226,7 +261,6 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	return &userInfo, nil
 }
 
-
 // Change the "satus" of a connection
 func ModifyUserConnection(userID int) error {
 	return nil
@@ -234,5 +268,15 @@ func ModifyUserConnection(userID int) error {
 
 func RemoveUserConnection(currentUserID, userID2 int) error {
 	// GET the logged in userID from session to avoid potential
+	return nil
+}
+
+func DeleteUser(email string) error {
+	query := "DELETE FROM users WHERE email = $1"
+	_, err := DB.Exec(query, email)
+	if err != nil {
+		log.Printf("Error deleting user: %v", err)
+		return err
+	}
 	return nil
 }
