@@ -39,7 +39,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT") 
 	router.HandleFunc("/matches/block", handlers.ConfirmMatch).Methods("PUT") 
 	router.HandleFunc("/matches/remove", handlers.ConfirmMatch).Methods("PUT") 
-	router.HandleFunc("/matches/remove", handlers.ConfirmMatch).Methods("PUT") 
+
 
 // chat routs
 

@@ -27,30 +27,22 @@ const Matches = () => {
             catch (error) {
                 console.error('Error fetching data: ', error)
             }
- 
-        //POST
-
-        //PUT
-
         }
         fetchData();
     }, [])
 
     return (
         <>
-    {/* TODO: We need to figure out the payloads that need to be send and compiled at the BE*/}
             <div style={{ textAlign: 'center' }}>
-                <h1>This is the page Where I am testing out stuff!</h1>
-                {data.map((item, index) =>
-                (<p key={index}>{index + 1} : {Object.values(item)[1]}</p>
+                <h1>Matches</h1>
+                {matches.map((item, index) =>
+                (<p key={index}>
+            <MatchCard userProfile={item} key={index}></MatchCard>
+                </p>
                 ))}
             </div>
-            {/* {users.map((user, index) => (
-            <MatchCard userProfile={user} key={index}></MatchCard>
-            ))} */}
             
         </>
-
     );
 };
 
