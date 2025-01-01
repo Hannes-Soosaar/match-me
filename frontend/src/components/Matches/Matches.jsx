@@ -13,8 +13,6 @@ const Matches = () => {
     const [matches, setMatches] = useState([])
     useEffect(() => {
         const fetchData = async () => {
-
-        //GET
             try {
                 const response = await axios.get('/matches', {
                     headers: {

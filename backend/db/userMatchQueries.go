@@ -96,3 +96,12 @@ func UpdateUserMatchScore(currentUserID, userID2 string, userScore int) error {
 	return nil
 }
 
+
+func UpdateUserMatchStatus(matchId int, status string) (string, error){
+	query := "UPDATE user_matches SET status = $1 WHERE id = $2"
+	_, err := DB.Exec(query, status, matchId)
+	if err != nil {	
+		return "", fmt.Errorf("error updating user match status: %w", err)
+	}		
+	return  status + "  was updated", nil
+}

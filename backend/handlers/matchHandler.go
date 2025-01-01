@@ -3,37 +3,143 @@ package handlers
 import (
 	"encoding/json"
 	"log"
-
 	"match_me_backend/db"
-
 	"net/http"
 )
 
 // Handle match requests from the front end
 
+type MatchRequest struct {
+	MatchId int `json:"match_id"`
+}
+
 func RemoveMatch(w http.ResponseWriter, r *http.Request) {
-	userID1, err := GetCurrentUserID(r)
+	var payload MatchRequest
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		log.Println("Error decoding request body:", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	matchId := payload.MatchId
+
+	if matchId == 0 {
+		http.Error(w, "Missing matchId", http.StatusBadRequest)
+		return
+	}
+// checks if the user is logged in
+	_, err = GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
 	}
 
-	//Get the match id from the request This needs to be done on the front end
-	db.GetSecondUserIdFromMatch(userID1, 1)
-	//Get the second user id from the match record
-	//Change the match status to removed.
+	successMessage, err := db.UpdateUserMatchStatus(matchId, db.REMOVED)
 
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": successMessage,
+	})
 }
 
 func RequestMatch(w http.ResponseWriter, r *http.Request) {
-	GetCurrentUserID(r)
-	//Get the match id from the request
-	//Change the match status to requested.
+
+	var payload MatchRequest
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		log.Println("Error decoding request body:", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	matchId := payload.MatchId
+
+	if matchId == 0 {
+		http.Error(w, "Missing matchId", http.StatusBadRequest)
+		return
+	}
+
+	_, err = GetCurrentUserID(r)
+
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+
+	successMessage, err := db.UpdateUserMatchStatus(matchId, db.REQUESTED)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": successMessage,
+	})
 }
 
 func ConfirmMatch(w http.ResponseWriter, r *http.Request) {
-	//Get the user id from the token
-	//Get the match id from the request
-	//Change the match status to confirmed.
+
+	var payload MatchRequest
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		log.Println("Error decoding request body:", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	matchId := payload.MatchId
+
+	if matchId == 0 {
+		http.Error(w, "Missing matchId", http.StatusBadRequest)
+		return
+	}
+
+	_, err = GetCurrentUserID(r)
+
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+
+	successMessage, err := db.UpdateUserMatchStatus(matchId, db.CONNECTED)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": successMessage,
+	})
+}
+
+func BlockMatch(w http.ResponseWriter, r *http.Request) {
+
+	var payload MatchRequest
+
+	err := json.NewDecoder(r.Body).Decode(&payload)
+	if err != nil {
+		log.Println("Error decoding request body:", err)
+		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		return
+	}
+
+	matchId := payload.MatchId
+
+	if matchId == 0 {
+		http.Error(w, "Missing matchId", http.StatusBadRequest)
+		return
+	}
+
+	_, err = GetCurrentUserID(r)
+
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+
+	successMessage, err := db.UpdateUserMatchStatus(matchId, db.BLOCKED)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]string{
+		"message": successMessage,
+	})
 }
 
 type MatchResponse struct {
@@ -47,7 +153,7 @@ type MatchResponse struct {
 }
 
 func GetMatches(w http.ResponseWriter, r *http.Request) {
-	
+
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
