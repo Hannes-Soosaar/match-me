@@ -21,6 +21,6 @@ const (
 	BLOCKED = "blocked"	// this is used if the user has blocked the connection all communication is blocked
 	DELETED = "deleted"	// this is used if the user has deleted the connection but there is still a possibility of the other party to reach out via message ect. 
 	
-	DEMO_USER_COUNT = 100
+	DEMO_USER_COUNT = 10
 
 )

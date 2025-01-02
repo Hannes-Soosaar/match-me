@@ -1,6 +1,7 @@
 package db
 
 import (
+	"fmt"
 	"log"
 	"match_me_backend/models"
 )
@@ -9,9 +10,9 @@ import (
 // Find matches with no scores
 // Score
 
-// Generates the match score for a new user
+// Generates the match score for a new user The interest must already exist!
 func CalculateMatchScore(userID1, userID2 string) (int,error) {
-
+	fmt.Println("Calculating Match score between : ", userID1," and ", userID2)
 	user1InterestsPtr, err := GetAllUserInterest(userID1)
 	if err != nil {
 		log.Println("Error getting user 1 interest", err)
@@ -37,30 +38,15 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 			}
 		}
 	}
+
 	matchScore := CalculateMatchProfile(matchProfile)
-
-//TODO this is temporary until we have the full update path determined
-
+	fmt.Println("Match score between : ", userID1," and ", userID2 ," is : ", matchScore)
 	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }
 
-
-
-// If the location criteria is not met, the match score is set to 0
-func ZeroMatchScore(currentUserID, userID2 string) {
-	err := UpdateUserMatchScore(currentUserID, userID2, 0)
-	if err != nil {
-		log.Println("Error updating match score: ", err)
-	}
-}
-
-// Update the match score in the database use when a user updates their profile
-func UpdatedMatchScore() {
-
-}
-
 func CalculateMatchProfile(matchProfile []models.Interests) (int) {
+	
 	score := 0
 	genreCount := 0
 	playStyleCount := 0
@@ -106,10 +92,12 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 		}
 	}
 
+
+	/* THE BELOW SECTION HAS BEEN REMOVED BECAUSE OF ALMOST NO MATCHES */
 	// If the user has less than 1 interest in any of these category, the match score is set to 0
-	if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
-		return 99 // this is temporary in order to test the match score
-	}
+	// if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
+	// 	return 99 // this is temporary in order to test the match score
+	// }
 	// the score is only derived from the number of interests in the categories of Genre, PlayStyle, Goals, Session and Vibe
 	score = score -languageCount- platformCount - communicationCount 
 	return score

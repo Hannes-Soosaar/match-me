@@ -83,7 +83,7 @@ func AddUserMatch(userID1, userID2 string) error {
 }
 
 func AddUserMatchForAllExistingUsers(newUserId string) error {
-
+	fmt.Println("Adding user match for all existing users")
 	existingUserIDs, err := GetAllUsersUuid() // returns a []string
 	log.Println("New user id: ", newUserId)
 	log.Println("Adding existingUserId: ", existingUserIDs)
@@ -94,7 +94,7 @@ func AddUserMatchForAllExistingUsers(newUserId string) error {
 
 	query := `
 	INSERT INTO user_matches (user_id_1, user_id_2,match_score, status, modified_at, created_at)
-	VALUES ($1, $2, $3,'new',now(), now())
+	VALUES ($1, $2,0,'new',now(), now())
 	ON CONFLICT DO NOTHING;
 	`
 
@@ -104,25 +104,25 @@ func AddUserMatchForAllExistingUsers(newUserId string) error {
 	}
 
 	for _, existingUserId := range existingUserIDs {
-		userMatch, err := CalculateMatchScore(newUserId, existingUserId)
-		log.Println("User match score calculated: ", userMatch);
+
 		if err != nil {
 			return fmt.Errorf("error calculating match score: %w", err)
 		}
 		log.Println("Adding existingUserId: ", existingUserId)
-		_, err = tx.Exec(query, newUserId, existingUserId, userMatch)
+		_, err = tx.Exec(query, newUserId, existingUserId)
 		if err != nil {
 			tx.Rollback()
 			return fmt.Errorf("error adding user match for user %s: %w", existingUserId, err)
 		}
-
 	}
 
 	if err := tx.Commit(); err != nil {
 		return fmt.Errorf("error committing transaction: %w", err)
 	}
-
+	fmt.Println("User matches added for all existing users with 0 score")
+	UpdateAllUserScores();
 	return nil
+
 }
 
 // User IDs are passed in as uuid strings
@@ -143,4 +143,21 @@ func UpdateUserMatchStatus(matchId int, status string) (string, error) {
 		return "", fmt.Errorf("error updating user match status: %w", err)
 	}
 	return status + "  was updated", nil
+}
+
+func UpdateAllUserScores()	error {
+	fmt.Println("Starting Updating all user scores")
+	userMatches, err := GetAllUserMatches()
+	if err != nil {
+		return fmt.Errorf("error getting all user matches: %w", err)
+	}
+	// For each user match, calculate the score and update the match
+	for _, userMatch := range userMatches {
+		log.Println("Calculating match score for user match:", userMatch)
+		_, err := CalculateMatchScore(userMatch.UserID1, userMatch.UserID2)
+		if err != nil {
+			return fmt.Errorf("error calculating match score: %w", err)
+		}
+	}
+	return nil
 }
