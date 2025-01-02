@@ -39,6 +39,19 @@ func RemoveDemoUsers() {
 	}
 }
 
+/* 
+Run only once, to create profiles for demo users. 
+
+if you want to run it again  all entries from the tables should be removed first from the following tables.
+
+TRUNCATE TABLE user_interests;
+TRUNCATE TABLE users;
+TRUNCATE TABLE user_matches;
+TRUNCATE TABLE profiles
+
+*/
+
+
 func CreateProfile() {
 	fmt.Println("Creating profiles")
 	for i := 0; i < DEMO_USER_COUNT; i++ {
@@ -52,7 +65,7 @@ func CreateProfile() {
 		}
 
 		// Add two Genres
-		for j := 0; j <= 2; j++ {
+		for j := 0; j <= 3; j++ {
 			rndNum, err := GenerateRandomNumber(1, 10)
 			if err != nil {
 				log.Println("Error generating random number: ", err)
@@ -60,8 +73,8 @@ func CreateProfile() {
 			AddInterestToUser(rndNum, uuid)
 		}
 		// Add play style
-		for k := 0; k <= 2; k++ {
-			rndNum, err := GenerateRandomNumber(11, 14)
+		for k := 0; k <= 3; k++ {
+			rndNum, err := GenerateRandomNumber(11, 16)
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
@@ -90,8 +103,15 @@ func CreateProfile() {
 		rndSession, err := GenerateRandomNumber(32, 34)
 		AddInterestToUser(rndSession, uuid)
 		// Add vibe
-		rndVibe, err := GenerateRandomNumber(35, 37)
-		AddInterestToUser(rndVibe, uuid)
+
+		for n := 0; n <= 3; n++ {
+			rndVibe, err := GenerateRandomNumber(35, 41)
+			if err != nil {
+				log.Println("Error generating random number: ", err)
+			}
+			AddInterestToUser(rndVibe, uuid)
+		}
+
 		// Add language
 		// rndLanguage, err := GenerateRandomNumber(42, 45)
 		AddInterestToUser(42, uuid)

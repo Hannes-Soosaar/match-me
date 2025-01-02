@@ -12,7 +12,7 @@ import (
 
 // Generates the match score for a new user The interest must already exist!
 func CalculateMatchScore(userID1, userID2 string) (int,error) {
-	fmt.Println("Calculating Match score between : ", userID1," and ", userID2)
+
 	user1InterestsPtr, err := GetAllUserInterest(userID1)
 	if err != nil {
 		log.Println("Error getting user 1 interest", err)
@@ -40,7 +40,8 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 	}
 
 	matchScore := CalculateMatchProfile(matchProfile)
-	fmt.Println("Match score between : ", userID1," and ", userID2 ," is : ", matchScore)
+
+	fmt.Println("Match score between  matchProfile", matchProfile, " is ", matchScore)
 	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }
@@ -57,6 +58,9 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 	vibeCount := 0
 	languageCount := 0
 
+	// 5 is a good score meaning there is a least one match per category 
+	// excluding language, platform and communication
+
 	for _, interest := range matchProfile {
 		if interest.CategoryID == GENRE {
 			genreCount += 1
@@ -68,11 +72,9 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 		}
 		if interest.CategoryID == PLATFORM {
 			platformCount += 1
-			score += 1
 		}
 		if interest.CategoryID == COMMUNICATION {
 			communicationCount += 1
-			score += 1
 		}
 		if interest.CategoryID == GOALS {
 			goalsCount += 1
@@ -88,18 +90,18 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 		}
 		if interest.CategoryID == LANGUAGE {
 			languageCount += 1
-			score += 1
 		}
 	}
 
 
 	/* THE BELOW SECTION HAS BEEN REMOVED BECAUSE OF ALMOST NO MATCHES */
 	// If the user has less than 1 interest in any of these category, the match score is set to 0
-	// if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
-	// 	return 99 // this is temporary in order to test the match score
-	// }
+	if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
+		return 0
+	}
+
 	// the score is only derived from the number of interests in the categories of Genre, PlayStyle, Goals, Session and Vibe
-	score = score -languageCount- platformCount - communicationCount 
+
 	return score
 
 }
