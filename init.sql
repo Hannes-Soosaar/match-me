@@ -2,6 +2,7 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- there should be a way to delete a user with out deleting the user's history.
+--OK
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL, 
@@ -15,6 +16,7 @@ CREATE TABLE IF NOT EXISTS users (
 	browser_location GEOGRAPHY(POINT, 4326)
 );
 
+-- OK
 CREATE TABLE IF NOT EXISTS profiles (
     id SERIAL PRIMARY KEY,
     uuid UUID UNIQUE NOT NULL,
@@ -24,33 +26,32 @@ CREATE TABLE IF NOT EXISTS profiles (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     birthdate DATE
 );
-
+-- OK not used!
 CREATE TABLE IF NOT EXISTS bio_points (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
     question VARCHAR(50) NOT NULL,
     answer TEXT NOT NULL
 );
-
+-- OK
 CREATE TABLE IF NOT EXISTS sessions (
 	id SERIAL PRIMARY KEY,
 	session_guid UUID UNIQUE,
 	user_id UUID
 );
 
-
--- Do not require the below table 
+-- OK not used
 CREATE TABLE IF NOT EXISTS connections (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL ,
     connected_user_id UUID NOT NULL
 );
-
+-- OK 
 CREATE TABLE IF NOT EXISTS categories(
     id SERIAL PRIMARY KEY,
     category VARCHAR(255) NOT NULL
 );
-
+-- OK
 INSERT INTO categories (category)
 VALUES 
 ('Genre'), -- 1
@@ -62,14 +63,14 @@ VALUES
 ('Vibe'), --7
 ('Language') --8
 ;
-
+-- OK
 CREATE TABLE IF NOT EXISTS interests (
     id SERIAL PRIMARY KEY,
     categoryID VARCHAR(255) NOT NULL,
     interest VARCHAR(255) NOT NULL
 );
 
--- Can choose at least 1 max 3 from category
+-- OK
 INSERT INTO interests(categoryId,interest)
 VALUES 
 (1,'RPG'),
@@ -122,40 +123,15 @@ VALUES
 (8,'Chinese')
 ;
 
-/* The JSNOB is  a new type not used before needs testing*/
-
-CREATE TABLE IF NOT EXISTS multiple_choice_questions (
-    id SERIAL PRIMARY KEY,          -- Unique identifier for each question
-    questions JSONB NOT NULL,       -- Array of questions stored as JSON
-    answer INT NOT NULL             -- Index of the correct answer
-);
-
--- INSERT INTO multiple_choice_questions (questions, answer)
--- VALUES (
---     '['Option A', 'Option B', 'Option C', 'Option D']'::jsonb,
---     2
--- );
-
-	
-
-
--- type UsersMatches struct {
--- 	ID         int       `json:"id"`
--- 	UserID1    int       `json:"userId1"`
--- 	UserID2    int       `json:"userId2"`
--- 	MatchScore int       `json:"MatchScore"`
--- 	CreatedAt  time.Time `json:"createdAt"`
--- }
-
-
 -- if there is a need to do time zone management we should use TIMESTAMPTZ
+-- NOK did no create, fixed syntax error
 CREATE TABLE IF NOT EXISTS user_matches(
     id SERIAL PRIMARY KEY,
     user_id_1 UUID NOT NULL,
     user_id_2 UUID NOT NULL,
     match_score INTEGER,
     status VARCHAR(20),
-    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
