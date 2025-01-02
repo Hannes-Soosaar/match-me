@@ -124,7 +124,7 @@ VALUES
 ;
 
 -- if there is a need to do time zone management we should use TIMESTAMPTZ
--- NOK did no create, fixed syntax error
+-- OK 
 CREATE TABLE IF NOT EXISTS user_matches(
     id SERIAL PRIMARY KEY,
     user_id_1 UUID NOT NULL,
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS user_matches(
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
+--OK
 CREATE TABLE IF NOT EXISTS user_interests (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
