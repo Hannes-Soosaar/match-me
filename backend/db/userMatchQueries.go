@@ -2,10 +2,9 @@ package db
 
 import (
 	"fmt"
+	"log"
 	"match_me_backend/models"
 )
-
-
 
 func GetAllUserMatches() ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches"
@@ -33,8 +32,6 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 // Need to get all new matches
 // Need to get all online matches
 // Need to get all blocked matches
-
-
 
 func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE user_id_1 = $1 OR user_id_2 = $1"
@@ -70,7 +67,7 @@ func GetSecondUserIdFromMatch(userID1 string, matchID int) (string, error) {
 }
 
 func AddUserMatch(userID1, userID2 string) error {
-query := `
+	query := `
 	INSERT INTO user_matches (user_id_1, user_id_2, match_score, created_at)
 	SELECT $1, $2, $3, now()
 	WHERE NOT EXISTS (
@@ -87,15 +84,17 @@ query := `
 
 func AddUserMatchForAllExistingUsers(newUserId string) error {
 
-	
 	existingUserIDs, err := GetAllUsersUuid() // returns a []string
+	log.Println("New user id: ", newUserId)
+	log.Println("Adding existingUserId: ", existingUserIDs)
+
 	if err != nil {
 		return fmt.Errorf("error getting all existing users: %w", err)
 	}
 
 	query := `
 	INSERT INTO user_matches (user_id_1, user_id_2,match_score, status, modified_at, created_at)
-	VALUES ($1, $2, 0,"new",now(), now())
+	VALUES ($1, $2, $3,'new',now(), now())
 	ON CONFLICT DO NOTHING;
 	`
 
@@ -104,17 +103,19 @@ func AddUserMatchForAllExistingUsers(newUserId string) error {
 		return fmt.Errorf("error starting transaction: %w", err)
 	}
 
-
 	for _, existingUserId := range existingUserIDs {
-		if existingUserId == newUserId {
-			continue
+		userMatch, err := CalculateMatchScore(newUserId, existingUserId)
+		log.Println("User match score calculated: ", userMatch);
+		if err != nil {
+			return fmt.Errorf("error calculating match score: %w", err)
 		}
-
-		_, err := tx.Exec(query, newUserId, existingUserId)
+		log.Println("Adding existingUserId: ", existingUserId)
+		_, err = tx.Exec(query, newUserId, existingUserId, userMatch)
 		if err != nil {
 			tx.Rollback()
 			return fmt.Errorf("error adding user match for user %s: %w", existingUserId, err)
 		}
+
 	}
 
 	if err := tx.Commit(); err != nil {
@@ -124,23 +125,22 @@ func AddUserMatchForAllExistingUsers(newUserId string) error {
 	return nil
 }
 
-
 // User IDs are passed in as uuid strings
 func UpdateUserMatchScore(currentUserID, userID2 string, userScore int) error {
 	query := "UPDATE user_matches SET match_score = $1 WHERE user_id_1 = $2 AND user_id_2 = $3"
 	_, err := DB.Exec(query, userScore, currentUserID, userID2)
 	if err != nil {
-		return fmt.Errorf("error updating user match score: %w", err)	
+		return fmt.Errorf("error updating user match score: %w", err)
 	}
+	log.Println(currentUserID, userID2, "User match score updated", userScore)
 	return nil
 }
 
-
-func UpdateUserMatchStatus(matchId int, status string) (string, error){
+func UpdateUserMatchStatus(matchId int, status string) (string, error) {
 	query := "UPDATE user_matches SET status = $1 WHERE id = $2"
 	_, err := DB.Exec(query, status, matchId)
-	if err != nil {	
+	if err != nil {
 		return "", fmt.Errorf("error updating user match status: %w", err)
-	}		
-	return  status + "  was updated", nil
+	}
+	return status + "  was updated", nil
 }

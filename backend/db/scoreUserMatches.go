@@ -1,8 +1,7 @@
-package utils
+package db
 
 import (
 	"log"
-	"match_me_backend/db"
 	"match_me_backend/models"
 )
 
@@ -13,21 +12,18 @@ import (
 // Generates the match score for a new user
 func CalculateMatchScore(userID1, userID2 string) (int,error) {
 
-	user1InterestsPtr, err := db.GetAllUserInterest(userID1)
+	user1InterestsPtr, err := GetAllUserInterest(userID1)
 	if err != nil {
 		log.Println("Error getting user 1 interest", err)
 	}
 	// user1Interests is []models.Interests
 	user1Interests := *user1InterestsPtr
-	user2InterestsPtr, err := db.GetAllUserInterest(userID2)
+	user2InterestsPtr, err := GetAllUserInterest(userID2)
 
 	if err != nil {
 		log.Println("Error getting user 2 interest", err)
 	}
 	user2Interests := *user2InterestsPtr
-	log.Println("User 1 interests: ", user1Interests)
-	log.Println("User 2 interests: ", user2Interests)
-
 	var matchProfile []models.Interests
 
 	for _, User1Interest := range user1Interests {
@@ -36,9 +32,6 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 
 			// handel exceptions where the score must be zero
 			if User1Interest == User2Interest {
-				log.Println("Match found")
-				log.Println("User 1 interest: ", User1Interest)
-				log.Println("User 2 interest: ", User2Interest)
 				//Create a match profile for the two users.
 				matchProfile = append(matchProfile, User1Interest)
 			}
@@ -47,7 +40,8 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 	matchScore := CalculateMatchProfile(matchProfile)
 
 //TODO this is temporary until we have the full update path determined
-	err = db.UpdateUserMatchScore(userID1, userID2, matchScore)
+
+	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }
 
@@ -55,7 +49,7 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 
 // If the location criteria is not met, the match score is set to 0
 func ZeroMatchScore(currentUserID, userID2 string) {
-	err := db.UpdateUserMatchScore(currentUserID, userID2, 0)
+	err := UpdateUserMatchScore(currentUserID, userID2, 0)
 	if err != nil {
 		log.Println("Error updating match score: ", err)
 	}
@@ -78,35 +72,35 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 	languageCount := 0
 
 	for _, interest := range matchProfile {
-		if interest.CategoryID == db.GENRE {
+		if interest.CategoryID == GENRE {
 			genreCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.PLAY_STYLE {
+		if interest.CategoryID == PLAY_STYLE {
 			playStyleCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.PLATFORM {
+		if interest.CategoryID == PLATFORM {
 			platformCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.COMMUNICATION {
+		if interest.CategoryID == COMMUNICATION {
 			communicationCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.GOALS {
+		if interest.CategoryID == GOALS {
 			goalsCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.SESSION {
+		if interest.CategoryID == SESSION {
 			sessionCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.VIBE {
+		if interest.CategoryID == VIBE {
 			vibeCount += 1
 			score += 1
 		}
-		if interest.CategoryID == db.LANGUAGE {
+		if interest.CategoryID == LANGUAGE {
 			languageCount += 1
 			score += 1
 		}
@@ -114,7 +108,7 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 
 	// If the user has less than 1 interest in any of these category, the match score is set to 0
 	if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
-		return 0
+		return 99 // this is temporary in order to test the match score
 	}
 	// the score is only derived from the number of interests in the categories of Genre, PlayStyle, Goals, Session and Vibe
 	score = score -languageCount- platformCount - communicationCount 

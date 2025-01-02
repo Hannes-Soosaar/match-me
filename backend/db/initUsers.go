@@ -1,26 +1,23 @@
-package utils
+package db
 
 import (
 	"fmt"
 	"log"
 	"match_me_backend/auth"
-	"match_me_backend/db"
 	"strconv"
-
 	"golang.org/x/exp/rand"
 )
 
 // ! run only once, to initialize demo users.
 func InitDemoUsers() {
-	for i := 0; i < db.DEMO_USER_COUNT; i++ {
+	for i := 0; i < DEMO_USER_COUNT; i++ {
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
 		hashedPassword, err := auth.HashPassword(iStr)
 		if err != nil {
 			log.Println("Error hashing password: ", err)
-		}
-		//If I save the user and get all the user then I can just add a new connection to all the existing users.  
-		err = db.SaveUser(email, hashedPassword)
+		}  
+		err = SaveUser(email, hashedPassword)
 		if err != nil {
 			log.Println("Error saving user: ", err)
 		}
@@ -30,10 +27,10 @@ func InitDemoUsers() {
 }
 
 func RemoveDemoUsers() {
-	for i := 0; i < db.DEMO_USER_COUNT; i++ {
+	for i := 0; i < DEMO_USER_COUNT; i++ {
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
-		err := db.DeleteUser(email)
+		err := DeleteUser(email)
 		if err != nil {
 			log.Print(email)
 			log.Println(" Error deleting user: ", err)
@@ -42,11 +39,11 @@ func RemoveDemoUsers() {
 }
 
 func CreateProfile() {
-	for i := 0; i < db.DEMO_USER_COUNT; i++ {
+	for i := 0; i < DEMO_USER_COUNT; i++ {
 		rand.Seed(uint64(i))
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
-		uuid, err := db.GetUserUUIDFromUserEmail(email)
+		uuid, err := GetUserUUIDFromUserEmail(email)
 		if err != nil {
 			log.Println("Error getting user uuid: ", err)
 		}
@@ -57,7 +54,7 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			db.AddInterestToUser(rndNum, uuid)
+			AddInterestToUser(rndNum, uuid)
 		}
 		// Add play style
 		for k := 0; k <= 2; k++ {
@@ -65,18 +62,18 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			db.AddInterestToUser(rndNum, uuid)
+			AddInterestToUser(rndNum, uuid)
 		}
 		// Add platform
 		rndPlatform, err := GenerateRandomNumber(17, 21)
-		db.AddInterestToUser(rndPlatform, uuid)
+		AddInterestToUser(rndPlatform, uuid)
 		// Add communication
 		for m := 0; m <= 2; m++ {
 			rndNum, err := GenerateRandomNumber(22, 26)
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			db.AddInterestToUser(rndNum, uuid)
+			AddInterestToUser(rndNum, uuid)
 		}
 		// Add goals
 		for n := 0; n <= 2; n++ {
@@ -84,17 +81,17 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			db.AddInterestToUser(rndNum, uuid)
+			AddInterestToUser(rndNum, uuid)
 		}
 		// Add session
 		rndSession, err := GenerateRandomNumber(32, 34)
-		db.AddInterestToUser(rndSession, uuid)
+		AddInterestToUser(rndSession, uuid)
 		// Add vibe
 		rndVibe, err := GenerateRandomNumber(35, 41)
-		db.AddInterestToUser(rndVibe, uuid)
+		AddInterestToUser(rndVibe, uuid)
 		// Add language
 		rndLanguage, err := GenerateRandomNumber(42, 48)
-		db.AddInterestToUser(rndLanguage, uuid)
+		AddInterestToUser(rndLanguage, uuid)
 		if err != nil {
 			log.Println("Error saving profile: ", err)
 		}

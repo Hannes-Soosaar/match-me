@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS sessions (
 	user_id UUID
 );
 
+
+-- Do not require the below table 
 CREATE TABLE IF NOT EXISTS connections (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL ,
