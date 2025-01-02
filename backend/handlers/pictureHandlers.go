@@ -6,12 +6,10 @@ import (
 	"log"
 	"match_me_backend/auth"
 	"match_me_backend/db"
-	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
-	"time"
 )
 
 func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
@@ -26,11 +24,6 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 
-	if err != nil {
-		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
-		log.Printf("Error extracting user ID from token: %v", err)
-		return
-	}
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
 		log.Printf("Error extracting user ID from token: %v", err)
@@ -55,10 +48,9 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer file.Close()
 
-	rand.Seed(time.Now().UnixNano())
-	randomFileName := fmt.Sprintf("%s_%d.jpeg", currentUserID, rand.Intn(1000000))
+	randomFileName := currentUserID + ".jpeg"
 
-	dir := "../frontend/src/components/Assets" // Change this to the desired directory
+	dir := "../frontend/src/components/Assets/ProfilePictures" // Change this to the desired directory
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err := os.MkdirAll(dir, os.ModePerm)
 		if err != nil {
@@ -84,16 +76,11 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	oldPath := db.GetPicturePath(currentUserID)
 	err = db.SetPicturePath(currentUserID, randomFileName)
 	if err != nil {
 		http.Error(w, "Error setting the username", http.StatusInternalServerError)
 		log.Printf("Error setting the username: %v", err)
 		return
-	}
-
-	if oldPath != "default_profile_pic.png" && oldPath != "" {
-		//implement logic to delete old uploaded profile pictures
 	}
 
 	w.WriteHeader(http.StatusOK)

@@ -10,17 +10,17 @@ import (
 func InitRoutes() *mux.Router {
 	router := mux.NewRouter()
 
-	fileDirectory := "../frontend/src/components/Assets"
+	fileDirectory := "../frontend/src/components/Assets/ProfilePictures"
 
 	router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(fileDirectory))))
-// user routs
+	// user routs
 	router.HandleFunc("/login", handlers.LoginHandler).Methods("POST")
 	router.HandleFunc("/register", handlers.RegisterHandler).Methods("POST")
 	router.HandleFunc("/users/{id}", handlers.GetUserHandler).Methods("GET")
 	router.HandleFunc("/me", handlers.GetCurrentUserHandler).Methods("GET")
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
-// Profile routs
+	// Profile routs
 	router.HandleFunc("/userInterests", handlers.GetUserInterests).Methods("GET")
 	router.HandleFunc("/userInterest", handlers.UpdateUserInterest).Methods("POST")
 	router.HandleFunc("/interests", handlers.GetInterests).Methods("GET")
@@ -32,16 +32,14 @@ func InitRoutes() *mux.Router {
 
 	router.HandleFunc("/browserlocation", handlers.BrowserHandler).Methods("POST")
 
-
-// match routs
-	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET") // get 15 all matches	
+	// match routs
+	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET") // get 15 all matches
 	router.HandleFunc("/matches/request", handlers.RequestMatch).Methods("PUT")
-	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT") 
-	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT") 
-	router.HandleFunc("/matches/remove", handlers.RemoveMatch).Methods("PUT") 
+	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT")
+	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")
+	router.HandleFunc("/matches/remove", handlers.RemoveMatch).Methods("PUT")
 
-
-// chat routs
+	// chat routs
 
 	return router
 }
