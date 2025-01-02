@@ -39,8 +39,18 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 
 	file, _, err := r.FormFile("profilePic") // "profilePic" should be the name of the form field
 	if err != nil {
-		http.Error(w, "Unable to extract file", http.StatusBadRequest)
-		log.Printf("Error extracting file: %v", err)
+		currentPic := db.GetPicturePath(currentUserID)
+		if currentPic != "" {
+			log.Printf("Error setting picture but one already exists so nothing will be changed.")
+			return
+		} else {
+			err = db.SetPicturePath(currentUserID, "default_profile_pic.png")
+			if err != nil {
+				http.Error(w, "Error setting the default profile picture path", http.StatusInternalServerError)
+				log.Printf("Error setting the default profile picture path: %v", err)
+				return
+			}
+		}
 		return
 	}
 	defer file.Close()
@@ -74,11 +84,16 @@ func PostProfilePictureHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	oldPath := db.GetPicturePath(currentUserID)
 	err = db.SetPicturePath(currentUserID, randomFileName)
 	if err != nil {
 		http.Error(w, "Error setting the username", http.StatusInternalServerError)
 		log.Printf("Error setting the username: %v", err)
 		return
+	}
+
+	if oldPath != "default_profile_pic.png" && oldPath != "" {
+		//implement logic to delete old uploaded profile pictures
 	}
 
 	w.WriteHeader(http.StatusOK)

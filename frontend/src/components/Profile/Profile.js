@@ -148,18 +148,16 @@ const Profile = () => {
             );
             console.log('City information updated successfully!');
 
-            if (profilePic) {
-                const picData = new FormData();
-                picData.append('profilePic', profilePic);
+            const picData = new FormData();
+            picData.append('profilePic', profilePic);
 
-                await axios.post('/picture', picData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                });
-                console.log('Profile picture updated successfully!');
-            }
+            await axios.post('/picture', picData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            console.log('Profile picture updated successfully!');
 
             alert('Profile updated successfully!');
         } catch (error) {

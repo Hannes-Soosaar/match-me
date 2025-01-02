@@ -17,8 +17,8 @@ func SetPicturePath(userID, path string) error {
 
 func GetPicturePath(userID string) string {
 	var queriedPicturePath string
-	userQuery := "SELECT profile_picture FROM profiles WHERE uuid = $2"
-	err := DB.QueryRow(userQuery, userID).Scan(queriedPicturePath)
+	userQuery := "SELECT profile_picture FROM profiles WHERE uuid = $1"
+	err := DB.QueryRow(userQuery, userID).Scan(&queriedPicturePath)
 	if err != nil {
 		log.Printf("Error returning picture path for uuid=%s: %v", userID, err)
 		return ""
