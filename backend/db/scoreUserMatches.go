@@ -20,17 +20,18 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 	// user1Interests is []models.Interests
 	user1Interests := *user1InterestsPtr
 	user2InterestsPtr, err := GetAllUserInterest(userID2)
+	fmt.Println(userID1, "User Interest", user1Interests)
 
 	if err != nil {
 		log.Println("Error getting user 2 interest", err)
 	}
 	user2Interests := *user2InterestsPtr
+	fmt.Println(userID2, " User Interests ", user2Interests)
+
 	var matchProfile []models.Interests
 
 	for _, User1Interest := range user1Interests {
-
 		for _, User2Interest := range user2Interests {
-
 			// handel exceptions where the score must be zero
 			if User1Interest == User2Interest {
 				//Create a match profile for the two users.
@@ -41,7 +42,7 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 
 	matchScore := CalculateMatchProfile(matchProfile)
 
-	fmt.Println("Match score between  matchProfile", matchProfile, " is ", matchScore)
+	// fmt.Println("Match score between  matchProfile", matchProfile, " is ", matchScore)
 	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }
