@@ -97,13 +97,11 @@ func GetUserByID(userID string) (*models.User, error) {
 
 func SaveUser(email string, password_hash string) error {
 	userUUID := uuid.New()
-
 	tx, err := DB.Begin()
 	if err != nil {
 		log.Printf("Error starting transaction: %v", err)
 		return err
 	}
-
 	userQuery := "INSERT INTO users (uuid, email, password_hash) VALUES ($1, $2, $3)"
 	_, err = tx.Exec(userQuery, userUUID, email, password_hash)
 	if err != nil {
@@ -111,7 +109,6 @@ func SaveUser(email string, password_hash string) error {
 		log.Printf("Error inserting into users table: %v", err)
 		return err
 	}
-
 	profileQuery := "INSERT INTO profiles (uuid) VALUES ($1)"
 	_, err = tx.Exec(profileQuery, userUUID)
 	if err != nil {
@@ -119,7 +116,6 @@ func SaveUser(email string, password_hash string) error {
 		log.Printf("Error inserting into profiles table: %v", err)
 		return err
 	}
-
 	err = tx.Commit()
 	if err != nil {
 		log.Printf("Error committing transaction: %v", err)

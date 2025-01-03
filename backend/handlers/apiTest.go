@@ -12,8 +12,20 @@ import (
 //to test any GET function use postman and run localhost:4000/test
 
 func GetTestResultHandler(w http.ResponseWriter, r *http.Request) {
-	db.InitDemoUsers()
-	userID := "RAN this" // user id for a@a.com
+
+	if db.InitDemoUsers() {
+		userMatches, err := db.GetAllUserMatches()
+		if err != nil {
+			log.Println("Error getting user matches:", err)
+		}
+
+		for _, userMatch := range userMatches {
+			db.CalculateMatchScore(userMatch.UserID1, userMatch.UserID2)
+		}
+
+	}
+	userID := "RAN this"
+	// user id for a@a.com
 
 	// db.AddUserMatchForAllExistingUsers(userID1)
 

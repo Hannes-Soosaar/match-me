@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"log"
 	"match_me_backend/models"
 )
@@ -20,13 +19,11 @@ func CalculateMatchScore(userID1, userID2 string) (int,error) {
 	// user1Interests is []models.Interests
 	user1Interests := *user1InterestsPtr
 	user2InterestsPtr, err := GetAllUserInterest(userID2)
-	fmt.Println(userID1, "User Interest", user1Interests)
 
 	if err != nil {
 		log.Println("Error getting user 2 interest", err)
 	}
 	user2Interests := *user2InterestsPtr
-	fmt.Println(userID2, " User Interests ", user2Interests)
 
 	var matchProfile []models.Interests
 
