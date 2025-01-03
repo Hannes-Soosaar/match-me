@@ -160,11 +160,10 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	}
 	// Based on what the input is here we can filter the output to the front end.
 	userMatches, err := db.GetAllUserMatchesByUserId(userID1)
+	log.Println(`userMatches`, userMatches)
 	if err != nil {
 		log.Println("Error getting user matches:", err)
 	}
-
-	log.Println("User Matches:", userMatches)
 
 	var matches []MatchResponse
 	var match MatchResponse

@@ -14,23 +14,19 @@ type UserInterestResponse struct {
 
 func GetInterestResponseBody() (*[]UserInterestResponse, error) {
 	categories, err := GetAllCategories()
-
 	if err != nil {
 		log.Println("Error getting all categories")
 		return nil, err
 	}
 	interests, err := GetAllInterest()
-
 	if err != nil {
 		log.Println("Error getting all interests")
 		return nil, err
 	}
-
 	interestMap := make(map[int][]models.Interests)
 	for _, interest := range *interests {
 		interestMap[interest.CategoryID] = append(interestMap[interest.CategoryID], interest)
 	}
-
 	var userInterestResponses []UserInterestResponse
 	for _, category := range *categories {
 		response := UserInterestResponse{
@@ -51,7 +47,6 @@ func GetAllInterest() (*[]models.Interests, error) {
 		return nil, err
 	}
 	defer rows.Close()
-
 	var interests []models.Interests
 	for rows.Next() {
 		var interest models.Interests
@@ -95,7 +90,6 @@ func GetAllUserInterest(userID string) (*[]models.Interests, error) {
 		return nil, err
 	}
 	
-
 	query := "SELECT id, categoryID, interest FROM interests WHERE id = ANY($1)"
 	rows, err := DB.Query(query, pq.Array(userIds))
 	if err != nil {
@@ -113,7 +107,6 @@ func GetAllUserInterest(userID string) (*[]models.Interests, error) {
 		}
 		interests = append(interests, interest)
 	}
-	log.Println(interests)
 	return &interests, nil
 }
 
