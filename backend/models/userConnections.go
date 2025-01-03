@@ -12,3 +12,7 @@ type UserConnections struct {
 	Status    string    `json:"status"`
 	CreatedAt time.Time `json:"createdAt"`
 }
+
+type ConnectionRequest struct {
+	UserID string `json:"user_id"`
+}
