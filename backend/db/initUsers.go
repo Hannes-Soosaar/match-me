@@ -5,12 +5,13 @@ import (
 	"log"
 	"match_me_backend/auth"
 	"strconv"
+	"time"
 
 	"golang.org/x/exp/rand"
 )
 
 // ! run only once, to initialize demo users.
-func InitDemoUsers() {
+func InitDemoUsers() bool {
 	for i := 0; i < DEMO_USER_COUNT; i++ {
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
@@ -25,6 +26,7 @@ func InitDemoUsers() {
 	}
 	CreateProfile()
 	log.Println("Demo users initialized")
+	return true
 }
 
 func RemoveDemoUsers() {
@@ -39,8 +41,8 @@ func RemoveDemoUsers() {
 	}
 }
 
-/* 
-Run only once, to create profiles for demo users. 
+/*
+Run only once, to create profiles for demo users.
 
 if you want to run it again  all entries from the tables should be removed first from the following tables.
 
@@ -51,18 +53,29 @@ TRUNCATE TABLE profiles
 
 */
 
-
 func CreateProfile() {
 	fmt.Println("Creating profiles")
+	rand.Seed(uint64(time.Now().UnixNano()))
+	birthdate, err := time.Parse("2006-01-02", "1999-01-01")
+	if err != nil {
+		log.Println("Error parsing birthdate: ", err)
+	}
+
 	for i := 0; i < DEMO_USER_COUNT; i++ {
-		rand.Seed(uint64(i))
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
-		uuid, err := GetUserUUIDFromUserEmail(email)
+		uuid, err := GetUserUUIDFromUserEmail(email) //
 
 		if err != nil {
 			log.Println("Error getting user uuid: ", err)
 		}
+
+		SetUsername(uuid, "User"+iStr)
+		SetBirthdate(uuid, birthdate) // 1999-01-01 all user have the same birthdate
+		SetAbout(uuid, "I am a user "+ iStr)
+		SetPicturePath(uuid, "")	// TODO add bot picture no picture or default picture
+		SetCity(uuid, "Estonia", "Tartu County", "Tartu")	// TODO have 5 cities
+
 
 		// Add two Genres
 		for j := 0; j <= 3; j++ {
@@ -70,7 +83,10 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			AddInterestToUser(rndNum, uuid)
+			err = AddInterestToUser(rndNum, uuid)
+			if err != nil {
+				log.Printf("Error adding interest to user %s: %v", uuid, err)
+			}
 		}
 		// Add play style
 		for k := 0; k <= 3; k++ {
@@ -78,18 +94,27 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			AddInterestToUser(rndNum, uuid)
+			err = AddInterestToUser(rndNum, uuid)
+			if err != nil {
+				log.Printf("Error adding interest to user %s: %v", uuid, err)
+			}
 		}
 		// Add platform
 		// rndPlatform, err := GenerateRandomNumber(17, 18)
-		AddInterestToUser(17, uuid)
+		err = AddInterestToUser(17, uuid)
+		if err != nil {
+			log.Printf("Error adding interest to user %s: %v", uuid, err)
+		}
 		// Add communication
 		for m := 0; m <= 2; m++ {
 			// rndNum, err := GenerateRandomNumber(22, 23)
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			AddInterestToUser(22, uuid)
+			err = AddInterestToUser(22, uuid)
+			if err != nil {
+				log.Printf("Error adding interest to user %s: %v", uuid, err)
+			}
 		}
 		// Add goals
 		for n := 0; n <= 2; n++ {
@@ -97,11 +122,17 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			AddInterestToUser(rndNum, uuid)
+			err = AddInterestToUser(rndNum, uuid)
+			if err != nil {
+				log.Printf("Error adding interest to user %s: %v", uuid, err)
+			}
 		}
 		// Add session
 		rndSession, err := GenerateRandomNumber(32, 34)
-		AddInterestToUser(rndSession, uuid)
+		err = AddInterestToUser(rndSession, uuid)
+		if err != nil {
+			log.Printf("Error adding interest to user %s: %v", uuid, err)
+		}
 		// Add vibe
 
 		for n := 0; n <= 3; n++ {
@@ -109,20 +140,24 @@ func CreateProfile() {
 			if err != nil {
 				log.Println("Error generating random number: ", err)
 			}
-			AddInterestToUser(rndVibe, uuid)
+			err = AddInterestToUser(rndVibe, uuid)
+			if err != nil {
+				log.Printf("Error adding interest to user %s: %v", uuid, err)
+			}
 		}
-
 		// Add language
 		// rndLanguage, err := GenerateRandomNumber(42, 45)
-		AddInterestToUser(42, uuid)
+		err = AddInterestToUser(42, uuid)
 		if err != nil {
-			log.Println("Error saving profile: ", err)
+			log.Printf("Error adding Language interest to user %s: %v", uuid, err)
 		}
+
 		err = AddUserMatchForAllExistingUsers(uuid)
 		if err != nil {
 			log.Println("Error adding user match for all existing users: ", err)
 		}
 	}
+
 }
 
 func GenerateRandomNumber(min, max int) (int, error) {

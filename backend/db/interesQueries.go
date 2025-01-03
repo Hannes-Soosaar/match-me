@@ -130,7 +130,6 @@ func AddInterestToUser(interestID int, userID string) error {
 		query := "INSERT INTO user_interests (user_id, interest_id) VALUES ($1, $2)"
 		_, err := DB.Exec(query, userID, interestID)
 		if err != nil {
-			log.Println("Error adding interest to user")
 			return err
 		}
 	}
