@@ -41,11 +41,24 @@ CREATE TABLE IF NOT EXISTS sessions (
 );
 
 -- OK not used
-CREATE TABLE IF NOT EXISTS connections (
-    id SERIAL PRIMARY KEY,
-    user_id UUID NOT NULL ,
-    connected_user_id UUID NOT NULL
+CREATE TABLE Connections (
+    ConnectionID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID1 UUID NOT NULL,
+    UserID2 UUID NOT NULL,
+    Status ENUM('pending', 'accepted', 'blocked') DEFAULT 'pending',
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (UserID1, UserID2)
 );
+
+CREATE TABLE Messages (
+    MessageID INT PRIMARY KEY AUTO_INCREMENT,
+    SenderID UUID NOT NULL,
+    ReceiverID UUID NOT NULL,
+    MessageText TEXT NOT NULL,
+    SentAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    IsRead BOOLEAN DEFAULT FALSE,
+);
+
 -- OK 
 CREATE TABLE IF NOT EXISTS categories(
     id SERIAL PRIMARY KEY,
