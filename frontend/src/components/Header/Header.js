@@ -29,7 +29,10 @@ function Header() {
                             Matches
                         </Link>
                         <Link to="/connections" className="nav-link">
-                            Buddies 
+                            Buddies
+                        </Link>
+                        <Link to="/chat" className="nav-link">
+                            Chat
                         </Link>
                     </>
                 )}

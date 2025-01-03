@@ -8,6 +8,7 @@ import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
 import Matches from './Matches/Matches';
 import InterestSection from './InterestSection/InterestSection';
+import Chat from './Chat/Chat';
 
 
 function App() {
@@ -38,6 +39,9 @@ function App() {
           <Route
             path='/connections'
             element={isAuthenticated ? <InterestSection /> : <Navigate to="/" />} />
+          <Route
+            path='/chat'
+            element={isAuthenticated ? <Chat /> : <Navigate to="/" />} />
         </Routes>
       </div>
     </BrowserRouter >
