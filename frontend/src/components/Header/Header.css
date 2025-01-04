@@ -1,11 +1,13 @@
 .header {
-    margin: 0;
     background-color: #FF6969;
     height: 60px;
+    max-width: 1980px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 20px;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .logo,
@@ -18,19 +20,30 @@
     margin-bottom: 4px;
 }
 
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
+.nav-left,
 .nav-right {
     display: flex;
     align-items: center;
+    gap: 15px;
 }
 
 .logo:hover,
 .signup:hover,
 .nav-link:hover {
     color: hsla(0, 0%, 96%, 0.7);
+}
+
+.body-sides
+{
+    flex: 1; 
+    height: 100vh;
+}
+
+.nav-container {
+    flex: 1;
+}
+
+.body-side {
+    flex: 1;
+    background-color: #333; /* Optional: for visualization */
 }

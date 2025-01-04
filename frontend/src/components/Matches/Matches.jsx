@@ -31,13 +31,17 @@ const Matches = () => {
 
     return (
         <>
-            <div style={{ textAlign: 'center' }}>
-                <h1>Matches</h1>
+               <h1>Matches</h1>
+              <div className="body-div">
+                <div className="body-sides"></div>
+                <div className='body-content'>
                 {matches.map((item, index) =>
                 (<p key={index}>
-            <MatchCard userProfile={item} key={index}></MatchCard>
+                 <MatchCard userProfile={item} key={index}></MatchCard>
                 </p>
                 ))}
+                </div>
+                <div className="body-sides"></div>
             </div>
             
         </>
