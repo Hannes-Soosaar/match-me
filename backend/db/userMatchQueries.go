@@ -51,6 +51,37 @@ func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	return userMatches, nil
 }
 
+func GetConnectionsID(userID string) ([]string, error) {
+	query := `
+	SELECT user_id_1 FROM user_matches WHERE user_id_2 = $1
+	UNION
+	SELECT user_id_2 FROM user_matches WHERE user_id_1 = $1
+	`
+
+	var connections []string
+
+	rows, err := DB.Query(query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("failed to execute query: %w", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var connectionID string
+		if err := rows.Scan(&connectionID); err != nil {
+			return nil, fmt.Errorf("failed to scan row: %w", err)
+		}
+		connections = append(connections, connectionID)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("row iteration error: %w", err)
+	}
+
+	fmt.Println("Connections:", connections)
+	return connections, nil
+}
+
 func GetSecondUserIdFromMatch(userID1 string, matchID int) (string, error) {
 	query := "SELECT user_id_2 FROM user_matches WHERE user_id_1 = $1 AND id = $2"
 	row := DB.QueryRow(query, userID1, matchID)
@@ -175,7 +206,6 @@ func UpdateAllUserScores() error {
 	fmt.Println("Finished Updating all user scores")
 	return nil
 }
-
 
 func UpdateMatchScoreForUser(user1ID string) error {
 	userMatches, err := GetAllUserMatchesByUserId(user1ID)

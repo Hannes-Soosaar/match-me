@@ -1,10 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import './Chat.css';
+import axios from 'axios';
 
 const Chat = () => {
     const [socket, setSocket] = useState(null)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState("")
+
+    const authToken = localStorage.getItem('token');
+
+    useEffect(() => {
+        const fetchConnections = async () => {
+            try {
+                const connections = await axios.get('/connections', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+                console.log("Connections:", connections.data)
+
+            } catch (error) {
+                console.error('Error fetching connections:', error);
+            }
+        }
+
+        fetchConnections()
+    }, [authToken])
 
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:4000/ws")

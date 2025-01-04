@@ -38,6 +38,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT")
 	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")
 	router.HandleFunc("/matches/remove", handlers.RemoveMatch).Methods("PUT")
+	router.HandleFunc("/connections", handlers.GetConnections).Methods("GET")
 
 	// chat routes
 	router.HandleFunc("/ws", handlers.WebsocketHandler)

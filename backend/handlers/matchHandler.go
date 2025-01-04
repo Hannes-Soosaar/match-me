@@ -28,7 +28,7 @@ func RemoveMatch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Missing matchId", http.StatusBadRequest)
 		return
 	}
-// checks if the user is logged in
+	// checks if the user is logged in
 	_, err = GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
@@ -142,8 +142,7 @@ func BlockMatch(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-
-// is online ? 
+// is online ?
 type MatchResponse struct {
 	MatchID                int    `json:"match_id"`
 	MatchScore             int    `json:"match_score"`
@@ -190,4 +189,22 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(matches)
+}
+
+func GetConnections(w http.ResponseWriter, r *http.Request) {
+
+	userID1, err := GetCurrentUserID(r)
+
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+
+	connections, err := db.GetConnectionsID(userID1)
+	if err != nil {
+		log.Println("Error getting connections from db:", err)
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(connections)
 }
