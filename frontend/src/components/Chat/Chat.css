@@ -1,0 +1,76 @@
+.chat-container {
+    display: flex;
+    justify-content: flex-start;
+    /* Align content to the start */
+    align-items: flex-start;
+    /* Align items to the top */
+    height: 80vh;
+    width: 90vw;
+    margin-left: 5vw;
+    margin-bottom: 5vw;
+    flex-direction: row;
+    border: 2px solid black;
+}
+
+.chat-sidebar {
+    display: flex;
+    flex-direction: column;
+    /* Stack sidebar items vertically */
+    justify-content: flex-start;
+    /* Align items to the top */
+    align-items: flex-start;
+    /* Align items to the start horizontally */
+    width: 15%;
+    height: 80vh;
+    background-color: hsla(32, 87%, 30%, 0.511);
+    overflow: auto;
+    border-right: 2px solid black;
+}
+
+.chat-sidebar ul {
+    padding: 20px;
+    margin: 0px;
+}
+
+.chat-messages {
+    flex: 1;
+    /* Take up the remaining space */
+    background-color: #fff;
+    overflow: auto;
+    border-bottom: 2px solid black;
+}
+
+.chat-right-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    /* Take remaining space */
+    height: 80vh;
+}
+
+.chat-input-container {
+    height: 6vh;
+    max-height: 6vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #ccc;
+
+}
+
+.chat-input-container button {
+    width: 4vw;
+    height: 3vh;
+    font-size: calc(0.5vh + 0.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.chat-input-container input {
+    border-color: #fff;
+    width: 40%;
+    height: 3vh;
+}
