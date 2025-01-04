@@ -30,121 +30,147 @@ Check what time does a JWT token hold.
 
 - Matches
 
-
 Kood/Jõhvi
 
-A profile picture can be set.
 
-The user can log out.
+// USER MANAGEMENT
 
-The user has a minimum of 5 biographical points to configure.
+DONE- All user responses return an id in the payload. (the payload is the JWT)
 
-It is possible to register with a username and password.
+CHECK- The users endpoints return HTTP404 when the id is not found.
 
-The application works with a single user.
+// PROFILE
 
-It refuses to recommend an obviously poor match.
+DONE -The profile endpoint returns "about me" type information.
 
-Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
+DONE - A profile picture can be set.
 
-It recommends obviously good matches.
+DONE -The user has a minimum of 5 biographical points to configure.
 
-Create two users in an empty system, who appear like they should obviously match
+DONE  -It is possible to register with a username and password.
 
-The user is not shown any recommendations until they have completed their profile.
+DONE -The user can change their biographical data.
 
-The user can change their biographical data.
+DONE -The user can specify preference which target biographical data points. get Interpertation
 
-The user can specify preference which target biographical data points.
+DONE- The email address is not returned in API calls for other users
 
-The profile picture can be removed or changed.
+CHECK - The application works with a single user.
 
-The email address is not shown, except to the owner of the profile.
+CHECK -The user is not shown any recommendations until they have completed their profile.
+CHECK (changed OK,  how to remove) - The profile picture can be removed or changed.
 
-The email address is not returned in API calls for other users
+CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
+    PAGES for 
+        They are recommended
+        There is an outstanding connection request ()
+        They are connected ( buddies )
 
-The user can specify a location from a list
+CHECK - It is possible to dismiss a recommendation.
 
-The user only sees recommendations from their location.
+TODO - The user can log out.
 
-The user can see a list of no more than 10 recommendations at a time.
+TODO - It refuses to recommend an obviously poor match.
 
-The recommendations are prioritized with the best first.
+TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
 
-The recommendations behave in line with the student's described matching logic.
+TODO - Create two users in an empty system, who appear like they should obviously match
 
-It is possible to dismiss a recommendation.
+TODO -It recommends obviously good matches.
 
-That recommendation is not shown again after it is dismissed.
+TODO- The email address is not shown, except to the owner of the profile.
 
-Connection requests can be sent.
+TODO -The user can specify a location from a list 
 
-Incoming connection requests can be rejected.
+TODO -The user only sees recommendations from their location.
 
-It is possible to disconnect with a user.
+    TODO- additional paratmeters for match query display 
 
-Chats are ordered with the most recently active chat first.
+TODO - The user can see a list of no more than 10 recommendations at a time.
+    TODO- query and return  10 new best matches based on score.
+    TODO- every update gets 10 new matches
 
-Both users see the same chat history.
+TODO- The recommendations are prioritized with the best first.
 
-The chat history API data is paginated.
+TODO- The recommendations behave in line with the student's described matching logic.
+    TODO - Describe matching logic.
 
-The realtime implementation does not rely on polling.
 
-The profile endpoint returns "about me" type information.
 
-The me endpoints correctly shortcuts to the appropriate users endpoint.
+TODO -That recommendation is not shown again after it is dismissed.
+    -TODO add logic for returning match response 
 
-The application is secure. Information is appropriately shown to the correct authenticated users only.
+TODO Connection requests can be sent.
+    -TODO add logic for returning match response 
 
-A method was provided to load fictitious users into the system (minimum 100).
+TODO- Incoming connection requests can be accepted.
+   -TODO add logic for returning match response 
+TODO- Incoming connection requests can be rejected. 
+        -TODO add logic for returning match response 
 
-Incoming connection requests can be accepted.
+TODO- It is possible to disconnect with a user.
+  -TODO add logic for returning match response 
 
-Users can only see profile information when properly allowed.
+  TODO- Users can only see profile information when properly allowed. ( connected or matched)
 
-They are recommended
-There is an outstanding connection request
-They are connected
-A PostgreSQL database is used as the primary application database.
 
-Chat is only possible between connected profiles.
+// CHAT
 
-The chat works in real time.
+TODO- The realtime implementation does not rely on polling. (ws)
 
-The users endpoint returns a name and profile link.
+TODO- Chats are ordered with the most recently active chat first.
 
-Chat messages feature a date and time.
+TODO- Both users see the same chat history.
 
-An unread message icon appears when new chat messages are received in real time.
+TODO- The chat history API data is paginated. (what is this )
 
-The connections endpoint only returns a list of ids.
+TODO- Chat is only possible between connected profiles.
 
-A chat history can be reached from the connected user's profile.
+TODO -The chat works in real time.
 
-The recommendations endpoint only returns a list of ids.
+TODO - An unread message icon appears when new chat messages are received in real time.
 
-The bio endpoint returns biographical data.
+TODO - Chat messages feature a date and time.
 
-All user responses return an id in the payload.
+// DEMO
 
-The users endpoints return HTTP404 when the id is not found.
+DONE- A method was provided to load fictitious users into the system (minimum 100).
 
-This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
+//SYSTEM
 
-The backend is implemented in Go.
+DONE -A PostgreSQL database is used as the primary application database.
 
-The frontend is implemented in React.
+DONE -The backend is implemented in Go.
 
-The application is responsive for mobile and desktop browsers.
+DONE -The frontend is implemented in React.
 
-Extra
-The user experience is excellent, usable and well designed.
+CHECK - The application is responsive for mobile and desktop browsers.
 
-An offline/online indicator is shown on profile and chat views.
+// API DEV.
 
-A typing in progress indicator is shown.
+CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
+TODO- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
 
-The recommendation algorithm is exceptional.
+TODO- The connections endpoint only returns a list of ids. (make /connections return a list of ID's )
 
-It implements proximity-based location filtering.
+TODO- A chat history can be reached from the connected user's profile.
+
+TODO- The recommendations endpoint only returns a list of ids. (make /recommendations return a list of ID's )
+
+TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
+
+TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
+
+
+// EXTRAS
+TODO -  The user experience is excellent, usable and well designed.
+
+TODO - An offline/online indicator is shown on profile and chat views.
+
+    - ADD field to user_matches get indication from WS map.
+
+TODO - A typing in progress indicator is shown.
+
+? -The recommendation algorithm is exceptional. The hardest!
+
+TODO - It implements proximity-based location filtering.

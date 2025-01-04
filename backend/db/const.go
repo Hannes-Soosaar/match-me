@@ -17,7 +17,7 @@ const (
 	NEW = "new" // this is used if the user has not seen the connection yet
 	SHOWN = "shown" 	// this is used if the user has seen the connection but has not made a decision
 	REMOVED = "removed"  // this is used if the user want to not see the connection, but it the status can be changed to new after a certain time period and if there is a lack of new connections
-	
+	REJECTED = "rejected"	// this is used if the user has rejected the connection
 	REQUESTED = "requested"	// this is used if the user has requested the connection but the other party has not accepted yet
 	CONNECTED = "connected"	// this is used if the user has accepted the connection and is now connected
 	BLOCKED = "blocked"	// this is used if the user has blocked the connection all communication is blocked

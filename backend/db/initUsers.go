@@ -29,6 +29,8 @@ func InitDemoUsers() bool {
 	return true
 }
 
+
+// DO we need to remove the demo users?
 func RemoveDemoUsers() {
 	for i := 0; i < DEMO_USER_COUNT; i++ {
 		iStr := strconv.Itoa(i)
@@ -40,6 +42,7 @@ func RemoveDemoUsers() {
 		}
 	}
 }
+
 
 /*
 Run only once, to create profiles for demo users.
