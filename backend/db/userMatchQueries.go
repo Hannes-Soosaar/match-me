@@ -29,7 +29,6 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 	return userMatches, nil
 }
 
-
 func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE user_id_1 = $1 OR user_id_2 = $1"
 	rows, err := DB.Query(query, userID)
@@ -63,8 +62,7 @@ func GetSecondUserIdFromMatch(userID1 string, matchID int) (string, error) {
 	return userID2, nil
 }
 
-
-//! do we need this.
+// ! do we need this.
 func UserIsMatched(userID1 string) (bool, error) {
 	query := `
 	SELECT EXISTS (
@@ -172,7 +170,27 @@ func UpdateAllUserScores() error {
 		if err != nil {
 			return fmt.Errorf("error calculating match score: %w", err)
 		}
-		time.Sleep(10 * time.Millisecond)
+		time.Sleep(10 * time.Millisecond) //is this needed anymore ?
+	}
+	fmt.Println("Finished Updating all user scores")
+	return nil
+}
+
+
+func UpdateMatchScoreForUser(user1ID string) error {
+	userMatches, err := GetAllUserMatchesByUserId(user1ID)
+	if err != nil {
+		return fmt.Errorf("error getting all user matches: %w", err)
+	}
+	for _, userMatch := range userMatches {
+		score, err := CalculateMatchScore(userMatch.UserID1, userMatch.UserID2)
+		if err != nil {
+			return fmt.Errorf("error calculating match score: %w", err)
+		}
+		err = UpdateUserMatchScore(userMatch.UserID1, userMatch.UserID2, score)
+		if err != nil {
+			return fmt.Errorf("error updating user match score: %w", err)
+		}
 	}
 	return nil
 }

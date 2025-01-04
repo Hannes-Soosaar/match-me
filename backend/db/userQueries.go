@@ -13,6 +13,7 @@ import (
 
 var ErrUserNotFound = errors.New("user not found")
 
+//UUID gets mapped as ID
 func GetUserByEmail(email string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash FROM users WHERE email = $1"
 	var user models.User
@@ -62,7 +63,7 @@ func GetAllUsersUuid() ([]string, error) {
 	}
 	return uuids, nil
 }
-
+// UUID gets mapped as ID	
 func GetUserByUsername(username string) (*models.User, error) {
 	query := "SELECT u.uuid, u.email, u.password_hash FROM users u JOIN profiles p ON u.uuid = p.uuid WHERE p.username = $1"
 	var user models.User
@@ -77,7 +78,7 @@ func GetUserByUsername(username string) (*models.User, error) {
 	}
 	return &user, nil
 }
-
+// UUID gets mapped as ID	
 func GetUserByID(userID string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash FROM users WHERE uuid = $1"
 	var user models.User

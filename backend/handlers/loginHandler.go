@@ -57,6 +57,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
+	db.UpdateMatchScoreForUser(existingUser.ID)
+	
+	if err != nil {
+		log.Println("Error updating all user scores", err)
+	}
+
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
