@@ -1,0 +1,95 @@
+.chat-container {
+    display: flex;
+    justify-content: flex-start;
+    /* Align content to the start */
+    align-items: flex-start;
+    /* Align items to the top */
+    height: 80vh;
+    width: 90vw;
+    margin-left: 5vw;
+    margin-bottom: 5vw;
+    flex-direction: row;
+}
+
+.chat-sidebar {
+    display: flex;
+    flex-direction: column;
+    /* Stack sidebar items vertically */
+    justify-content: flex-start;
+    /* Align items to the top */
+    align-items: flex-start;
+    /* Align items to the start horizontally */
+    width: 15%;
+    height: 80vh;
+    background-color: hsla(32, 87%, 30%, 0.511);
+    overflow: auto;
+}
+
+.chat-sidebar ul {
+    padding: 20px;
+    margin: 0px;
+}
+
+.chat-messages {
+    flex: 1;
+    /* Take up the remaining space */
+    background-color: #fff;
+    overflow: auto;
+}
+
+.chat-right-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    /* Take remaining space */
+    height: 80vh;
+}
+
+.chat-input-container {
+    height: 8vh;
+    max-height: 8vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    background-color: #ccc;
+}
+
+.chat-input-container button {
+    width: 4vw;
+    height: 4vh;
+    font-size: calc(0.5vh + 0.5vw);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background-color: #FF6969;
+    margin: 5px;
+    padding: 0px;
+    border-radius: 15px;
+    border: 0px solid black;
+    color: whitesmoke;
+    font-weight: bold;
+    box-sizing: content-box;
+}
+
+.chat-input-container button:hover {
+    color: hsla(0, 0%, 96%, 0.7);
+    cursor: pointer;
+}
+
+.chat-input-container input {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: left;
+    border: 0px solid #FF6969;
+    box-sizing: content-box;
+    width: 40%;
+    height: 4vh;
+    border-radius: 15px;
+    margin: 5px;
+    padding-left: 7px;
+    outline: none;
+    font-size: calc(0.5vh + 0.5vw);
+}
