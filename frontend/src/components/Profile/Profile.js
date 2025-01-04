@@ -15,38 +15,32 @@ const Profile = () => {
     const [usernameText, setUsernameText] = useState('');
     const [profilePic, setProfilePic] = useState(null);
     const [previewPic, setPreviewPic] = useState(null);
+    const [isEditingLocation, setIsEditingLocation] = useState(false);
     const [formData, setFormData] = useState({
         country: '',
         state: '',
         city: '',
     });
 
-    // Retrieve authentication token
     const authToken = localStorage.getItem('token');
-
 
     const formatDate = (date) => {
         if (!date) return '';
         const parsedDate = new Date(date);
-        // Check if date is valid
         if (isNaN(parsedDate)) return '';
-        // Format the date to 'YYYY-MM-DDT00:00:00Z' (assuming the API needs a timestamp with no time component)
         return parsedDate.toISOString();
     };
+
     const formattedBirthdate = formatDate(birthdate);
 
     const formatDateForInput = (dateString) => {
         if (!dateString) return '';
         const parsedDate = new Date(dateString);
-        // Check if the date is valid
         if (isNaN(parsedDate)) return '';
-        return parsedDate.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+        return parsedDate.toISOString().split('T')[0];
     };
 
-
-
     useEffect(() => {
-
         const fetchData = async () => {
             try {
                 const response = await axios.get('/me', {
@@ -56,7 +50,6 @@ const Profile = () => {
                 });
                 const data = response.data;
 
-                // Populate fields with data, or leave them empty if not provided
                 setUsername(data.username || '');
                 setAboutMe(data.about_me || '');
                 setrawBirthdate(data.birthdate || '');
@@ -68,9 +61,8 @@ const Profile = () => {
                     city: data.user_city || '',
                 });
 
-                // Handle profile picture (default or from backend)
                 if (data.profile_picture) {
-                    setPreviewPic(`/uploads/${data.profile_picture}`); // Assuming it's a URL
+                    setPreviewPic(`/uploads/${data.profile_picture}`);
                 } else {
                     setPreviewPic(defaultProfilePic);
                 }
@@ -79,19 +71,91 @@ const Profile = () => {
             }
         };
 
-
-
         fetchData();
     }, [authToken]);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleSubmitUsername = async () => {
+        try {
+            await axios.post(
+                '/username',
+                { username },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                }
+            );
+            alert('Username updated successfully!');
+        } catch (error) {
+            console.error('Error updating username:', error);
+            alert('Failed to update username.');
+        }
+    };
 
+    const handleSubmitAboutMe = async () => {
+        try {
+            await axios.post(
+                '/about',
+                { about },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                }
+            );
+            alert('About Me updated successfully!');
+        } catch (error) {
+            console.error('Error updating About Me:', error);
+            alert('Failed to update About Me.');
+        }
+    };
+
+    const handleSubmitBirthdate = async () => {
         if (!birthdate) {
             alert('Please enter a valid birthdate.');
             return;
         }
+        try {
+            await axios.post(
+                '/birthdate',
+                { birthdate: formattedBirthdate },
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                }
+            );
+            alert('Birthdate updated successfully!');
+        } catch (error) {
+            console.error('Error updating birthdate:', error);
+            alert('Failed to update birthdate.');
+        }
+    };
 
+    const handleSubmitProfilePic = async () => {
+        if (!profilePic) {
+            alert('Please select a profile picture.');
+            return;
+        }
+
+        const picData = new FormData();
+        picData.append('profilePic', profilePic);
+
+        try {
+            await axios.post('/picture', picData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+            alert('Profile picture updated successfully!');
+        } catch (error) {
+            console.error('Error updating profile picture:', error);
+            alert('Failed to update profile picture.');
+        }
+    };
+
+    const handleSubmitLocation = async () => {
         if (!countryId || !stateId || !formData.city) {
             alert('Please select a valid country, state, and city.');
             return;
@@ -105,39 +169,6 @@ const Profile = () => {
 
         try {
             await axios.post(
-                '/username',
-                { username },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                }
-            );
-            console.log('Username updated successfully!');
-
-            await axios.post(
-                '/about',
-                { about },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                }
-            );
-            console.log('About Me updated successfully!');
-
-            await axios.post(
-                '/birthdate',
-                { birthdate: formattedBirthdate },
-                {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                }
-            );
-            console.log('About Me updated successfully!');
-
-            await axios.post(
                 '/city',
                 payload,
                 {
@@ -146,50 +177,34 @@ const Profile = () => {
                     },
                 }
             );
-            console.log('City information updated successfully!');
-
-            const picData = new FormData();
-            picData.append('profilePic', profilePic);
-
-            await axios.post('/picture', picData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${authToken}`,
-                },
-            });
-            console.log('Profile picture updated successfully!');
-
-            alert('Profile updated successfully!');
+            alert('Location updated successfully!');
+            setIsEditingLocation(false);
         } catch (error) {
-            console.error('Error updating profile:', error);
-            alert('There was an error updating your profile. Please try again.');
+            console.error('Error updating location:', error);
+            alert('Failed to update location.');
         }
     };
 
     const onCountryChange = (country) => {
         if (country?.id && country?.name) {
-            setCountryId(country.id); // Update country ID
+            setCountryId(country.id);
             setFormData((prevData) => ({
                 ...prevData,
-                country: country.name, // Store country name
-                state: '', // Reset state
-                city: '', // Reset city
+                country: country.name,
+                state: '',
+                city: '',
             }));
-        } else {
-            console.error('Invalid country data received:', country);
         }
     };
 
     const onStateChange = (state) => {
         if (state?.id && state?.name) {
-            setStateId(state.id); // Update state ID
+            setStateId(state.id);
             setFormData((prevData) => ({
                 ...prevData,
-                state: state.name, // Store state name
-                city: '', // Reset city
+                state: state.name,
+                city: '',
             }));
-        } else {
-            console.error('Invalid state data received:', state);
         }
     };
 
@@ -199,8 +214,6 @@ const Profile = () => {
                 ...prevData,
                 city: city.name,
             }));
-        } else {
-            console.error('Invalid city data received:', city);
         }
     };
 
@@ -228,6 +241,7 @@ const Profile = () => {
         <div style={{ textAlign: 'center' }}>
             <div className='profile-container'>
                 <div className='inputs'>
+                    {/* Username Section */}
                     <div className='profile-text'>{usernameText}</div>
                     <div className='input'>
                         <input
@@ -239,6 +253,16 @@ const Profile = () => {
                             required
                         />
                     </div>
+                    <div className='submit-container'>
+                        <button
+                            className='submit'
+                            onClick={handleSubmitUsername}
+                        >
+                            Submit Username
+                        </button>
+                    </div>
+    
+                    {/* About Me Section */}
                     <div className='profile-text'>Write something about yourself</div>
                     <div className='input-textarea'>
                         <textarea
@@ -249,6 +273,16 @@ const Profile = () => {
                             required
                         />
                     </div>
+                    <div className='submit-container'>
+                        <button
+                            className='submit'
+                            onClick={handleSubmitAboutMe}
+                        >
+                            Submit About Me
+                        </button>
+                    </div>
+    
+                    {/* Birthdate Section */}
                     <div className='profile-text'>When were you born?</div>
                     <div className='input'>
                         <input
@@ -258,6 +292,16 @@ const Profile = () => {
                             required
                         />
                     </div>
+                    <div className='submit-container'>
+                        <button
+                            className='submit'
+                            onClick={handleSubmitBirthdate}
+                        >
+                            Submit Birthdate
+                        </button>
+                    </div>
+    
+                    {/* Profile Picture Section */}
                     <div className='profile-text'>Upload a profile picture</div>
                     <div className='input-profile-pic'>
                         <label htmlFor="file-input" className="profile-pic-label">
@@ -275,49 +319,85 @@ const Profile = () => {
                             style={{ display: 'none' }}
                         />
                     </div>
-                </div>
-                <div className='profile-text'>Choose your prefered location</div>
-                <div className="inputGroup">
-                    <div className="inputField">
-                        <h6>Country:</h6>
-                        <CountrySelect
-                            onChange={onCountryChange}
-                            placeHolder="Select Country"
-                        />
-                    </div>
-                    <div className="inputField">
-                        <h6>State:</h6>
-                        <StateSelect
-                            countryid={countryId}
-                            onChange={onStateChange}
-                            placeHolder="Select State"
-                            disabled={countryId == null}
-
-                        />
-                    </div>
-                    <div className="inputField">
-                        <h6>City:</h6>
-                        <CitySelect
-                            countryid={countryId}
-                            stateid={stateId}
-                            onChange={handleCitySelect}
-                            placeHolder="Select City"
-                            disabled={countryId == null || stateId == null}
-
-                        />
+                    <div className='submit-container'>
+                        <button
+                            className='submit'
+                            onClick={handleSubmitProfilePic}
+                        >
+                            Submit Picture
+                        </button>
                     </div>
                 </div>
-                <div className='submit-container'>
-                    <button
-                        className='submit'
-                        onClick={(e) => handleSubmit(e)}
-                    >
-                        Create profile
-                    </button>
+    
+                {/* Location Section */}
+                <div className='profile-text'>Your Location</div>
+                <div className="location-display">
+                    {!isEditingLocation ? (
+                        <>
+                            <p><strong>Country:</strong> {formData.country || 'Not Set'}</p>
+                            <p><strong>State:</strong> {formData.state || 'Not Set'}</p>
+                            <p><strong>City:</strong> {formData.city || 'Not Set'}</p>
+                            <div className='submit-container'>
+                                <button
+                                    className='submit'
+                                    onClick={() => setIsEditingLocation(true)}
+                                >
+                                    Edit Location
+                                </button>
+                            </div>
+                        </>
+                    ) : (
+                        <div className="inputGroupLocation">
+                            <div className="inputField">
+                                <h6>Country:</h6>
+                                <CountrySelect
+                                    onChange={onCountryChange}
+                                    placeHolder={formData.country || "Select Country"}
+                                />
+                            </div>
+                            <div className="inputField">
+                                <h6>State:</h6>
+                                <StateSelect
+                                    countryid={countryId}
+                                    onChange={onStateChange}
+                                    placeHolder={formData.state || "Select State"}
+                                    disabled={!countryId}
+                                />
+                            </div>
+                            <div className="inputField">
+                                <h6>City:</h6>
+                                <CitySelect
+                                    countryid={countryId}
+                                    stateid={stateId}
+                                    onChange={handleCitySelect}
+                                    placeHolder={formData.city || "Select City"}
+                                    disabled={!countryId || !stateId}
+                                />
+                            </div>
+                            <div className='submit-container'>
+                                <button
+                                    className='submit'
+                                    onClick={() => {
+                                        handleSubmitLocation();
+                                        setIsEditingLocation(false);
+                                    }}
+                                >
+                                    Save Location
+                                </button>
+                                <button
+                                    className='submit'
+                                    onClick={() => setIsEditingLocation(false)}
+                                >
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
     );
+    
 };
 
 export default Profile;
