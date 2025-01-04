@@ -21,9 +21,9 @@
     /* Align items to the top */
     align-items: flex-start;
     /* Align items to the start horizontally */
-    width: 15%;
+    width: 16%;
     height: 70vh;
-    background-color: hsla(32, 87%, 30%, 0.511);
+    background-color: hsla(32, 97%, 45%, 0.795);
     overflow: auto;
 }
 
@@ -33,7 +33,13 @@
     align-items: center;
     /* Vertically align the items in the center */
     margin-bottom: 10px;
-    /* Space between connections */
+    padding-left: 5px;
+    width: 98%;
+}
+
+.connection-item:hover {
+    background-color: hsla(32, 87%, 30%, 0.511);
+    cursor: pointer;
 }
 
 .connection-item img {

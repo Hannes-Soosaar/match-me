@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import './Chat.css';
 import axios from 'axios';
 import { WebSocketContext } from '../WebSocketContext';
 
 const Chat = () => {
-    const [socket, setSocket] = useState(null)
+    const socket = useContext(WebSocketContext)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState("")
     const [connections, setConnections] = useState([])
