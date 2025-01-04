@@ -29,7 +29,6 @@ func InitDemoUsers() bool {
 	return true
 }
 
-
 // DO we need to remove the demo users?
 func RemoveDemoUsers() {
 	for i := 0; i < DEMO_USER_COUNT; i++ {
@@ -42,7 +41,6 @@ func RemoveDemoUsers() {
 		}
 	}
 }
-
 
 /*
 Run only once, to create profiles for demo users.
@@ -75,10 +73,9 @@ func CreateProfile() {
 
 		SetUsername(uuid, "User"+iStr)
 		SetBirthdate(uuid, birthdate) // 1999-01-01 all user have the same birthdate
-		SetAbout(uuid, "I am a user "+ iStr)
-		SetPicturePath(uuid, "")	// TODO add bot picture no picture or default picture
-		SetCity(uuid, "Estonia", "Tartu County", "Tartu")	// TODO have 5 cities
-
+		SetAbout(uuid, "I am a user "+iStr)
+		SetPicturePath(uuid, "default_profile_pic.png")   // TODO add bot picture no picture or default picture
+		SetCity(uuid, "Estonia", "Tartu County", "Tartu") // TODO have 5 cities
 
 		// Add two Genres
 		for j := 0; j <= 3; j++ {

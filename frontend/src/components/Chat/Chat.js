@@ -6,54 +6,28 @@ const Chat = () => {
     const [socket, setSocket] = useState(null)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState("")
-    const [connectionsID, setConnectionsID] = useState([])
     const [connections, setConnections] = useState([])
     const basePictureURL = "http://localhost:4000/uploads/";
 
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
-        const fetchConnectionsID = async () => {
+        const fetchConnections = async () => {
             try {
-                const response = await axios.get('/connections', {
+                const response = await axios.get('/matches', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },
-                });
-                setConnectionsID(response.data)
+                })
+
+                setConnections(response.data)
                 console.log(response.data)
-            } catch (error) {
-                console.error('Error fetching connections:', error);
-            }
-        }
-
-        fetchConnectionsID()
-    }, [authToken])
-
-    useEffect(() => {
-        const fetchConnections = async () => {
-            try {
-                const fetchedConnections = []
-
-                for (const connectionID of connectionsID) {
-                    const response = await axios.get(`/users/${connectionID}/profile`, {
-                        headers: {
-                            Authorization: `Bearer ${authToken}`,
-                        },
-                    })
-                    fetchedConnections.push(response.data)
-                }
-                setConnections(fetchedConnections)
-                console.log(fetchedConnections)
             } catch (error) {
                 console.error('Error getting connections profiles:', error)
             }
         }
-
-        if (connectionsID.length > 0) {
-            fetchConnections()
-        }
-    }, [connectionsID, authToken])
+        fetchConnections()
+    }, [authToken])
 
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:4000/ws")
@@ -92,8 +66,8 @@ const Chat = () => {
                 <div className="chat-sidebar">
                     {connections.map((connection, index) => (
                         <div key={index} className="connection-item">
-                            <img src={basePictureURL + connection.profile_picture} alt={connection.username} />
-                            <h4>{connection.username}</h4>
+                            <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
+                            <h4>{connection.matched_user_name}</h4>
                         </div>
                     ))}
                 </div>

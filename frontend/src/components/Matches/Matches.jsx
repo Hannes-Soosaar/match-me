@@ -31,19 +31,19 @@ const Matches = () => {
 
     return (
         <>
-               <h1>Matches</h1>
-              <div className="body-div">
+            <h1>Matches</h1>
+            <div className="body-div">
                 <div className="body-sides"></div>
                 <div className='body-content'>
-                {matches.map((item, index) =>
-                (<p key={index}>
-                 <MatchCard userProfile={item} key={index}></MatchCard>
-                </p>
-                ))}
+                    {matches.map((item, index) =>
+                    (<p key={index}>
+                        <MatchCard userProfile={item} key={index}></MatchCard>
+                    </p>
+                    ))}
                 </div>
                 <div className="body-sides"></div>
             </div>
-            
+
         </>
     );
 };
