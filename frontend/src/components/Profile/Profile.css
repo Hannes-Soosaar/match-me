@@ -77,15 +77,15 @@
 }
 
 .input-profile-pic img {
-    width: 75px;
-    height: 75px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
 }
 
 .input-profile-pic img:hover {
-    width: 75px;
-    height: 75px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -93,20 +93,20 @@
 
 .submit-container {
     display: flex;
-    gap: 30px;
-    margin: 60px auto;
+    gap: 10px;
+    margin: 20px auto;
 }
 
 .submit {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 185px;
-    height: 59px;
+    width: 200px;
+    height: 40px;
     color: whitesmoke;
     background: #FF6969;
     border-radius: 50px;
-    font-size: 19px;
+    font-size: 14px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -118,6 +118,14 @@
 
 .inputGroup {
     height: 100px;
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 20px; 
+    justify-content: flex-start; 
+}
+
+.inputGroupLocation {
+    height: 200px;
     display: flex;
     flex-wrap: wrap; 
     gap: 20px; 
