@@ -1,12 +1,12 @@
 .header {
     background-color: #FF6969;
-    height: 60px;
+    height: 3vw;
     max-width: 100vw;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 20px;
-    margin: 0 auto;
+    padding: 0 1vw;
+    margin: 0;
     box-sizing: border-box;
 }
 
@@ -16,15 +16,15 @@
     text-decoration: none;
     color: whitesmoke;
     font-weight: bold;
-    font-size: 20px;
-    margin-bottom: 4px;
+    font-size: calc(0.8vw + 0.8vh);
+    margin-bottom: 0px;
 }
 
 .nav-left,
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 1vw;
 }
 
 .logo:hover,
