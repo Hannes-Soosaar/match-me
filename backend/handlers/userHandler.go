@@ -83,7 +83,7 @@ func GetCurrentUserID(r *http.Request) (string, error) {
 
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		log.Printf("Unauthorized: Missing or invalid token")
-		return "", errors.New("Unauthorized: Missing or invalid token in header")
+		return "", errors.New("unauthorized: Missing or invalid token in header")
 	}
 
 	token := strings.TrimPrefix(authHeader, "Bearer ")
@@ -94,7 +94,6 @@ func GetCurrentUserID(r *http.Request) (string, error) {
 	}
 	return currentUserID, nil
 }
-
 
 //TODO userLogout handler ?
 //TODO Find_User

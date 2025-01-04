@@ -13,7 +13,7 @@ import (
 
 var ErrUserNotFound = errors.New("user not found")
 
-//UUID gets mapped as ID
+// UUID gets mapped as ID
 func GetUserByEmail(email string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash FROM users WHERE email = $1"
 	var user models.User
@@ -63,7 +63,8 @@ func GetAllUsersUuid() ([]string, error) {
 	}
 	return uuids, nil
 }
-// UUID gets mapped as ID	
+
+// UUID gets mapped as ID
 func GetUserByUsername(username string) (*models.User, error) {
 	query := "SELECT u.uuid, u.email, u.password_hash FROM users u JOIN profiles p ON u.uuid = p.uuid WHERE p.username = $1"
 	var user models.User
@@ -78,7 +79,8 @@ func GetUserByUsername(username string) (*models.User, error) {
 	}
 	return &user, nil
 }
-// UUID gets mapped as ID	
+
+// UUID gets mapped as ID
 func GetUserByID(userID string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash FROM users WHERE uuid = $1"
 	var user models.User
@@ -121,7 +123,7 @@ func SaveUser(email string, password_hash string) error {
 	if err != nil {
 		log.Printf("Error committing transaction: %v", err)
 		return err
-	}	
+	}
 	err = AddUserMatchForAllExistingUsers(userUUID.String())
 	if err != nil {
 		log.Printf("Error adding user match for all existing users: %v", err)
@@ -280,4 +282,26 @@ func DeleteUser(email string) error {
 		return err
 	}
 	return nil
+}
+
+func GetUserIDfromUUIDarray(UUIDs []string) ([]string, error) {
+	var userIDs []string
+
+	query := "SELECT id FROM users WHERE uuid = $1"
+
+	for _, uuid := range UUIDs {
+		var userID string
+
+		err := DB.QueryRow(query, uuid).Scan(&userID)
+		if err != nil {
+			if err == sql.ErrNoRows {
+				fmt.Printf("UUID not found: %s\n", uuid)
+				continue
+			}
+			return nil, fmt.Errorf("error fetching user ID for UUID %s: %w", uuid, err)
+		}
+		userIDs = append(userIDs, userID)
+	}
+	fmt.Println("Connections IDs:", userIDs)
+	return userIDs, nil
 }

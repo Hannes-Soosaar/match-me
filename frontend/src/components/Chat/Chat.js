@@ -6,19 +6,20 @@ const Chat = () => {
     const [socket, setSocket] = useState(null)
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState("")
+    const [connections, setConnections] = useState([])
 
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
         const fetchConnections = async () => {
             try {
-                const connections = await axios.get('/connections', {
+                const response = await axios.get('/connections', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
-                console.log("Connections:", connections.data)
-
+                setConnections(response.data)
+                console.log(response.data)
             } catch (error) {
                 console.error('Error fetching connections:', error);
             }

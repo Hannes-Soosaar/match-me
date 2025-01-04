@@ -199,12 +199,17 @@ func GetConnections(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error getting user Id from token:", err)
 	}
 
-	connections, err := db.GetConnectionsID(userID1)
+	connectionsUUIDs, err := db.GetConnectionsID(userID1)
 	if err != nil {
-		log.Println("Error getting connections from db:", err)
+		log.Println("Error getting connections UUID from db:", err)
+	}
+
+	connectionsIDs, err := db.GetUserIDfromUUIDarray(connectionsUUIDs)
+	if err != nil {
+		log.Println("Error getting connections ID from db:", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(connections)
+	json.NewEncoder(w).Encode(connectionsIDs)
 }
