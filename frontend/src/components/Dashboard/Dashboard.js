@@ -11,7 +11,6 @@ const Dashboard = () => {
     const [profilePic, setProfilePic] = useState(null);
     const navigate = useNavigate();
 
-
     useEffect(() => {
         const fetchUserData = async () => {
             try {

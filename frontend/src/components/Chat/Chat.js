@@ -8,6 +8,7 @@ const Chat = () => {
     const [newMessage, setNewMessage] = useState("")
     const [connectionsID, setConnectionsID] = useState([])
     const [connections, setConnections] = useState([])
+    const basePictureURL = "http://localhost:4000/uploads/";
 
     const authToken = localStorage.getItem('token');
 
@@ -31,9 +32,28 @@ const Chat = () => {
 
     useEffect(() => {
         const fetchConnections = async () => {
+            try {
+                const fetchedConnections = []
 
+                for (const connectionID of connectionsID) {
+                    const response = await axios.get(`/users/${connectionID}/profile`, {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    })
+                    fetchedConnections.push(response.data)
+                }
+                setConnections(fetchedConnections)
+                console.log(fetchedConnections)
+            } catch (error) {
+                console.error('Error getting connections profiles:', error)
+            }
         }
-    })
+
+        if (connectionsID.length > 0) {
+            fetchConnections()
+        }
+    }, [connectionsID, authToken])
 
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:4000/ws")
@@ -70,8 +90,11 @@ const Chat = () => {
         <>
             <div className="chat-container">
                 <div className="chat-sidebar">
-                    {connectionsID.map((connection, index) => (
-                        <ul key={index}>{connection}</ul>
+                    {connections.map((connection, index) => (
+                        <div key={index} className="connection-item">
+                            <img src={basePictureURL + connection.profile_picture} alt={connection.username} />
+                            <h4>{connection.username}</h4>
+                        </div>
                     ))}
                 </div>
                 <div className="chat-right-container">
