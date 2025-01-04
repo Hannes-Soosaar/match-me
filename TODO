@@ -68,6 +68,8 @@ CHECK- The application is secure. Information is appropriately shown to the corr
 
 CHECK - It is possible to dismiss a recommendation.
 
+TODO - Location Filter! // 
+
 TODO - The user can log out.
 
 TODO - It refuses to recommend an obviously poor match.
@@ -78,12 +80,11 @@ TODO - Create two users in an empty system, who appear like they should obviousl
 
 TODO -It recommends obviously good matches.
 
-TODO- The email address is not shown, except to the owner of the profile.
+TODO- The email address is not shown, except to the owner of the profile.  
 
 TODO -The user can specify a location from a list 
 
 TODO -The user only sees recommendations from their location.
-
     TODO- additional paratmeters for match query display 
 
 TODO - The user can see a list of no more than 10 recommendations at a time.
@@ -94,8 +95,6 @@ TODO- The recommendations are prioritized with the best first.
 
 TODO- The recommendations behave in line with the student's described matching logic.
     TODO - Describe matching logic.
-
-
 
 TODO -That recommendation is not shown again after it is dismissed.
     -TODO add logic for returning match response 
@@ -160,7 +159,6 @@ TODO- The recommendations endpoint only returns a list of ids. (make /recommenda
 TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
 
 TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
-
 
 // EXTRAS
 TODO -  The user experience is excellent, usable and well designed.

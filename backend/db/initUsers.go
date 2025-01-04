@@ -155,10 +155,10 @@ func CreateProfile() {
 			log.Printf("Error adding Language interest to user %s: %v", uuid, err)
 		}
 
-		err = AddUserMatchForAllExistingUsers(uuid)
-		if err != nil {
-			log.Println("Error adding user match for all existing users: ", err)
-		}
+		// err = AddUserMatchForAllExistingUsers(uuid)
+		// if err != nil {
+		// 	log.Println("Error adding user match for all existing users: ", err)
+		// }
 	}
 
 }

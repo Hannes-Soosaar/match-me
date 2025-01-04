@@ -76,7 +76,7 @@ func RegisterHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.SaveUser(user.Email, hashedPassword)
+	err = db.SaveUser(user.Email, hashedPassword)	
 	if err != nil {
 		sendErrorResponse(w, "Error saving user", http.StatusInternalServerError)
 		log.Printf("Error saving user: %v", err)

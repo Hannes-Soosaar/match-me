@@ -120,6 +120,11 @@ func SaveUser(email string, password_hash string) error {
 	if err != nil {
 		log.Printf("Error committing transaction: %v", err)
 		return err
+	}	
+	err = AddUserMatchForAllExistingUsers(userUUID.String())
+	if err != nil {
+		log.Printf("Error adding user match for all existing users: %v", err)
+		return err
 	}
 	return nil
 }

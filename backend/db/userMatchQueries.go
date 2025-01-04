@@ -29,10 +29,6 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 	return userMatches, nil
 }
 
-// Need to get all connected matches
-// Need to get all new matches
-// Need to get all online matches
-// Need to get all blocked matches
 
 func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE user_id_1 = $1 OR user_id_2 = $1"
@@ -67,6 +63,25 @@ func GetSecondUserIdFromMatch(userID1 string, matchID int) (string, error) {
 	return userID2, nil
 }
 
+
+//! do we need this.
+func UserIsMatched(userID1 string) (bool, error) {
+	query := `
+	SELECT EXISTS (
+    SELECT 1
+    FROM user_matches
+    WHERE user_id_1 = $1 
+    OR user_id_2 =  $1
+	);`
+	var exists bool
+	err := DB.QueryRow(query, userID1).Scan(&exists)
+	if err != nil {
+		log.Printf("error checking if user is in match: %v", err)
+		return false, fmt.Errorf("error executing query: %w", err)
+	}
+	return exists, nil
+}
+
 func AddUserMatch(userID1, userID2 string) error {
 	query := `
 	INSERT INTO user_matches (user_id_1, user_id_2, match_score, created_at)
@@ -86,7 +101,6 @@ func AddUserMatch(userID1, userID2 string) error {
 func AddUserMatchForAllExistingUsers(newUserId string) error {
 	fmt.Println("Adding user match for all existing users")
 	existingUserIDs, err := GetAllUsersUuid() // returns a []string
-
 
 	if err != nil {
 		return fmt.Errorf("error getting all existing users: %w", err)
@@ -146,7 +160,7 @@ func UpdateUserMatchStatus(matchId int, status string) (string, error) {
 	return status + "  was updated", nil
 }
 
-func UpdateAllUserScores()	error {
+func UpdateAllUserScores() error {
 	fmt.Println("Starting Updating all user scores")
 	userMatches, err := GetAllUserMatches()
 	if err != nil {
