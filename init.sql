@@ -40,15 +40,6 @@ CREATE TABLE IF NOT EXISTS sessions (
 	user_id UUID
 );
 
--- OK not used
-CREATE TABLE Connections (
-    ConnectionID INT PRIMARY KEY AUTO_INCREMENT,
-    UserID1 UUID NOT NULL,
-    UserID2 UUID NOT NULL,
-    Status ENUM('pending', 'accepted', 'blocked') DEFAULT 'pending',
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (UserID1, UserID2)
-);
 
 CREATE TABLE Messages (
     MessageID INT PRIMARY KEY AUTO_INCREMENT,
@@ -147,6 +138,18 @@ CREATE TABLE IF NOT EXISTS user_matches(
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+
+-- OK not used
+CREATE TABLE Connections (
+    ConnectionID INT PRIMARY KEY AUTO_INCREMENT,
+    UserID1 UUID NOT NULL,
+    UserID2 UUID NOT NULL,
+    Status ENUM('pending', 'accepted', 'blocked') DEFAULT 'pending',
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (UserID1, UserID2)
+);
+
 --OK
 CREATE TABLE IF NOT EXISTS user_interests (
     id SERIAL PRIMARY KEY,

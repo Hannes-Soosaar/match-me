@@ -5,10 +5,6 @@ import (
 	"match_me_backend/models"
 )
 
-// Read in all the matches
-// Find matches with no scores
-// Score
-
 // Generates the match score for a new user The interest must already exist!
 func CalculateMatchScore(userID1, userID2 string) (int,error) {
 
@@ -90,7 +86,6 @@ func CalculateMatchProfile(matchProfile []models.Interests) (int) {
 			languageCount += 1
 		}
 	}
-
 
 	/* THE BELOW SECTION HAS BEEN REMOVED BECAUSE OF ALMOST NO MATCHES */
 	// If the user has less than 1 interest in any of these category, the match score is set to 0

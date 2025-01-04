@@ -142,6 +142,8 @@ func BlockMatch(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+
+// is online ? 
 type MatchResponse struct {
 	MatchID                int    `json:"match_id"`
 	MatchScore             int    `json:"match_score"`

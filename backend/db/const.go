@@ -11,6 +11,8 @@ const (
 	SESSION       = 6
 	VIBE          = 7
 	LANGUAGE      = 8
+
+
 	// The following are the possible values for the "status" field in the "user_match" table 
 	NEW = "new" // this is used if the user has not seen the connection yet
 	SHOWN = "shown" 	// this is used if the user has seen the connection but has not made a decision
