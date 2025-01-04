@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './Chat.css';
 import axios from 'axios';
+import { WebSocketContext } from '../WebSocketContext';
 
 const Chat = () => {
     const [socket, setSocket] = useState(null)
@@ -8,7 +9,6 @@ const Chat = () => {
     const [newMessage, setNewMessage] = useState("")
     const [connections, setConnections] = useState([])
     const basePictureURL = "http://localhost:4000/uploads/";
-
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
@@ -21,7 +21,6 @@ const Chat = () => {
                 })
 
                 setConnections(response.data)
-                console.log(response.data)
             } catch (error) {
                 console.error('Error getting connections profiles:', error)
             }
@@ -30,28 +29,13 @@ const Chat = () => {
     }, [authToken])
 
     useEffect(() => {
-        const ws = new WebSocket("ws://localhost:4000/ws")
+        if (!socket) return;
 
-        ws.onopen = () => {
-            console.log("WebSocket connected")
-        }
-
-        ws.onmessage = (event) => {
+        socket.onmessage = (event) => {
             setMessages((prevMessages) => [...prevMessages, event.data])
         }
 
-        ws.onclose = () => {
-            console.log("WebSocket disconnected")
-            //TODO: Save chat history to the backend when WebSocket closes
-        }
-
-        setSocket(ws)
-
-        return () => {
-            ws.close()
-        }
-
-    }, [])
+    }, [socket])
 
     const sendMessage = () => {
         if (socket && newMessage) {
