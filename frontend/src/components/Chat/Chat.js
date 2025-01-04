@@ -7,11 +7,12 @@ const Chat = () => {
     const [messages, setMessages] = useState([])
     const [newMessage, setNewMessage] = useState("")
     const [connectionsID, setConnectionsID] = useState([])
+    const [connections, setConnections] = useState([])
 
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
-        const fetchConnections = async () => {
+        const fetchConnectionsID = async () => {
             try {
                 const response = await axios.get('/connections', {
                     headers: {
@@ -25,8 +26,14 @@ const Chat = () => {
             }
         }
 
-        fetchConnections()
+        fetchConnectionsID()
     }, [authToken])
+
+    useEffect(() => {
+        const fetchConnections = async () => {
+
+        }
+    })
 
     useEffect(() => {
         const ws = new WebSocket("ws://localhost:4000/ws")

@@ -42,6 +42,26 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
+func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	profile, err := db.GetUserProfileByID(userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "User/Profile not found", http.StatusNotFound)
+			log.Printf("User/Profile not found for uuid=%s: %v", userID, err)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error fetching user/profile for uuid=%s: %v", userID, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(profile)
+}
+
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user *models.ProfileInformation
 

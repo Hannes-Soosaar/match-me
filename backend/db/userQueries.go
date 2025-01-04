@@ -98,6 +98,23 @@ func GetUserByID(userID string) (*models.User, error) {
 	return &user, nil
 }
 
+func GetUserProfileByID(userID string) (*models.Profiles, error) {
+	query := "SELECT uuid, username, about_me, profile_picture, created_at, birthdate FROM profiles WHERE uuid = $1"
+	var profile models.Profiles
+
+	row := DB.QueryRow(query, userID)
+	if err := row.Scan(&profile.UUID, &profile.Username, &profile.AboutMe, &profile.ProfilePicture, &profile.CreatedAt, &profile.Birthdate); err != nil {
+		if err == sql.ErrNoRows {
+			log.Printf("user not found: %v", err)
+			return nil, fmt.Errorf("user not found: %w", err)
+		}
+		log.Printf("error querying user by ID: %v", err)
+		return nil, fmt.Errorf("error querying user by ID: %w", err)
+	}
+
+	return &profile, nil
+}
+
 func SaveUser(email string, password_hash string) error {
 	userUUID := uuid.New()
 	tx, err := DB.Begin()

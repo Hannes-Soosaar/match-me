@@ -4,11 +4,12 @@
     /* Align content to the start */
     align-items: flex-start;
     /* Align items to the top */
-    height: 80vh;
+    height: 70vh;
     width: 90vw;
     margin-left: 5vw;
-    margin-bottom: 5vw;
-    margin-top: 5vw;
+    margin-top: 6vw;
+    margin-right: 5vw;
+    margin-bottom: 6vw;
     flex-direction: row;
 }
 
@@ -21,7 +22,7 @@
     align-items: flex-start;
     /* Align items to the start horizontally */
     width: 15%;
-    height: 80vh;
+    height: 70vh;
     background-color: hsla(32, 87%, 30%, 0.511);
     overflow: auto;
 }
@@ -43,7 +44,7 @@
     flex-direction: column;
     flex: 1;
     /* Take remaining space */
-    height: 80vh;
+    height: 70vh;
 }
 
 .chat-input-container {
