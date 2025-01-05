@@ -1,4 +1,3 @@
-CREATE EXTENSION IF NOT EXISTS postgis;
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- there should be a way to delete a user with out deleting the user's history.
@@ -13,9 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_nation VARCHAR(50),
     user_region VARCHAR(50),
     latitude FLOAT,
-    longitude FLOAT,
-	register_location GEOGRAPHY(POINT, 4326), 
-	browser_location GEOGRAPHY(POINT, 4326)
+    longitude FLOAT
 );
 
 -- OK

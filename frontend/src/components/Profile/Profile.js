@@ -45,7 +45,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('/me', {
+                const response = await axios.get('/me/profile', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },

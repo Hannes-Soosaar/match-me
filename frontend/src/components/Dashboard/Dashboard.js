@@ -23,7 +23,7 @@ const Dashboard = () => {
                     return;
                 }
 
-                const response = await axios.get('/me', {
+                const response = await axios.get('/me/profile', {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },

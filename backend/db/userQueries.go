@@ -149,8 +149,7 @@ func SaveUser(email string, password_hash string) error {
 	return nil
 }
 
-
-//TODO  this function looks like is not used 
+//TODO  this function looks like is not used
 
 // func GetUserConnectionsByUserID(userID int) (*[]models.UserConnections, error) {
 // 	query := "SELECT * FROM users WHERE uuid = $1" // TODO: need to add check for status
@@ -174,7 +173,46 @@ func SaveUser(email string, password_hash string) error {
 // 	return &connections, nil
 // }
 
+func GetLightUserInformation(userID string) (*models.LightProfileInformation, error) {
+	query := `
+        SELECT 
+            username, profile_picture
+        FROM 
+            profiles 
+        WHERE 
+            uuid = $1`
 
+	var userInfo models.LightProfileInformation
+
+	var username sql.NullString
+	var picture sql.NullString
+
+	err := DB.QueryRow(query, userID).Scan(
+		&username,
+		&picture,
+	)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Printf("User not found for uuid=%v: %v", userID, err)
+			return nil, fmt.Errorf("user not found: %w", err)
+		}
+		log.Printf("Error querying user by ID: %v", err)
+		return nil, fmt.Errorf("error querying user by ID: %w", err)
+	}
+
+	// Check if any fields are NULL and assign them to appropriate defaults
+	userInfo.Username = ""
+	if username.Valid {
+		userInfo.Username = username.String
+	}
+
+	userInfo.Picture = ""
+	if picture.Valid {
+		userInfo.Picture = picture.String
+	}
+
+	return &userInfo, nil
+}
 
 func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	query := `

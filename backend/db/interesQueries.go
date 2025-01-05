@@ -3,6 +3,7 @@ package db
 import (
 	"log"
 	"match_me_backend/models"
+
 	"github.com/lib/pq"
 )
 
@@ -82,14 +83,14 @@ func GetAllUserInterestIDs(userID string) (*[]int, error) {
 }
 
 func GetAllUserInterest(userID string) (*[]models.Interests, error) {
-	
+
 	userIdsPtr, err := GetAllUserInterestIDs(userID)
-	userIds := *userIdsPtr 
+	userIds := *userIdsPtr
 	if err != nil {
 		log.Println("Error getting all user interests_ids")
 		return nil, err
 	}
-	
+
 	query := "SELECT id, categoryID, interest FROM interests WHERE id = ANY($1)"
 	rows, err := DB.Query(query, pq.Array(userIds))
 	if err != nil {
@@ -110,6 +111,17 @@ func GetAllUserInterest(userID string) (*[]models.Interests, error) {
 	return &interests, nil
 }
 
+func GetUserBioByID(userID string) ([]models.Interests, error) {
+	var queriedInterests []models.Interests
+	query := "SELECT interest_id FROM user_interests WHERE uuid = $1"
+	err := DB.QueryRow(query, userID).Scan(queriedInterests)
+	if err != nil {
+		log.Printf("Error updating username for uuid=%s: %v", userID, err)
+		return nil, err
+	}
+	return queriedInterests, nil
+
+}
 
 // TODO recalculate all matches for the user
 func AddInterestToUser(interestID int, userID string) error {
@@ -129,7 +141,7 @@ func AddInterestToUser(interestID int, userID string) error {
 	return nil
 }
 
-//TODO recalculate all matches for the user
+// TODO recalculate all matches for the user
 func RemoveInterestFromUser(interestID int, userID string) error {
 	query := "DELETE FROM user_interests WHERE user_id = $1 AND interest_id = $2"
 	_, err := DB.Exec(query, userID, interestID)

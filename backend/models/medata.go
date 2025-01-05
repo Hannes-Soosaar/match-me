@@ -2,6 +2,10 @@ package models
 
 import "time"
 
+type LightProfileInformation struct {
+	Username string `json:"username"`
+	Picture  string `json:"profile_picture"`
+}
 type ProfileInformation struct {
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`

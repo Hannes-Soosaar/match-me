@@ -62,6 +62,61 @@ func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(profile)
 }
 
+func GetUserBioHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	profile, err := db.GetUserBioByID(userID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "User/Profile not found", http.StatusNotFound)
+			log.Printf("User/Profile not found for uuid=%s: %v", userID, err)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error fetching user/profile for uuid=%s: %v", userID, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(profile)
+
+}
+
+func GetMeBioHandler(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
+		log.Printf("Unauthorized: Missing or invalid token")
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	currentUserID, err := auth.ExtractUserIDFromToken(token)
+	if err != nil {
+		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
+		log.Printf("Error extracting user ID from token: %v", err)
+		return
+	}
+
+	profile, err := db.GetUserBioByID(currentUserID)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			http.Error(w, "User/Profile not found", http.StatusNotFound)
+			log.Printf("User/Profile not found for uuid=%s: %v", currentUserID, err)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error fetching user/profile for uuid=%s: %v", currentUserID, err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(profile)
+
+}
+
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user *models.ProfileInformation
 
@@ -82,6 +137,41 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user, err = db.GetUserInformation(currentUserID)
+	if err != nil {
+		if err.Error() == "user not found" {
+			http.Error(w, "User not found", http.StatusNotFound)
+			log.Printf("User with ID %v not found", currentUserID)
+		} else {
+			http.Error(w, "Internal server error", http.StatusInternalServerError)
+			log.Printf("Error fetching user information: %v", err)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(user)
+}
+
+func GetLightCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
+	var user *models.LightProfileInformation
+
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
+		log.Printf("Unauthorized: Missing or invalid token")
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	currentUserID, err := auth.ExtractUserIDFromToken(token)
+	if err != nil {
+		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
+		log.Printf("Error extracting user ID from token: %v", err)
+		return
+	}
+
+	user, err = db.GetLightUserInformation(currentUserID)
 	if err != nil {
 		if err.Error() == "user not found" {
 			http.Error(w, "User not found", http.StatusNotFound)
