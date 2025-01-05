@@ -327,16 +327,16 @@ const Profile = () => {
                             Submit Picture
                         </button>
                     </div>
-                </div>
+                
     
                 {/* Location Section */}
                 <div className='profile-text'>Your Location</div>
-                <div className="location-display">
+                <div className="input-location">
                     {!isEditingLocation ? (
                         <>
-                            <p><strong>Country:</strong> {formData.country || 'Not Set'}</p>
-                            <p><strong>State:</strong> {formData.state || 'Not Set'}</p>
-                            <p><strong>City:</strong> {formData.city || 'Not Set'}</p>
+                            <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>
+                            <p><strong className='location-text'>State:</strong> {formData.state || 'Not Set'}</p>
+                            <p><strong className='location-text'>City:</strong> {formData.city || 'Not Set'}</p>
                             <div className='submit-container'>
                                 <button
                                     className='submit'
@@ -393,6 +393,7 @@ const Profile = () => {
                             </div>
                         </div>
                     )}
+                </div>
                 </div>
             </div>
         </div>
