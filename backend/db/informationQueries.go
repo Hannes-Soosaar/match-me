@@ -27,18 +27,21 @@ func GetUsername(userID string) string {
 	}
 	return queriedUsername
 }
+//TODO pass in a struct instead of multiple parameters
+func SetCity(userID, nation, region, city string, latitude, longitude float64) error {
 
-func SetCity(userID, nation, region, city string) error {
+	log.Println("Setting city", city, "for user", userID, "with latitude", latitude, "and longitude", longitude)
 	userQuery := `
 	UPDATE users 
 	SET 
 		user_city = $1, 
 		user_nation = $2,
-		user_region = $3
-		
-	WHERE uuid = $4
+		user_region = $3,
+		latitude = $4,
+		longitude = $5
+	WHERE uuid = $6
 `
-	_, err := DB.Exec(userQuery, city, nation, region, userID)
+	_, err := DB.Exec(userQuery, city, nation, region, latitude, longitude, userID)
 	if err != nil {
 		log.Printf("Error updating city for uuid=%s: %v", userID, err)
 		return fmt.Errorf("could not update city: %w", err)

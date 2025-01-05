@@ -19,6 +19,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/users/{id}", handlers.GetUserHandler).Methods("GET")
 	router.HandleFunc("/users/{id}/profile", handlers.GetUserProfileHandler).Methods("GET")
 	router.HandleFunc("/me", handlers.GetCurrentUserHandler).Methods("GET")
+
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
 	// Profile routes
@@ -40,6 +41,32 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")
 	router.HandleFunc("/matches/remove", handlers.RemoveMatch).Methods("PUT")
 	router.HandleFunc("/connections", handlers.GetConnections).Methods("GET")
+
+	/*
+	EXTERNAL API ROUTES
+
+	Create documentation for the following routes:
+
+	DONE:   /users/{id}: which returns the user's name and link to the profile picture.
+	DONE:   /users/{id}/profile: which returns the users "about me" type information.
+
+	None of them must return authentication-related data.
+
+	/users/{id}/bio: which returns the users biographical data (the data used to power recommendations).
+
+	  DONE AND IN USER:  /me: which is a shortcut to /users/{id}  for the authenticated user. You should also implement 
+
+	TODO: router.HandleFunc("/me/bio", handlers.GetCurrentUserHandler).Methods("GET")
+	TODO: router.HandleFunc("/me/profile", handlers.GetCurrentUserHandler).Methods("GET")
+
+	TODO:  /recommendations: which returns a maximum of 10 recommendations, containing only the id and nothing else.
+
+	TODO: /connections: which returns a list connected profiles, containing only the id and nothing else.		
+	  
+	TODO: All of the responses for /users data must also contain the id.
+
+	TODO: If the id is not found, or the user does not have permission to view that profile, it must return HTTP404.
+	*/
 
 	// chat routes
 	router.HandleFunc("/ws", handlers.WebsocketHandler)

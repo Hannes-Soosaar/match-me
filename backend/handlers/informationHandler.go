@@ -6,6 +6,7 @@ import (
 	"match_me_backend/auth"
 	"match_me_backend/db"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -14,11 +15,7 @@ type PostUsernameRequest struct {
 	Username string `json:"username"`
 }
 
-type PostCitynameRequest struct {
-	City   string `json:"city"`
-	Nation string `json:"country"`
-	Region string `json:"state"`
-}
+
 
 type PostAboutRequest struct {
 	About string `json:"about"`
@@ -71,6 +68,16 @@ func PostUsername(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Username successfully registered"})
 }
 
+
+type PostCityNameRequest struct {
+	City   string `json:"city"`
+	Nation string `json:"country"`
+	Region string `json:"state"`
+	Latitude  string `json:"latitude"`
+	Longitude string `json:"longitude"`
+}
+
+
 func PostCity(w http.ResponseWriter, r *http.Request) {
 	// Extract the Authorization header from the request
 	authHeader := r.Header.Get("Authorization")
@@ -92,7 +99,7 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse the request body to get city information
-	var body PostCitynameRequest
+	var body PostCityNameRequest
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
@@ -100,15 +107,19 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Ensure that City, Longitude, and Latitude are provided and not empty
+	// At least the city  is required 
+	// TODO the region and city can be undefined
 	if body.City == "" || body.Region == "" || body.Nation == "" {
 		http.Error(w, "City details cannot be empty", http.StatusBadRequest)
 		log.Printf("Error: City, Longitude, or Latitude cannot be empty")
 		return
 	}
 
+	latitude64, err := strconv.ParseFloat(body.Latitude, 64)
+	longitude64, err := strconv.ParseFloat(body.Longitude, 64)
+
 	// Call the db function to set the city details for the user
-	err = db.SetCity(currentUserID, body.Nation, body.Region, body.City)
+	err = db.SetCity(currentUserID, body.Nation, body.Region, body.City, latitude64, longitude64)
 	if err != nil {
 		http.Error(w, "Error setting the City", http.StatusInternalServerError)
 		log.Printf("Error setting the City: %v", err)

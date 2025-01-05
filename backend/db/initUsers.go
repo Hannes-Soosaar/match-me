@@ -58,6 +58,8 @@ func CreateProfile() {
 	fmt.Println("Creating profiles")
 	rand.Seed(uint64(time.Now().UnixNano()))
 	birthdate, err := time.Parse("2006-01-02", "1999-01-01")
+	var latitude float64
+	var longitude float64
 	if err != nil {
 		log.Println("Error parsing birthdate: ", err)
 	}
@@ -70,13 +72,14 @@ func CreateProfile() {
 		if err != nil {
 			log.Println("Error getting user uuid: ", err)
 		}
+		latitude = 58.378025 + float64(i)
+		longitude = 26.728493 + float64(i)
 
 		SetUsername(uuid, "User"+iStr)
 		SetBirthdate(uuid, birthdate) // 1999-01-01 all user have the same birthdate
 		SetAbout(uuid, "I am a user "+iStr)
-		SetPicturePath(uuid, "default_profile_pic.png")   // TODO add bot picture no picture or default picture
-		SetCity(uuid, "Estonia", "Tartu County", "Tartu") // TODO have 5 cities
-
+		SetPicturePath(uuid, "default_profile_pic.png")                        // TODO add bot picture no picture or default picture
+		SetCity(uuid, "Estonia", "Tartu County", "Tartu", latitude, longitude) // all users are from Tartu random lat and long just stars adding distance to users
 		// Add two Genres
 		for j := 0; j <= 3; j++ {
 			rndNum, err := GenerateRandomNumber(1, 10)

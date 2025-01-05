@@ -189,6 +189,16 @@ func UpdateUserMatchStatus(matchId int, status string) (string, error) {
 	return status + "  was updated", nil
 }
 
+func UpdateMatchDistance(matchID int, distance float64) error {
+	log.Println("Updating match distance",matchID, "distance: ", distance)	
+	query := "UPDATE user_matches SET distance = $1 WHERE id = $2"
+	_, err := DB.Exec(query, distance, matchID)
+	if err != nil {
+		return fmt.Errorf("error updating match distance: %w", err)
+	}
+	return nil
+}
+
 func UpdateAllUserScores() error {
 	fmt.Println("Starting Updating all user scores")
 	userMatches, err := GetAllUserMatches()
@@ -217,6 +227,7 @@ func UpdateMatchScoreForUser(user1ID string) error {
 		if err != nil {
 			return fmt.Errorf("error calculating match score: %w", err)
 		}
+		// TODO: should recalculate the distance also if the location was updated
 		err = UpdateUserMatchScore(userMatch.UserID1, userMatch.UserID2, score)
 		if err != nil {
 			return fmt.Errorf("error updating user match score: %w", err)

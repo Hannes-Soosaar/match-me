@@ -20,6 +20,8 @@ const Profile = () => {
         country: '',
         state: '',
         city: '',
+        latitude: null,
+        longitude: null,
     });
 
     const authToken = localStorage.getItem('token');
@@ -213,6 +215,8 @@ const Profile = () => {
             setFormData((prevData) => ({
                 ...prevData,
                 city: city.name,
+                latitude: city.latitude || null,
+                longitude: city.longitude||null,
             }));
         }
     };
@@ -331,7 +335,8 @@ const Profile = () => {
     
                 {/* Location Section */}
                 <div className='profile-text'>Your Location</div>
-                <div className="input-location">
+
+                <div className="location-display">
                     {!isEditingLocation ? (
                         <>
                             <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>

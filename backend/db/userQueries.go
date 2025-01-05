@@ -82,11 +82,11 @@ func GetUserByUsername(username string) (*models.User, error) {
 
 // UUID gets mapped as ID
 func GetUserByID(userID string) (*models.User, error) {
-	query := "SELECT uuid, email, password_hash FROM users WHERE uuid = $1"
+	query := "SELECT uuid, email, password_hash,latitude,longitude FROM users WHERE uuid = $1"
 	var user models.User
 
 	row := DB.QueryRow(query, userID)
-	if err := row.Scan(&user.ID, &user.Email, &user.PasswordHash); err != nil {
+	if err := row.Scan(&user.ID, &user.Email, &user.PasswordHash, &user.Latitude, &user.Longitude); err != nil {
 		if err == sql.ErrNoRows {
 			log.Printf("user not found: %v", err)
 			return nil, fmt.Errorf("user not found: %w", err)
@@ -149,27 +149,32 @@ func SaveUser(email string, password_hash string) error {
 	return nil
 }
 
-func GetUserConnectionsByUserID(userID int) (*[]models.UserConnections, error) {
-	query := "SELECT * FROM users WHERE uuid = $1" // TODO: need to add check for status
-	rows, err := DB.Query(query, userID)
-	var connections []models.UserConnections
 
-	if err != nil {
-		return nil, fmt.Errorf("error executing query: %w", err)
-	}
-	defer rows.Close()
-	for rows.Next() {
-		var connection models.UserConnections
-		if err := rows.Scan(&connection.ID, &connection.UserID1, &connection.UserID2, &connection.Status, &connection.CreatedAt); err != nil {
-			return nil, fmt.Errorf("error scanning row: %w", err)
-		}
-		connections = append(connections, connection)
-	}
-	if err := rows.Err(); err != nil {
-		return nil, fmt.Errorf("error during row iteration: %w", err)
-	}
-	return &connections, nil
-}
+//TODO  this function looks like is not used 
+
+// func GetUserConnectionsByUserID(userID int) (*[]models.UserConnections, error) {
+// 	query := "SELECT * FROM users WHERE uuid = $1" // TODO: need to add check for status
+// 	rows, err := DB.Query(query, userID)
+// 	var connections []models.UserConnections
+
+// 	if err != nil {
+// 		return nil, fmt.Errorf("error executing query: %w", err)
+// 	}
+// 	defer rows.Close()
+// 	for rows.Next() {
+// 		var connection models.UserConnections
+// 		if err := rows.Scan(&connection.ID, &connection.UserID1, &connection.UserID2, &connection.Status, &connection.CreatedAt); err != nil {
+// 			return nil, fmt.Errorf("error scanning row: %w", err)
+// 		}
+// 		connections = append(connections, connection)
+// 	}
+// 	if err := rows.Err(); err != nil {
+// 		return nil, fmt.Errorf("error during row iteration: %w", err)
+// 	}
+// 	return &connections, nil
+// }
+
+
 
 func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	query := `

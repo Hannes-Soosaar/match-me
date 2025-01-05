@@ -68,11 +68,17 @@ CHECK- The application is secure. Information is appropriately shown to the corr
 
 CHECK - It is possible to dismiss a recommendation.
 
-TODO - Location Filter! // 
+TODO - Location Filter! //
+
+    -Add country filter 
+    -Add distance filter
 
 TODO - The user can log out.
 
-TODO - It refuses to recommend an obviously poor match.
+DONE - It refuses to recommend an obviously poor match.
+        -If the user do not speak the same language there will be no match
+        -if the user does not play on the same platform there will be no match
+        -if the user does not
 
 TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
 
@@ -148,6 +154,15 @@ CHECK - The application is responsive for mobile and desktop browsers.
 // API DEV.
 
 CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
+
+/users/{id}: which returns the user's name and link to the profile picture.
+/users/{id}/profile: which returns the users "about me" type information.
+/users/{id}/bio: which returns the users biographical data (the data used to power recommendations).
+/me: which is a shortcut to /users/{id} for the authenticated user. You should also implement /me/profile and /me/bio.
+/users/{id}/bio:
+
+
+
 TODO- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
 
 TODO- The connections endpoint only returns a list of ids. (make /connections return a list of ID's )
@@ -159,6 +174,8 @@ TODO- The recommendations endpoint only returns a list of ids. (make /recommenda
 TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
 
 TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
+
+
 
 // EXTRAS
 TODO -  The user experience is excellent, usable and well designed.

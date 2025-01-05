@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"time"
+
+)
 
 // There will be a function to calculate a score for two users.
 // how to page
@@ -21,4 +24,5 @@ type UsersMatches struct {
 	Status     string    `json:"status"`     //  new, shown, connected, blocked, deleted
 	ModifiedAt time.Time `json:"modifiedAt"` // last time the match was updated
 	CreatedAt  time.Time `json:"createdAt"`  // first time the match was created
+	Distance   float64   `json:"distance"`   // distance between the two users
 }

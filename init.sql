@@ -12,6 +12,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_city VARCHAR(50),
     user_nation VARCHAR(50),
     user_region VARCHAR(50),
+    latitude FLOAT,
+    longitude FLOAT,
 	register_location GEOGRAPHY(POINT, 4326), 
 	browser_location GEOGRAPHY(POINT, 4326)
 );
@@ -42,12 +44,12 @@ CREATE TABLE IF NOT EXISTS sessions (
 
 
 CREATE TABLE Messages (
-    MessageID INT PRIMARY KEY AUTO_INCREMENT,
+    MessageID INT PRIMARY KEY,
     SenderID UUID NOT NULL,
     ReceiverID UUID NOT NULL,
     MessageText TEXT NOT NULL,
     SentAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    IsRead BOOLEAN DEFAULT FALSE,
+    IsRead BOOLEAN DEFAULT FALSE
 );
 
 -- OK 
@@ -136,19 +138,10 @@ CREATE TABLE IF NOT EXISTS user_matches(
     match_score INTEGER,
     status VARCHAR(20),
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    distance FLOAT
 );
 
-
--- OK not used
-CREATE TABLE Connections (
-    ConnectionID INT PRIMARY KEY AUTO_INCREMENT,
-    UserID1 UUID NOT NULL,
-    UserID2 UUID NOT NULL,
-    Status ENUM('pending', 'accepted', 'blocked') DEFAULT 'pending',
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    UNIQUE (UserID1, UserID2)
-);
 
 --OK
 CREATE TABLE IF NOT EXISTS user_interests (

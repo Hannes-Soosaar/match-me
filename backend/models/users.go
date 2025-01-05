@@ -9,6 +9,10 @@ type User struct {
 	PasswordHash     string    `json:"password_hash"`
 	CreatedAt        time.Time `json:"created_at"`
 	UserCity         string    `json:"user_city"`
+	UserNation       string    `json:"user_nation"`
+	UserRegion       string    `json:"user_region"`
+	Latitude         float64   `json:"latitude"`
+	Longitude        float64   `json:"longitude"`
 	RegisterLocation string    `json:"register_location"`
 	BrowsLocation    string    `json:"brows_location"`
 }

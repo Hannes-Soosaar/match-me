@@ -21,6 +21,7 @@ func GetTestResultHandler(w http.ResponseWriter, r *http.Request) {
 
 		for _, userMatch := range userMatches {
 			db.CalculateMatchScore(userMatch.UserID1, userMatch.UserID2)
+			db.CalculateUserDistance(userMatch.ID , userMatch.UserID1, userMatch.UserID2)
 		}
 
 	}
