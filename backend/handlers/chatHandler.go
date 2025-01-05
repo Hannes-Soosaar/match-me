@@ -36,6 +36,8 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Println("Error sending message:", err)
 			break
 		}
+
+		//somehow get matchID,senderID, receiverID and save message to database.
 	}
 
 }
