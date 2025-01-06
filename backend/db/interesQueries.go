@@ -111,16 +111,48 @@ func GetAllUserInterest(userID string) (*[]models.Interests, error) {
 	return &interests, nil
 }
 
-func GetUserBioByID(userID string) ([]models.Interests, error) {
-	var queriedInterests []models.Interests
-	query := "SELECT interest_id FROM user_interests WHERE uuid = $1"
-	err := DB.QueryRow(query, userID).Scan(queriedInterests)
+func GetUserBioByID(userID string) (map[string]string, error) {
+	// Map to store interest ID and its corresponding category
+	interestsAndCategories := make(map[string]string)
+
+	// Query to get interest IDs for the user
+	query := "SELECT interest_id FROM user_interests WHERE user_id = $1"
+	rows, err := DB.Query(query, userID)
 	if err != nil {
-		log.Printf("Error updating username for uuid=%s: %v", userID, err)
+		log.Printf("Error fetching interests for uuid=%s: %v", userID, err)
 		return nil, err
 	}
-	return queriedInterests, nil
+	defer rows.Close()
 
+	for rows.Next() {
+		var interestID string
+		var interest string
+		interestsQuery := "SELECT interest FROM interests WHERE id = $1::integer"
+		if err := rows.Scan(&interestID); err != nil {
+			log.Printf("Error scanning interest for uuid=%s: %v", userID, err)
+			return nil, err
+		}
+		err := DB.QueryRow(interestsQuery, interestID).Scan(&interest)
+
+		// Fetch the category for the current interest ID
+		var category string
+		categoryQuery := "SELECT category FROM categories WHERE id = (SELECT categoryID::integer FROM interests WHERE id = $1)"
+		err = DB.QueryRow(categoryQuery, interestID).Scan(&category)
+		if err != nil {
+			log.Printf("Error fetching category for interest_id=%s: %v", interestID, err)
+			return nil, err
+		}
+
+		// Add interest and its category to the map
+		interestsAndCategories[category] = interest
+	}
+
+	if err := rows.Err(); err != nil {
+		log.Printf("Error iterating rows for uuid=%s: %v", userID, err)
+		return nil, err
+	}
+
+	return interestsAndCategories, nil
 }
 
 // TODO recalculate all matches for the user

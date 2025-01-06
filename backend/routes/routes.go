@@ -21,7 +21,7 @@ func InitRoutes() *mux.Router {
 	//router.HandleFunc("/users/{id}/bio", handlers.GetUserBioHandler).Methods("GET") // TEST
 	router.HandleFunc("/me", handlers.GetLightCurrentUserHandler).Methods("GET")
 	router.HandleFunc("/me/profile", handlers.GetCurrentUserHandler).Methods("GET")
-	//router.HandleFunc("/me/bio", handlers.GetMeBioHandler).Methods("GET") // TEST
+	router.HandleFunc("/me/bio", handlers.GetMeBioHandler).Methods("GET") // TEST
 	router.HandleFunc("/me/uuid", handlers.GetCurrentUserUUID).Methods("GET")
 
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
