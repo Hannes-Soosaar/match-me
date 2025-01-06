@@ -6,6 +6,7 @@ import (
 	"match_me_backend/db"
 	"match_me_backend/models"
 	"net/http"
+	"sort"
 )
 
 // Handle match requests from the front end
@@ -175,12 +176,12 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	var matches []MatchResponse
 	var match MatchResponse
 
-	var matchProfile  *models.ProfileInformation
-	
+	var matchProfile *models.ProfileInformation
+
 	for _, userMatch := range userMatches {
 
-		// Displays correctly the matched Profile user data 
-		if  userMatch.UserID2 == userID1 {
+		// Displays correctly the matched Profile user data
+		if userMatch.UserID2 == userID1 {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID1)
 			if err != nil {
 				log.Println("Error getting user information:", err)
@@ -210,37 +211,58 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
-
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
-	}
-	// Based on what the input is here we can filter the output to the front end.
-	userMatches, err := db.GetAllUserMatchesByUserId(userID1)
-	log.Println(`userMatches`, userMatches)
-	if err != nil {
-		log.Println("Error getting user matches:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
+	// Get all user matches for the current user
+	userMatches, err := db.GetAllUserMatchesByUserId(userID1)
+	if err != nil {
+		log.Println("Error getting user matches:", err)
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	log.Println(`userMatches`, userMatches)
+
+	// Transform userMatches into MatchResponse objects
 	var matches []MatchResponse
-	var match MatchResponse
 	for _, userMatch := range userMatches {
 		matchProfile, err := db.GetUserInformation(userMatch.UserID2)
 		if err != nil {
 			log.Println("Error getting user information:", err)
+			continue // Skip this match if there's an error
 		}
-		match.MatchID = userMatch.ID
-		match.Status = userMatch.Status
-		match.MatchScore = userMatch.MatchScore
-		match.MatchedUserName = matchProfile.Username
-		match.MatchedUserPicture = matchProfile.Picture
-		match.MatchedUserDescription = matchProfile.About
-		match.MatchedUserLocation = matchProfile.Nation
+
+		match := MatchResponse{
+			MatchID:                userMatch.ID,
+			Status:                 userMatch.Status,
+			MatchScore:             userMatch.MatchScore,
+			MatchedUserName:        matchProfile.Username,
+			MatchedUserPicture:     matchProfile.Picture,
+			MatchedUserDescription: matchProfile.About,
+			MatchedUserLocation:    matchProfile.Nation,
+		}
+
 		matches = append(matches, match)
 	}
 
+	// Sort matches by MatchScore in descending order
+	sort.Slice(matches, func(i, j int) bool {
+		return matches[i].MatchScore > matches[j].MatchScore
+	})
+
+	// Take the top 10 matches
+	if len(matches) > 10 {
+		matches = matches[:10]
+	}
+
+	// Encode the matches as JSON and send the response
 	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
+	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(matches)
 }
 

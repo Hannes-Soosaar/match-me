@@ -39,7 +39,7 @@ func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	var userMatches []models.UsersMatches
 	for rows.Next() {
 		var userMatch models.UsersMatches
-		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.Status, &userMatch.CreatedAt)
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.Status, &userMatch.MatchScore, &userMatch.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
@@ -61,7 +61,7 @@ func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	var userMatches []models.UsersMatches
 	for rows.Next() {
 		var userMatch models.UsersMatches
-		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.Status,  &userMatch.CreatedAt)
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.Status, &userMatch.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
