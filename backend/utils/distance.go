@@ -2,14 +2,11 @@ package utils
 
 import (
 	"math"
-
-	"log"
 )
 
 /*Distance calculates the distance between two points on the Earth's surface given their latitude and longitude
 does not take into account the altitude infrastructure*/
 func GetDistanceBetweenTwoPointsOnEarth(lat1, lon1, lat2, lon2 float64) float64 {	
-	// log.Printf("Calculating distance between %f, %f and %f, %f", lat1, lon1, lat2, lon2)
 	if lat1 == lat2 && lon1 == lon2 {
 		return 0
 	}
@@ -28,6 +25,5 @@ func GetDistanceBetweenTwoPointsOnEarth(lat1, lon1, lat2, lon2 float64) float64 
 		math.Cos(lat1)*math.Cos(lat2)*math.Sin(dLon/2)*math.Sin(dLon/2)
 	c := 2 * math.Atan2(math.Sqrt(a), math.Sqrt(1-a))
 	distance := R * c
-	log.Println("Distance calculated: ",distance)
     return distance; // Distance in kilometers
 }

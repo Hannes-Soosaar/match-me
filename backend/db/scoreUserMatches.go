@@ -8,16 +8,13 @@ import (
 
 func CalculateUserDistance(matchID int,userID1, userID2 string) (float64, error) {
 	user1, err := GetUserByID(userID1)
-	log.Println("User 1", user1)
 	if err != nil {
 		log.Println("Error getting user 1", err)
 	}
 	user2, err := GetUserByID(userID2)
-	log.Println("User 2", user2)
 	if err != nil {
 		log.Println("Error getting user 2", err)
 	}
-
 	distance := utils.GetDistanceBetweenTwoPointsOnEarth(user1.Latitude, user1.Longitude, user2.Latitude, user2.Longitude)
 	err = UpdateMatchDistance(matchID, distance)
 	if err != nil {
@@ -30,6 +27,7 @@ func CalculateUserDistance(matchID int,userID1, userID2 string) (float64, error)
 func CalculateMatchScore(userID1, userID2 string) (int, error) {
 
 	user1InterestsPtr, err := GetAllUserInterest(userID1)
+
 	if err != nil {
 		log.Println("Error getting user 1 interest", err)
 	}
@@ -46,17 +44,13 @@ func CalculateMatchScore(userID1, userID2 string) (int, error) {
 
 	for _, User1Interest := range user1Interests {
 		for _, User2Interest := range user2Interests {
-			// handel exceptions where the score must be zero
 			if User1Interest == User2Interest {
-				//Create a match profile for the two users.
 				matchProfile = append(matchProfile, User1Interest)
 			}
 		}
 	}
 
 	matchScore := CalculateMatchProfile(matchProfile)
-
-	// fmt.Println("Match score between  matchProfile", matchProfile, " is ", matchScore)
 	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }

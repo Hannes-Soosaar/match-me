@@ -51,6 +51,29 @@ func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	return userMatches, nil
 }
 
+
+func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
+	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'new' ORDER BY match_score DESC LIMIT 10"
+	rows, err := DB.Query(query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+	var userMatches []models.UsersMatches
+	for rows.Next() {
+		var userMatch models.UsersMatches
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.CreatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+		userMatches = append(userMatches, userMatch)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iterations: %w", err)
+	}
+	return userMatches, nil
+}
+
 func GetConnectionsID(userID string) ([]string, error) {
 	query := `
 	SELECT user_id_1 FROM user_matches WHERE user_id_2 = $1
@@ -177,6 +200,7 @@ func UpdateUserMatchScore(currentUserID, userID2 string, userScore int) error {
 	if err != nil {
 		return fmt.Errorf("error updating user match score: %w", err)
 	}
+
 	return nil
 }
 
@@ -190,7 +214,6 @@ func UpdateUserMatchStatus(matchId int, status string) (string, error) {
 }
 
 func UpdateMatchDistance(matchID int, distance float64) error {
-	log.Println("Updating match distance", matchID, "distance: ", distance)
 	query := "UPDATE user_matches SET distance = $1 WHERE id = $2"
 	_, err := DB.Exec(query, distance, matchID)
 	if err != nil {

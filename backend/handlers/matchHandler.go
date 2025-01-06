@@ -160,8 +160,13 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error getting user Id from token:", err)
 	}
 	// Based on what the input is here we can filter the output to the front end.
-	userMatches, err := db.GetAllUserMatchesByUserId(userID1)
-	log.Println(`userMatches`, userMatches)
+	// userMatches, err := db.GetAllUserMatchesByUserId(userID1)
+	userMatches, err := db.GetTenNewMatchesByUserId(userID1)
+	
+	if err != nil {
+		log.Println("Error getting user matches:", err)
+	}
+
 	if err != nil {
 		log.Println("Error getting user matches:", err)
 	}
@@ -181,7 +186,6 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 		match.MatchedUserDescription = matchProfile.About
 		match.MatchedUserLocation = matchProfile.Nation
 		matches = append(matches, match)
-		log.Println("Match in loop:", match)
 	}
 
 	log.Println("Matches:", matches)
@@ -191,7 +195,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(matches)
 }
 
-func GetReccomendationsHandler(w http.ResponseWriter, r *http.Request) {
+func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
@@ -219,10 +223,7 @@ func GetReccomendationsHandler(w http.ResponseWriter, r *http.Request) {
 		match.MatchedUserDescription = matchProfile.About
 		match.MatchedUserLocation = matchProfile.Nation
 		matches = append(matches, match)
-		log.Println("Match in loop:", match)
 	}
-
-	log.Println("Matches:", matches)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)

@@ -45,7 +45,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")
 	router.HandleFunc("/matches/remove", handlers.RemoveMatch).Methods("PUT")
 	router.HandleFunc("/connections", handlers.GetConnections).Methods("GET")
-	router.HandleFunc("/recommendations", handlers.GetReccomendationsHandler).Methods("GET") // Test
+	router.HandleFunc("/recommendations", handlers.GetRecommendationsHandler).Methods("GET") // Test
 
 	/*
 		EXTERNAL API ROUTES

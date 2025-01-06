@@ -75,12 +75,28 @@ func CreateProfile() {
 		latitude = 58.378025 + float64(i)
 		longitude = 26.728493 + float64(i)
 
-		SetUsername(uuid, "User"+iStr)
-		SetBirthdate(uuid, birthdate) // 1999-01-01 all user have the same birthdate
-		SetAbout(uuid, "I am a user "+iStr)
-		SetPicturePath(uuid, "default_profile_pic.png")                        // TODO add bot picture no picture or default picture
-		SetCity(uuid, "Estonia", "Tartu County", "Tartu", latitude, longitude) // all users are from Tartu random lat and long just stars adding distance to users
+		err = SetUsername(uuid, "User"+iStr)
+		if err != nil {
+			log.Println("Error setting username: ", err)
+		}
+		err = SetBirthdate(uuid, birthdate) // 1999-01-01 all user have the same birthdate
+		if err != nil {
+			log.Println("Error setting birthdate: ", err)
+		}
+		err = SetAbout(uuid, "I am a user "+iStr)
+		if err != nil {
+			log.Println("Error setting about: ", err)
+		}
+		err = SetPicturePath(uuid, "default_profile_pic.png") // TODO add bot picture no picture or default picture
+		if err != nil {
+			log.Println("Error setting picture path: ", err)
+		}
+		err = SetCity(uuid, "Estonia", "Tartu County", "Tartu", latitude, longitude) // all users are from Tartu random lat and long just stars adding distance to users
+		if err != nil {
+			log.Println("Error setting city: ", err)
+		}
 		// Add two Genres
+
 		for j := 0; j <= 3; j++ {
 			rndNum, err := GenerateRandomNumber(1, 10)
 			if err != nil {
