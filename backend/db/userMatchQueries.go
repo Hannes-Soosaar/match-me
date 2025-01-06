@@ -30,7 +30,7 @@ func GetAllUserMatches() ([]models.UsersMatches, error) {
 }
 
 func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
-	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE user_id_1 = $1 OR user_id_2 = $1"
+	query := "SELECT id, user_id_1, user_id_2,status, match_score, created_at FROM user_matches WHERE user_id_1 = $1 OR user_id_2 = $1"
 	rows, err := DB.Query(query, userID)
 	if err != nil {
 		return nil, fmt.Errorf("error executing query: %w", err)
@@ -39,7 +39,7 @@ func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	var userMatches []models.UsersMatches
 	for rows.Next() {
 		var userMatch models.UsersMatches
-		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.CreatedAt)
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.Status, &userMatch.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
@@ -51,9 +51,8 @@ func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	return userMatches, nil
 }
 
-
 func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
-	query := "SELECT id, user_id_1, user_id_2, match_score, created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'new' ORDER BY match_score DESC LIMIT 10"
+	query := "SELECT id, user_id_1, user_id_2, match_score,status,created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'new' ORDER BY match_score DESC LIMIT 10"
 	rows, err := DB.Query(query, userID)
 	if err != nil {
 		return nil, fmt.Errorf("error executing query: %w", err)
@@ -62,7 +61,7 @@ func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	var userMatches []models.UsersMatches
 	for rows.Next() {
 		var userMatch models.UsersMatches
-		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.CreatedAt)
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.Status,  &userMatch.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}

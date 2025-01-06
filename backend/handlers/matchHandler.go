@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"match_me_backend/db"
+	"match_me_backend/models"
 	"net/http"
 )
 
@@ -162,7 +163,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	// Based on what the input is here we can filter the output to the front end.
 	// userMatches, err := db.GetAllUserMatchesByUserId(userID1)
 	userMatches, err := db.GetTenNewMatchesByUserId(userID1)
-	
+
 	if err != nil {
 		log.Println("Error getting user matches:", err)
 	}
@@ -173,8 +174,21 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 
 	var matches []MatchResponse
 	var match MatchResponse
+
+	var matchProfile  *models.ProfileInformation
+	
 	for _, userMatch := range userMatches {
-		matchProfile, err := db.GetUserInformation(userMatch.UserID2)
+
+		// Displays correctly the matched Profile user data 
+		if  userMatch.UserID2 == userID1 {
+			matchProfile, err = db.GetUserInformation(userMatch.UserID1)
+			if err != nil {
+				log.Println("Error getting user information:", err)
+			}
+		} else {
+			matchProfile, err = db.GetUserInformation(userMatch.UserID2)
+		}
+
 		if err != nil {
 			log.Println("Error getting user information:", err)
 		}

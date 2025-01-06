@@ -229,7 +229,6 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
             u.uuid = $1`
 
 	var userInfo models.ProfileInformation
-
 	var username sql.NullString
 	var email sql.NullString
 	var created sql.NullTime
@@ -268,8 +267,8 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 		age = currentTime.Year() - birthdayTime.Year()
 		// Adjust age if the birthday hasn't occurred yet this year
 		if birthdayTime.After(currentTime.AddDate(-age, 0, 0)) {
-			age--
 		}
+		age--
 	}
 
 	// Check if any fields are NULL and assign them to appropriate defaults
