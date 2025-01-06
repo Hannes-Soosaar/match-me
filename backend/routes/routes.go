@@ -22,6 +22,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/me", handlers.GetLightCurrentUserHandler).Methods("GET")
 	router.HandleFunc("/me/profile", handlers.GetCurrentUserHandler).Methods("GET")
 	//router.HandleFunc("/me/bio", handlers.GetMeBioHandler).Methods("GET") // TEST
+	router.HandleFunc("/me/uuid", handlers.GetCurrentUserUUID).Methods("GET")
 
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
@@ -74,6 +75,8 @@ func InitRoutes() *mux.Router {
 
 	// chat routes
 	router.HandleFunc("/ws", handlers.WebsocketHandler)
+	router.HandleFunc("/receiver", handlers.ChatDataHandler).Methods("GET")
+	router.HandleFunc("/saveMessage", handlers.SaveMessageHandler).Methods("POST")
 
 	return router
 }

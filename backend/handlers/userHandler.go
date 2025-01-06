@@ -205,5 +205,26 @@ func GetCurrentUserID(r *http.Request) (string, error) {
 	return currentUserID, nil
 }
 
+func GetCurrentUserUUID(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
+		log.Printf("Unauthorized: Missing or invalid token")
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	currentUserID, err := auth.ExtractUserIDFromToken(token)
+	if err != nil {
+		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
+		log.Printf("Error extracting user ID from token: %v", err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(currentUserID)
+}
+
 //TODO userLogout handler ?
 //TODO Find_User

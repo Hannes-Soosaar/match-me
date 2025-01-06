@@ -139,7 +139,7 @@ CREATE TABLE IF NOT EXISTS user_interests (
 CREATE TABLE IF NOT EXISTS chat_messages (
     message_id SERIAL PRIMARY KEY,
     message TEXT NOT NULL,
-    match_id UUID NOT NULL,
+    match_id INTEGER NOT NULL,
     sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     sender_id UUID NOT NULL,
     receiver_id UUID NOT NULL,

@@ -190,7 +190,7 @@ func UpdateUserMatchStatus(matchId int, status string) (string, error) {
 }
 
 func UpdateMatchDistance(matchID int, distance float64) error {
-	log.Println("Updating match distance",matchID, "distance: ", distance)	
+	log.Println("Updating match distance", matchID, "distance: ", distance)
 	query := "UPDATE user_matches SET distance = $1 WHERE id = $2"
 	_, err := DB.Exec(query, distance, matchID)
 	if err != nil {
@@ -234,4 +234,26 @@ func UpdateMatchScoreForUser(user1ID string) error {
 		}
 	}
 	return nil
+}
+
+func GetReceiverID(matchID string, senderID string) (string, error) {
+
+	query := "SELECT user_id_1, user_id_2 FROM user_matches WHERE id = $1"
+	var userID1, userID2 string
+
+	err := DB.QueryRow(query, matchID).Scan(&userID1, &userID2)
+	if err != nil {
+		return "", fmt.Errorf("error getting receiver ID: %w", err)
+	}
+
+	var receiverID string
+	if senderID == userID1 {
+		receiverID = userID2
+	} else if senderID == userID2 {
+		receiverID = userID1
+	} else {
+		return "", fmt.Errorf("sender ID not found in the match")
+	}
+
+	return receiverID, nil
 }

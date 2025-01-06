@@ -1,7 +1,10 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"match_me_backend/db"
 	"net/http"
 
 	"github.com/gorilla/websocket"
@@ -39,5 +42,52 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		//somehow get matchID,senderID, receiverID and save message to database.
 	}
+}
 
+func ChatDataHandler(w http.ResponseWriter, r *http.Request) {
+	senderID := r.URL.Query().Get("senderID")
+	matchID := r.URL.Query().Get("matchID")
+
+	if senderID == "" || matchID == "" {
+		http.Error(w, "Both senderID and matchID are required", http.StatusBadRequest)
+		return
+	}
+
+	receiverID, err := db.GetReceiverID(matchID, senderID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error fetching receiver ID: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(receiverID)
+}
+
+func SaveMessageHandler(w http.ResponseWriter, r *http.Request) {
+
+	var messageData struct {
+		MatchID    int    `json:"matchID"`
+		SenderID   string `json:"senderID"`
+		ReceiverID string `json:"receiverID"`
+		Message    string `json:"message"`
+	}
+
+	body, _ := ioutil.ReadAll(r.Body)
+	fmt.Println("Received body:", string(body))
+
+	err := json.NewDecoder(r.Body).Decode(&messageData)
+	if err != nil {
+		http.Error(w, "Error parsing request body", http.StatusBadRequest)
+		return
+	}
+
+	err = db.SaveMessage(messageData.Message, messageData.MatchID, messageData.SenderID, messageData.ReceiverID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error saving message: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode("Message saved successfully")
 }

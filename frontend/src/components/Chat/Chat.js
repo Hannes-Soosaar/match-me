@@ -10,12 +10,16 @@ const Chat = () => {
     const [connections, setConnections] = useState([])
     const [selectedConnection, setSelectedConnection] = useState(null)
     const [chatUsername, setChatUsername] = useState("")
+    const [matchID, setMatchID] = useState(null)
+    const [senderID, setSenderID] = useState("")
+    const [receiverID, setReceiverID] = useState("")
     const basePictureURL = "http://localhost:4000/uploads/";
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
         if (connections.length > 0) {
             setSelectedConnection(connections[0].matched_user_name)
+            setMatchID(connections[0].match_id)
         }
     }, [connections])
 
@@ -46,11 +50,29 @@ const Chat = () => {
                     },
                 })
                 setChatUsername(response.data.username + ": ")
+                console.log('Profile/me:', response.data)
             } catch (error) {
                 console.error('Error getting username:', error)
             }
         }
         fetchUsername()
+    }, [authToken])
+
+    useEffect(() => {
+        const fetchUUID = async () => {
+            try {
+                const response = await axios.get('/me/uuid', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                })
+                setSenderID(response.data)
+                console.log('Profile/me/uuid:', response.data)
+            } catch (error) {
+                console.error('Error getting sender UUID:', error)
+            }
+        }
+        fetchUUID()
     }, [authToken])
 
     useEffect(() => {
@@ -62,10 +84,45 @@ const Chat = () => {
 
     }, [socket])
 
-    const sendMessage = () => {
-        if (socket && newMessage) {
-            const msgToSend = chatUsername + newMessage
+    useEffect(() => {
+        const fetchReceiverUUID = async () => {
+            try {
+                const response = await axios.get('/receiver', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                    params: { senderID, matchID }
+                })
+                setReceiverID(response.data)
+                console.log('/receiver:', response.data)
+            } catch (error) {
+                console.log('Error getting receiver UUID', error)
+            }
+        }
+        if (matchID) {
+            fetchReceiverUUID()
+        }
+    }, [matchID, senderID, authToken])
+
+    const sendMessage = async () => {
+        if (socket && newMessage && matchID && senderID && receiverID) {
+            var msgToSend = chatUsername + newMessage
             socket.send(msgToSend)
+
+            try {
+                //TODO: Fix error. I spent 2 hours testing and I have no idea why it doesn't work.
+                const response = await axios.post('/saveMessage', {
+                    matchID: parseInt(matchID, 10),
+                    senderID: senderID,
+                    receiverID: receiverID,
+                    message: newMessage,
+                })
+
+                console.log("Message saved:", response.data)
+            } catch (error) {
+                console.error('Error saving message:', error)
+            }
+            //send matchID, senderID and receiverID to api call to save message to database
             setNewMessage("")
         }
     }
@@ -73,7 +130,8 @@ const Chat = () => {
     const handleConnectionClick = (connection) => {
         console.log('Connection clicked:', connection)
         setSelectedConnection(connection.matched_user_name)
-        //retrieve chat history and display it.
+        setMatchID(connection.match_id)
+        console.log(connection.match_id)
     }
 
     return (

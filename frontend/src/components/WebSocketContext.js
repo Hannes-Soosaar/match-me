@@ -25,7 +25,7 @@ export const WebSocketProvider = ({ children }) => {
             }
         }
 
-    }, [])
+    }, [authToken])
 
     return (
         <WebSocketContext.Provider value={socket}>
