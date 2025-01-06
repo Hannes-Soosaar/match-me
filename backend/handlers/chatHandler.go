@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"log"
 	"match_me_backend/db"
 	"net/http"
 
@@ -73,11 +73,9 @@ func SaveMessageHandler(w http.ResponseWriter, r *http.Request) {
 		Message    string `json:"message"`
 	}
 
-	body, _ := ioutil.ReadAll(r.Body)
-	fmt.Println("Received body:", string(body))
-
 	err := json.NewDecoder(r.Body).Decode(&messageData)
 	if err != nil {
+		log.Printf("ERROR: Failed to save message to database. Error: %v, Arguments: %v", err, messageData)
 		http.Error(w, "Error parsing request body", http.StatusBadRequest)
 		return
 	}

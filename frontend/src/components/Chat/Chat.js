@@ -110,7 +110,6 @@ const Chat = () => {
             socket.send(msgToSend)
 
             try {
-                //TODO: Fix error. I spent 2 hours testing and I have no idea why it doesn't work.
                 const response = await axios.post('/saveMessage', {
                     matchID: parseInt(matchID, 10),
                     senderID: senderID,
@@ -122,7 +121,6 @@ const Chat = () => {
             } catch (error) {
                 console.error('Error saving message:', error)
             }
-            //send matchID, senderID and receiverID to api call to save message to database
             setNewMessage("")
         }
     }
@@ -132,6 +130,7 @@ const Chat = () => {
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
         console.log(connection.match_id)
+        //TODO: Make API for pulling all messages with match id equal to connection.match_id a.k.a matchID, then setMessages(array of all pulled messages)
     }
 
     return (
