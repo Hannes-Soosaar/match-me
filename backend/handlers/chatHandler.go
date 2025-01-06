@@ -6,6 +6,7 @@ import (
 	"log"
 	"match_me_backend/db"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/websocket"
 )
@@ -40,7 +41,9 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		//somehow get matchID,senderID, receiverID and save message to database.
+		/*TODO: somehow send the message out to both the sender and receiver.
+		That means, implement a map that tracks all different connections and send out messages to the correct ones.
+		*/
 	}
 }
 
@@ -88,4 +91,26 @@ func SaveMessageHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("Message saved successfully")
+}
+
+func ChatHistoryHandler(w http.ResponseWriter, r *http.Request) {
+	matchIDStr := r.URL.Query().Get("matchID")
+	if matchIDStr == "" {
+		http.Error(w, "Missing matchID", http.StatusBadRequest)
+		return
+	}
+
+	matchID, err := strconv.Atoi(matchIDStr)
+	if err != nil {
+		http.Error(w, "Invalid matchID", http.StatusBadRequest)
+	}
+
+	chatHistory, err := db.GetChatHistory(matchID)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error getting chat history: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(chatHistory)
 }

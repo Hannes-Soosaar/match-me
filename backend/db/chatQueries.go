@@ -12,3 +12,28 @@ func SaveMessage(message string, matchID int, senderID string, receiverID string
 	}
 	return nil
 }
+
+func GetChatHistory(matchID int) ([]string, error) {
+	query := "SELECT message FROM chat_messages WHERE match_id = $1"
+	var chatHistory []string
+
+	rows, err := DB.Query(query, matchID)
+	if err != nil {
+		return nil, fmt.Errorf("error getting chat history (GetChatHistory): %v", err)
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var message string
+		if err := rows.Scan(&message); err != nil {
+			return nil, fmt.Errorf("error scanning row (GetChatHistory): %v", err)
+		}
+		chatHistory = append(chatHistory, message)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error iterating over rows (GetChatHistory): %v", err)
+	}
+
+	return chatHistory, nil
+}

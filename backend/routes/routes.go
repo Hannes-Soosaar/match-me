@@ -77,6 +77,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/ws", handlers.WebsocketHandler)
 	router.HandleFunc("/receiver", handlers.ChatDataHandler).Methods("GET")
 	router.HandleFunc("/saveMessage", handlers.SaveMessageHandler).Methods("POST")
+	router.HandleFunc("/chatHistory", handlers.ChatHistoryHandler).Methods("GET")
 
 	return router
 }

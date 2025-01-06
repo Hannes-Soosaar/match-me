@@ -10,6 +10,9 @@ const Chat = () => {
     const [connections, setConnections] = useState([])
     const [selectedConnection, setSelectedConnection] = useState(null)
     const [chatUsername, setChatUsername] = useState("")
+    const [username, setUsername] = useState("")
+    const [receiverUsername, setReceiverUsername] = useState("")
+    const [receiverProfilePicture, setReceiverProfilePicture] = useState("")
     const [matchID, setMatchID] = useState(null)
     const [senderID, setSenderID] = useState("")
     const [receiverID, setReceiverID] = useState("")
@@ -18,8 +21,7 @@ const Chat = () => {
 
     useEffect(() => {
         if (connections.length > 0) {
-            setSelectedConnection(connections[0].matched_user_name)
-            setMatchID(connections[0].match_id)
+            handleConnectionClick(connections[0])
         }
     }, [connections])
 
@@ -50,6 +52,7 @@ const Chat = () => {
                     },
                 })
                 setChatUsername(response.data.username + ": ")
+                setUsername(response.data.username)
                 console.log('Profile/me:', response.data)
             } catch (error) {
                 console.error('Error getting username:', error)
@@ -79,30 +82,52 @@ const Chat = () => {
         if (!socket) return;
 
         socket.onmessage = (event) => {
-            setMessages((prevMessages) => [...prevMessages, event.data])
+            setMessages((prevMessages) => [...(prevMessages || []), event.data])
         }
 
     }, [socket])
 
     useEffect(() => {
-        const fetchReceiverUUID = async () => {
-            try {
-                const response = await axios.get('/receiver', {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                    params: { senderID, matchID }
-                })
-                setReceiverID(response.data)
-                console.log('/receiver:', response.data)
-            } catch (error) {
-                console.log('Error getting receiver UUID', error)
+        if (senderID && matchID) {
+            const fetchReceiverUUID = async () => {
+                try {
+                    const response = await axios.get('/receiver', {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                        params: { senderID, matchID }
+                    })
+                    setReceiverID(response.data)
+                    console.log('/receiver:', response.data)
+                } catch (error) {
+                    console.log('Error getting receiver UUID', error)
+                }
+            }
+            if (matchID) {
+                fetchReceiverUUID()
             }
         }
-        if (matchID) {
-            fetchReceiverUUID()
-        }
     }, [matchID, senderID, authToken])
+
+    useEffect(() => {
+        const fetchReceiverProfile = async () => {
+            try {
+                const response = await axios.get(`/users/${receiverID}/profile`, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    }
+                })
+                console.log('/users/receiverID:', response.data)
+                setReceiverUsername(response.data.username)
+                setReceiverProfilePicture(response.data.profile_picture)
+            } catch (error) {
+                console.log('Error getting receiver profile', error)
+            }
+        }
+        if (receiverID) {
+            fetchReceiverProfile()
+        }
+    }, [authToken, receiverID])
 
     const sendMessage = async () => {
         if (socket && newMessage && matchID && senderID && receiverID) {
@@ -114,7 +139,7 @@ const Chat = () => {
                     matchID: parseInt(matchID, 10),
                     senderID: senderID,
                     receiverID: receiverID,
-                    message: newMessage,
+                    message: msgToSend,
                 })
 
                 console.log("Message saved:", response.data)
@@ -129,8 +154,20 @@ const Chat = () => {
         console.log('Connection clicked:', connection)
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
-        console.log(connection.match_id)
+
         //TODO: Make API for pulling all messages with match id equal to connection.match_id a.k.a matchID, then setMessages(array of all pulled messages)
+        const fetchChatHistory = async () => {
+            try {
+                const response = await axios.get('/chatHistory', {
+                    params: { matchID: parseInt(connection.match_id, 10) },
+                })
+                console.log("History received")
+                setMessages(response.data)
+            } catch (error) {
+                console.log('Error getting chat history FE', error)
+            }
+        }
+        fetchChatHistory()
     }
 
     return (
@@ -150,9 +187,11 @@ const Chat = () => {
                 </div>
                 <div className="chat-right-container">
                     <div className="chat-messages">
-                        {messages.map((msg, index) => (
-                            <p key={index}>{msg}</p>
-                        ))}
+                        {messages != null ?
+                            messages.map((msg, index) => (
+                                <p key={index}>{msg}</p>
+                            )) : null
+                        }
                     </div>
                     <div className="chat-input-container">
                         <input
