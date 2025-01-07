@@ -21,9 +21,10 @@
 ```cd frontend```,
 ```npm install```.
 4. Add a JWT secret key in the backend .env file ```JWT_SECRET = "a5b39010c7r7894jf8d8n98a83750t4gs6d5h54aq903831085ja1s5d6df4"```
-5. Start the database, backend, and frontend servers all at the same time by running ```make start``` in the project root directory.
-6. Close the backend and frontend servers by pressing ```Ctrl+C``` in the terminal.
-7. Close the database server with ```make stop-db```.
+5. Run ```docker-compose build``` in project directory.
+6. Start the database, backend, and frontend servers all at the same time by running ```make start``` in the project root directory.
+7. Close the backend and frontend servers by pressing ```Ctrl+C``` in the terminal.
+8. Close the database server with ```make stop-db```.
 
 #### Other helpful commands
 Check if the docker container is running with ```docker ps```.<br>
