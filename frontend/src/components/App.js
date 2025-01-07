@@ -8,7 +8,7 @@ import LoginSignup from './LoginSignup/LoginSignup';
 import Dashboard from './Dashboard/Dashboard';
 import Profile from './Profile/Profile';
 import Matches from './Matches/Matches';
-import InterestSection from './InterestSection/InterestSection';
+import BuddiesSection from './BuddiesSection/BuddiesSection.jsx';
 import Chat from './Chat/Chat';
 
 
@@ -40,7 +40,7 @@ function App() {
               element={isAuthenticated ? <Matches /> : <Navigate to="/" />} />
             <Route
               path='/connections'
-              element={isAuthenticated ? <InterestSection /> : <Navigate to="/" />} />
+              element={isAuthenticated ? <BuddiesSection /> : <Navigate to="/" />} />
             <Route
               path='/chat'
               element={isAuthenticated ? <Chat /> : <Navigate to="/" />} />

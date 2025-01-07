@@ -65,46 +65,33 @@ const handleInterestClick = (interestId) => {
     } catch (error) {
         console.error('Error adding interest:', error);
     }
-
   };
 
 
 //TODO extract the button element to a separate component
 //TODO have different styling for the buttons that have the same interestId as the user already selected.
-return (
-    <div>
-      <h1>Interest Section</h1>
-      <div>
-        <h2>Categories</h2>
-        <ul>
-          {categories.map((category) => (
-            <li key={category.category_id}>
-              <h3>{category.category}</h3>
-              <div>
-                {category.interests.map((interest) => (
-                  <button
-                    key={interest.id}
-                    onClick={() => handleInterestClick(interest.id)}
-                    className={userInterests.includes(interest.id) ? 'selected' : 'unselected'}
-                 >
-                    {interest.interestName}
-                  </button>
-                ))}
-
-              </div>
-            </li>
-
-          ))}
-        </ul>
-        <h2>User Interests</h2>
-        <ul>
-          {userInterests.map((userInterest) => (
-            <li key={userInterest}>{userInterest}</li>
-          ))}
-        </ul>
-      </div>
-    </div>
-);
+  return (
+        <div className='interest-section' > 
+        <p className='heading'>Select your interest and matching parameters</p>
+            {categories.map((category) => (
+              <>
+                <div className ='category-section' key={category.category_id}>
+                <p className='title-section' key={category.category_id}>{category.category}</p>
+                  {category.interests.map((interest) => (
+                    <button
+                      key={interest.id}
+                      onClick={() => handleInterestClick(interest.id)}
+                      className={userInterests.includes(interest.id) ? 'selected' : 'unselected'}
+                    >
+                      {interest.interestName}
+                    </button>
+                  ))}       
+                </div>
+                <br/>
+                </>
+              ))}
+        </div>
+  );
 
 }
 export default InterestSection;

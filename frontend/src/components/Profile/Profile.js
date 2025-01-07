@@ -4,6 +4,7 @@ import './Profile.css';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
 import { CitySelect, CountrySelect, StateSelect } from 'react-country-state-city';
 import 'react-country-state-city/dist/react-country-state-city.css';
+import InterestSection from '../InterestSection/InterestSection';
 
 const Profile = () => {
     const [countryId, setCountryId] = useState(0);
@@ -285,6 +286,8 @@ const Profile = () => {
                             Submit About Me
                         </button>
                     </div>
+
+                    <InterestSection/>
     
                     {/* Birthdate Section */}
                     <div className='profile-text'>When were you born?</div>
