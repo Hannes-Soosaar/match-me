@@ -15,7 +15,7 @@ const Matches = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('/matches', {
+                const response = await axios.get('/buddies', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },

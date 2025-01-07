@@ -50,6 +50,31 @@ func GetAllUserMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	}
 	return userMatches, nil
 }
+func GetAllConnectedMatchesByUserId(userID string) ([]models.UsersMatches, error) {
+	log.Println("Getting all connected matches for user:", userID)
+
+	query := "SELECT id, user_id_1, user_id_2, status, match_score, created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'connected'"
+	rows, err := DB.Query(query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+	var userConnections []models.UsersMatches
+	for rows.Next() {
+		var userConnection models.UsersMatches
+		err = rows.Scan(&userConnection.ID, &userConnection.UserID1, &userConnection.UserID2,&userConnection.Status, &userConnection.MatchScore, &userConnection.CreatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+		userConnections = append(userConnections, userConnection)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iterations: %w", err)
+	}
+
+	return userConnections, nil
+}
+
 
 func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score,status,created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'new' ORDER BY match_score DESC LIMIT 10"
