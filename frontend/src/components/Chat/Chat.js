@@ -131,15 +131,24 @@ const Chat = () => {
 
     const sendMessage = async () => {
         if (socket && newMessage && matchID && senderID && receiverID) {
-            var msgToSend = chatUsername + newMessage
-            socket.send(msgToSend)
+            var message = chatUsername + newMessage
+
+            const msgToSend = {
+                senderID: senderID,
+                receiverID: receiverID,
+                message: message
+            }
+
+            const jsonMessage = JSON.stringify(msgToSend)
+
+            socket.send(jsonMessage)
 
             try {
                 const response = await axios.post('/saveMessage', {
                     matchID: parseInt(matchID, 10),
                     senderID: senderID,
                     receiverID: receiverID,
-                    message: msgToSend,
+                    message: message,
                 })
 
                 console.log("Message saved:", response.data)

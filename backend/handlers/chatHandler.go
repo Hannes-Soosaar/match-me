@@ -7,9 +7,13 @@ import (
 	"match_me_backend/db"
 	"net/http"
 	"strconv"
+	"sync"
 
 	"github.com/gorilla/websocket"
 )
+
+var connections = make(map[string]*websocket.Conn)
+var mu sync.Mutex
 
 var upgrader = websocket.Upgrader{
 	CheckOrigin: func(r *http.Request) bool {
@@ -25,7 +29,24 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	defer conn.Close()
 
-	fmt.Println("WebSocket connection established")
+	userID := r.URL.Query().Get("userID")
+	if userID == "" {
+		log.Println("No userID provided")
+		return
+	}
+
+	mu.Lock()
+	connections[userID] = conn
+	mu.Unlock()
+	log.Printf("WebSocket connection established for userID: %s\n", userID)
+
+	defer func() {
+		mu.Lock()
+		delete(connections, userID)
+		mu.Unlock()
+		log.Printf("Websocket connection closed for userID: %s\n", userID)
+		conn.Close()
+	}()
 
 	for {
 		_, message, err := conn.ReadMessage()
@@ -36,14 +57,39 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		fmt.Printf("Received message: %s\n", message)
 
-		if err := conn.WriteMessage(websocket.TextMessage, message); err != nil {
-			fmt.Println("Error sending message:", err)
-			break
+		var msgData struct {
+			SenderID   string `json:"senderID"`
+			ReceiverID string `json:"receiverID"`
+			Message    string `json:"message"`
 		}
 
-		/*TODO: somehow send the message out to both the sender and receiver.
-		That means, implement a map that tracks all different connections and send out messages to the correct ones.
-		*/
+		if err := json.Unmarshal(message, &msgData); err != nil {
+			log.Println("Error unmarshaling message:", err)
+			continue
+		}
+
+		mu.Lock()
+		senderConn, senderOnline := connections[msgData.SenderID]
+		receiverConn, receiverOnline := connections[msgData.ReceiverID]
+		mu.Unlock()
+
+		returnMessage := string(msgData.Message)
+
+		//if sender is online, send message
+		if senderOnline {
+			err := senderConn.WriteMessage(websocket.TextMessage, []byte(returnMessage))
+			if err != nil {
+				log.Println("Error sending message to sender:", err)
+			}
+		}
+
+		//if receiver is online, send message
+		if receiverOnline {
+			err := receiverConn.WriteMessage(websocket.TextMessage, []byte(returnMessage))
+			if err != nil {
+				log.Println("Error sending message to receiver:", err)
+			}
+		}
 	}
 }
 

@@ -11,5 +11,8 @@
             "password": "SecretDevPassword",
             "connectionTimeout": 30
         }
+    ],
+    "cSpell.words": [
+        "upgrader"
     ]
 }
