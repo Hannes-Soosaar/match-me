@@ -73,8 +73,11 @@ const Profile = () => {
                 }
 
                 if (data.username && data.about_me && data.birthdate && data.user_nation) {
-                    localStorage.setItem('profileExists', true);
-                    console.log('localstorage item created!')
+                    if (!localStorage.getItem('profileExists')) {
+                        localStorage.setItem('profileExists', true);
+                        console.log('localstorage item created!')
+                        window.location.reload();
+                    }
                 }
             } catch (error) {
                 console.error('Error fetching profile data:', error);

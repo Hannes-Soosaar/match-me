@@ -16,12 +16,7 @@ import Chat from './Chat/Chat';
 function App() {
 
   const isAuthenticated = !!localStorage.getItem('token');
-  const [profileExists, setProfileExists] = useState(localStorage.getItem('profileExists'));
-
-  useEffect(() => {
-    // Initialize on mount
-    setProfileExists(localStorage.getItem('profileExists') === 'true');
-  }, []);
+  const profileExists = localStorage.getItem('profileExists');
 
   return (
     <WebSocketProvider>
