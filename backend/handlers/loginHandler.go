@@ -70,7 +70,7 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error updating all user scores", err)
 	}
-	
+
 	err = db.SetUserOnlineStatus(existingUser.ID, true)
 
 	if err != nil {
@@ -80,3 +80,21 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
+
+func LogoutHandler(w http.ResponseWriter, r *http.Request) {
+	userId, err := GetCurrentUserID(r)
+	if err != nil {
+		sendErrorResponse(w, "Error getting user Id from token", http.StatusUnauthorized)
+		log.Println("Error getting user Id from token:", err)
+		return
+	}
+	err = db.SetUserOnlineStatus(userId, false)
+	if err != nil {
+		sendErrorResponse(w, "Error setting user offline", http.StatusInternalServerError)
+		log.Println("Error setting user offline:", err)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(map[string]string{"message": "safely logged out!"})
+}
+

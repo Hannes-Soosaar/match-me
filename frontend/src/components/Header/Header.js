@@ -5,7 +5,25 @@ import './Header.css'
 function Header() {
     const isAuthenticated = !!localStorage.getItem('token');
 
+    
+    
     const handleLogout = () => {
+
+        const logout = async () => {
+            try {
+                const response = await axios.post('/logout', {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+            }
+            catch (error) {
+                console.error('logging out: ', error)
+                return
+            }
+        }
+        logout();
+
         localStorage.removeItem('token');
         localStorage.removeItem('profileExists');
         window.location.href = '/login';
