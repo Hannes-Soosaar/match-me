@@ -15,4 +15,5 @@ type User struct {
 	Longitude        float64   `json:"longitude"`
 	RegisterLocation string    `json:"register_location"`
 	BrowsLocation    string    `json:"brows_location"`
+	IsOnline 		 bool      `json:"is_online"`
 }

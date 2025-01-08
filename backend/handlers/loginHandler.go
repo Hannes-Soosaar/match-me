@@ -56,11 +56,25 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Error generating JWT: %v", err)
 		return
 	}
+
+	//is it redundant  to check if token is empty?
+	if token == "" {
+		sendErrorResponse(w, "No token", http.StatusInternalServerError)
+		log.Println("Error token is empty")
+		return
+	}
+
 	
-	db.UpdateMatchScoreForUser(existingUser.ID)
+	err = db.UpdateMatchScoreForUser(existingUser.ID)
 	
 	if err != nil {
 		log.Println("Error updating all user scores", err)
+	}
+	
+	err = db.SetUserOnlineStatus(existingUser.ID, true)
+
+	if err != nil {
+		log.Println("Error setting user online status", err)
 	}
 
 	w.Header().Set("Content-Type", "application/json")

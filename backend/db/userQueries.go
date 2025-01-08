@@ -364,3 +364,14 @@ func GetUserIDfromUUIDarray(UUIDs []string) ([]string, error) {
 	fmt.Println("Connections IDs:", userIDs)
 	return userIDs, nil
 }
+
+
+func SetUserOnlineStatus(userID string, status bool) error {
+	query := "UPDATE users SET is_online = $1 WHERE uuid = $2"
+	_, err := DB.Exec(query, status, userID)
+	if err != nil {
+		log.Printf("Error setting user online status: %v", err)
+		return err
+	}
+	return nil
+}
