@@ -169,6 +169,24 @@ const Profile = () => {
         }
     };
 
+    const handleSubmitRemovePicture = async () => {
+        try {
+            await axios.post(
+                '/picture/remove',
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                }
+            );
+            alert('Profile picture removed successfully!');
+        } catch (error) {
+            console.error('Error removing profile picture:', error);
+            alert('Failed to remove profile picture.');
+        }
+    };
+
     const handleSubmitLocation = async () => {
         if (!countryId || !stateId || !formData.city) {
             alert('Please select a valid country, state, and city.');
@@ -342,6 +360,12 @@ const Profile = () => {
                             onClick={handleSubmitProfilePic}
                         >
                             Submit Picture
+                        </button>
+                        <button
+                            className='submit'
+                            onClick={handleSubmitRemovePicture}
+                        >
+                            Remove Picture
                         </button>
                     </div>
 

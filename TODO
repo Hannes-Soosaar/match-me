@@ -35,9 +35,9 @@ Kood/Jõhvi
 
 // USER MANAGEMENT
 
-DONE- All user responses return an id in the payload. (the payload is the JWT)
+DONE - All user responses return an id in the payload. (the payload is the JWT)
 
-CHECK- The users endpoints return HTTP404 when the id is not found.
+DONE - The users endpoints return HTTP404 when the id is not found.
 
 // PROFILE
 
@@ -55,10 +55,10 @@ DONE -The user can specify preference which target biographical data points. get
 
 DONE- The email address is not returned in API calls for other users
 
-CHECK - The application works with a single user.
+NOT YET (Empty matches and empty connections create an empty map error) - The application works with a single user.
 
-CHECK -The user is not shown any recommendations until they have completed their profile.
-CHECK (changed OK,  how to remove) - The profile picture can be removed or changed.
+DONE -The user is not shown any recommendations until they have completed their profile.
+DONE (changed OK,  how to remove) - The profile picture can be removed or changed.
 
 CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
     PAGES for 

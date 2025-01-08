@@ -35,6 +35,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/about", handlers.PostAbout).Methods("POST")
 	router.HandleFunc("/birthdate", handlers.PostBirthdate).Methods("POST")
 	router.HandleFunc("/picture", handlers.PostProfilePictureHandler).Methods("POST")
+	router.HandleFunc("/picture/remove", handlers.PostProfileRPictureRemoveHandler).Methods("POST")
 
 	router.HandleFunc("/browserlocation", handlers.BrowserHandler).Methods("POST")
 
@@ -47,7 +48,6 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/connections", handlers.GetConnections).Methods("GET")
 	router.HandleFunc("/buddies", handlers.GetBuddies).Methods("GET")
 	router.HandleFunc("/recommendations", handlers.GetRecommendationsHandler).Methods("GET")
-
 
 	/*
 		EXTERNAL API ROUTES
