@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import './Dashboard.css';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
 
@@ -9,7 +8,6 @@ const Dashboard = () => {
     const [loading, setLoading] = useState(true); // Track loading state for user data
     const [error, setError] = useState(null); // Track errors
     const [profilePic, setProfilePic] = useState(null);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -49,19 +47,6 @@ const Dashboard = () => {
 
         fetchUserData();
     }, []);
-
-    useEffect(() => {
-        if (!loading && userData) {
-            if (
-                userData.id === 0 ||
-                userData.username === "" ||
-                userData.profile_picture === ""
-            ) {
-                localStorage.setItem('profileExists', 'doesNotExist');
-                navigate("/profile");
-            }
-        }
-    }, [loading, userData, navigate]);
 
     if (loading) {
         // Show loading for user data

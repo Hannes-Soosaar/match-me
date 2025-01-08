@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS profiles (
     uuid UUID UNIQUE NOT NULL,
     username VARCHAR(20) UNIQUE,
     about_me TEXT,
-    profile_picture TEXT,
+    profile_picture TEXT DEFAULT 'default_profile_pic.png',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     birthdate DATE
 );

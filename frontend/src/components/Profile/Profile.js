@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './Profile.css';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
@@ -24,6 +25,7 @@ const Profile = () => {
         latitude: null,
         longitude: null,
     });
+    const navigate = useNavigate();
 
     const authToken = localStorage.getItem('token');
 
@@ -69,8 +71,14 @@ const Profile = () => {
                 } else {
                     setPreviewPic(defaultProfilePic);
                 }
+
+                if (data.username && data.about_me && data.birthdate && data.user_nation) {
+                    localStorage.setItem('profileExists', true);
+                    console.log('localstorage item created!')
+                }
             } catch (error) {
                 console.error('Error fetching profile data:', error);
+                localStorage.removeItem('profileExists');
             }
         };
 
@@ -217,7 +225,7 @@ const Profile = () => {
                 ...prevData,
                 city: city.name,
                 latitude: city.latitude || null,
-                longitude: city.longitude||null,
+                longitude: city.longitude || null,
             }));
         }
     };
@@ -236,8 +244,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        const profileNotExist = localStorage.getItem('profileExists') === 'doesNotExist';
-        setUsernameText(profileNotExist ? "Choose your username" : "Change your username");
+        setUsernameText("Set your username");
         const formattedDate = formatDateForInput(rawbirthdate);
         setBirthdate(formattedDate);
     }, [rawbirthdate]);
@@ -266,7 +273,7 @@ const Profile = () => {
                             Submit Username
                         </button>
                     </div>
-    
+
                     {/* About Me Section */}
                     <div className='profile-text'>Write something about yourself</div>
                     <div className='input-textarea'>
@@ -287,8 +294,8 @@ const Profile = () => {
                         </button>
                     </div>
 
-                    <InterestSection/>
-    
+                    <InterestSection />
+
                     {/* Birthdate Section */}
                     <div className='profile-text'>When were you born?</div>
                     <div className='input'>
@@ -307,7 +314,7 @@ const Profile = () => {
                             Submit Birthdate
                         </button>
                     </div>
-    
+
                     {/* Profile Picture Section */}
                     <div className='profile-text'>Upload a profile picture</div>
                     <div className='input-profile-pic'>
@@ -334,79 +341,79 @@ const Profile = () => {
                             Submit Picture
                         </button>
                     </div>
-                
-    
-                {/* Location Section */}
-                <div className='profile-text'>Your Location</div>
 
-                <div className="location-display">
-                    {!isEditingLocation ? (
-                        <>
-                            <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>
-                            <p><strong className='location-text'>State:</strong> {formData.state || 'Not Set'}</p>
-                            <p><strong className='location-text'>City:</strong> {formData.city || 'Not Set'}</p>
-                            <div className='submit-container'>
-                                <button
-                                    className='submit'
-                                    onClick={() => setIsEditingLocation(true)}
-                                >
-                                    Edit Location
-                                </button>
+
+                    {/* Location Section */}
+                    <div className='profile-text'>Your Location</div>
+
+                    <div className="location-display">
+                        {!isEditingLocation ? (
+                            <>
+                                <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>
+                                <p><strong className='location-text'>State:</strong> {formData.state || 'Not Set'}</p>
+                                <p><strong className='location-text'>City:</strong> {formData.city || 'Not Set'}</p>
+                                <div className='submit-container'>
+                                    <button
+                                        className='submit'
+                                        onClick={() => setIsEditingLocation(true)}
+                                    >
+                                        Edit Location
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="inputGroupLocation">
+                                <div className="inputField">
+                                    <h6>Country:</h6>
+                                    <CountrySelect
+                                        onChange={onCountryChange}
+                                        placeHolder={formData.country || "Select Country"}
+                                    />
+                                </div>
+                                <div className="inputField">
+                                    <h6>State:</h6>
+                                    <StateSelect
+                                        countryid={countryId}
+                                        onChange={onStateChange}
+                                        placeHolder={formData.state || "Select State"}
+                                        disabled={!countryId}
+                                    />
+                                </div>
+                                <div className="inputField">
+                                    <h6>City:</h6>
+                                    <CitySelect
+                                        countryid={countryId}
+                                        stateid={stateId}
+                                        onChange={handleCitySelect}
+                                        placeHolder={formData.city || "Select City"}
+                                        disabled={!countryId || !stateId}
+                                    />
+                                </div>
+                                <div className='submit-container'>
+                                    <button
+                                        className='submit'
+                                        onClick={() => {
+                                            handleSubmitLocation();
+                                            setIsEditingLocation(false);
+                                        }}
+                                    >
+                                        Save Location
+                                    </button>
+                                    <button
+                                        className='submit'
+                                        onClick={() => setIsEditingLocation(false)}
+                                    >
+                                        Cancel
+                                    </button>
+                                </div>
                             </div>
-                        </>
-                    ) : (
-                        <div className="inputGroupLocation">
-                            <div className="inputField">
-                                <h6>Country:</h6>
-                                <CountrySelect
-                                    onChange={onCountryChange}
-                                    placeHolder={formData.country || "Select Country"}
-                                />
-                            </div>
-                            <div className="inputField">
-                                <h6>State:</h6>
-                                <StateSelect
-                                    countryid={countryId}
-                                    onChange={onStateChange}
-                                    placeHolder={formData.state || "Select State"}
-                                    disabled={!countryId}
-                                />
-                            </div>
-                            <div className="inputField">
-                                <h6>City:</h6>
-                                <CitySelect
-                                    countryid={countryId}
-                                    stateid={stateId}
-                                    onChange={handleCitySelect}
-                                    placeHolder={formData.city || "Select City"}
-                                    disabled={!countryId || !stateId}
-                                />
-                            </div>
-                            <div className='submit-container'>
-                                <button
-                                    className='submit'
-                                    onClick={() => {
-                                        handleSubmitLocation();
-                                        setIsEditingLocation(false);
-                                    }}
-                                >
-                                    Save Location
-                                </button>
-                                <button
-                                    className='submit'
-                                    onClick={() => setIsEditingLocation(false)}
-                                >
-                                    Cancel
-                                </button>
-                            </div>
-                        </div>
-                    )}
-                </div>
+                        )}
+                    </div>
                 </div>
             </div>
         </div>
     );
-    
+
 };
 
 export default Profile;
