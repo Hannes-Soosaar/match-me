@@ -13,8 +13,8 @@ CREATE TABLE IF NOT EXISTS users (
     latitude FLOAT,
     longitude FLOAT,
     register_location GEOGRAPHY(POINT, 4326),
-    browser_location GEOGRAPHY(POINT, 4326)
-    is_online BOOLEAN DEFAULT FALSE,
+    browser_location GEOGRAPHY(POINT, 4326),
+    is_online BOOLEAN DEFAULT FALSE
 );
 -- OK
 CREATE TABLE IF NOT EXISTS profiles (
