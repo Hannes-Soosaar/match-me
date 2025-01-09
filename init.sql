@@ -60,8 +60,9 @@ VALUES ('Genre'),
     --6
     ('Vibe'),
     --7
-    ('Language') --8
-;
+    ('Language'), --8
+    ('Distance') --9
+    ;
 -- OK
 CREATE TABLE IF NOT EXISTS interests (
     id SERIAL PRIMARY KEY,
@@ -117,8 +118,13 @@ VALUES (1, 'RPG'),
     (8, 'German'),
     (8, 'French'),
     (8, 'Russian'),
-    (8, 'Chinese');
+    (8, 'Chinese'),
+    (9, '0-100 km'),
+    (9, '100-500 km'),
+    (9, '500-1000 km'),
+    (9, '1000+ km');
 -- if there is a need to do time zone management we should use TIMESTAMPTZ
+
 -- OK 
 CREATE TABLE IF NOT EXISTS user_matches(
     id SERIAL PRIMARY KEY,
