@@ -20,6 +20,10 @@ const Matches = () => {
                         Authorization: `Bearer ${authToken}`,
                     },
                 });
+
+                if (response.data === null) {
+                    response.data = [];
+                }
                 console.log(response.data);
                 setMatches(response.data);
             }
@@ -36,11 +40,12 @@ const Matches = () => {
             <div className="body-div">
                 <div className="body-sides"></div>
                 <div className='body-content'>
-                    {matches.map((item, index) =>
+                    {matches.length > 0 ? (
+                    matches.map((item, index) =>
                     (<p key={index}>
                         <MatchCard userProfile={item} key={index}></MatchCard>
                     </p>
-                    ))}
+                    ))):(<p>No matches found. Try updating your preferences or check back later!</p>)}
                 </div>
                 <div className="body-sides"></div>
             </div>

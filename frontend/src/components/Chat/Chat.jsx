@@ -20,6 +20,9 @@ const Chat = () => {
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
+        if (connections === null) {
+            return
+        }
         if (connections.length > 0) {
             handleConnectionClick(connections[0])
         }
@@ -80,7 +83,6 @@ const Chat = () => {
 
     useEffect(() => {
         if (!socket) return;
-
         socket.onmessage = (event) => {
             setMessages((prevMessages) => [...(prevMessages || []), event.data])
         }
@@ -183,7 +185,8 @@ const Chat = () => {
         <>
             <div className="chat-container">
                 <div className="chat-sidebar">
-                    {connections.map((connection, index) => (
+                    { connections && connections.length > 0 ? (
+                    connections.map((connection, index) => (
                         <div
                             key={index}
                             className={`connection-item ${selectedConnection === connection.matched_user_name ? 'selected' : ''}`}
@@ -192,7 +195,9 @@ const Chat = () => {
                             <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
                             <h4>{connection.matched_user_name}</h4>
                         </div>
-                    ))}
+                    ))):(
+                        <p>No matches found. Try updating your preferences or check back later!</p>
+                    )}
                 </div>
                 <div className="chat-right-container">
                     <div className="chat-messages">
