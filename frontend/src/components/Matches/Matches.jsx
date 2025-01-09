@@ -34,13 +34,17 @@ const Matches = () => {
             <h1>Matches</h1>
             <div className="body-div">
                 <div className="body-sides"></div>
-                <div className='body-content'>
-                    {matches.map((item, index) =>
-                    (<p key={index}>
-                        <MatchCard userProfile={item} key={index}></MatchCard>
-                    </p>
-                    ))}
-                </div>
+                <div className="body-content">
+                    {matches && matches.length > 0 ? (
+                        matches.map((item, index) => (
+                            <p key={index}>
+                                <MatchCard userProfile={item} key={index} />
+                            </p>
+                        ))
+                    ) : (
+                        <p>No matches found. Try updating your preferences or check back later!</p>
+                    )}
+                    </div>
                 <div className="body-sides"></div>
             </div>
 

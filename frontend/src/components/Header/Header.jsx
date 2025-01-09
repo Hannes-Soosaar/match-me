@@ -1,12 +1,15 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Header.css'
 
 function Header() {
+    
     const isAuthenticated = !!localStorage.getItem('token');
+    const authToken = localStorage.getItem('token');
 
-    
-    
+
     const handleLogout = () => {
 
         const logout = async () => {
