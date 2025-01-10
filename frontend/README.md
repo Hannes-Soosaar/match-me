@@ -68,3 +68,33 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+   TODO - Describe matching logic.
+
+## Match-Me logic
+
+Match-Me gamer buddy 
+
+### Matching logic
+
+    A Match - A Matches is made and scored based on the number of interest in common.The more interest you have in common the better the match.
+
+    Bad matches- There are interest/profile points that are critical these are  platform, communication type, language and the distance. If any of these do not match, a match will not be made.
+
+    All matches are shown from the best match to the worst. So you know the best matches are always shown.
+
+    To keep things interesting, we do not show you what the common interests you share with you matches. However the score shows you how many interest you have in common, connect, and chat to find out what they are.
+
+### Future
+
+In the next releases
+
+-add scores
+-add playing game
+-add matching
+-add server adds
+-discord name to user
+-
+
+

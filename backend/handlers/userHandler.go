@@ -25,7 +25,6 @@ type UserResponse struct {
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	user, err := db.GetUserByID(userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -37,7 +36,6 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
@@ -45,7 +43,6 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	profile, err := db.GetUserProfileByID(userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -57,7 +54,6 @@ func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(profile)
 }
@@ -65,7 +61,6 @@ func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 func GetUserBioHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	profile, err := db.GetUserBioByID(userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -77,7 +72,6 @@ func GetUserBioHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(profile)
 

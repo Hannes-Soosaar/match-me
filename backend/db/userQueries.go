@@ -328,8 +328,12 @@ func ModifyUserConnection(userID int) error {
 	return nil
 }
 
-func RemoveUserConnection(currentUserID, userID2 int) error {
-	// GET the logged in userID from session to avoid potential
+func RemoveUserConnection(matchID int) error {
+
+	// Set the user connection as "removed" in the matches table
+	// query = "DELETE FROM user_matches WHERE user_id_1 = $1 AND user_id_2 = $2"
+
+
 	return nil
 }
 
@@ -364,7 +368,6 @@ func GetUserIDfromUUIDarray(UUIDs []string) ([]string, error) {
 	fmt.Println("Connections IDs:", userIDs)
 	return userIDs, nil
 }
-
 
 func SetUserOnlineStatus(userID string, status bool) error {
 	query := "UPDATE users SET is_online = $1 WHERE uuid = $2"

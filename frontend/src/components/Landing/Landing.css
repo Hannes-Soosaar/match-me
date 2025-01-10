@@ -1,0 +1,10 @@
+.main-text {
+    font-size: 2.5rem;
+    font-weight: 700;
+color: #000000;
+    margin-bottom: 1rem;
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
+    line-height: 1.5;
+}
