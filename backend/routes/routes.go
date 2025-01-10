@@ -26,6 +26,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/me/bio", handlers.GetMeBioHandler).Methods("GET")
 	router.HandleFunc("/me/uuid", handlers.GetCurrentUserUUID).Methods("GET")
 
+	//router.HandleFunc("/session", handlers.GetSessionDetails).Methods("GET") Building out session management
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
 	// Profile routes
