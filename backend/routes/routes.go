@@ -14,8 +14,9 @@ func InitRoutes() *mux.Router {
 
 	router.PathPrefix("/uploads/").Handler(http.StripPrefix("/uploads/", http.FileServer(http.Dir(fileDirectory))))
 	// user routes
+	router.HandleFunc("/authorization", handlers.AuthorizationHandler).Methods("POST")
 	router.HandleFunc("/login", handlers.LoginHandler).Methods("POST")
-	router.HandleFunc("/logout", handlers.LogoutHandler).Methods("POST") 
+	router.HandleFunc("/logout", handlers.LogoutHandler).Methods("POST")
 	router.HandleFunc("/register", handlers.RegisterHandler).Methods("POST")
 	router.HandleFunc("/users/{id}", handlers.GetUserHandler).Methods("GET")
 	router.HandleFunc("/users/{id}/profile", handlers.GetUserProfileHandler).Methods("GET")

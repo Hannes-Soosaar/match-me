@@ -152,6 +152,31 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(user)
 }
 
+func AuthorizationHandler(w http.ResponseWriter, r *http.Request) {
+	// Get Authorization header.
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
+		log.Printf("Unauthorized: Missing or invalid token")
+		return
+	}
+
+	// Extract token from the header.
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	// Validate the token and check authorization.
+	_, err := auth.ExtractUserIDFromToken(token)
+	if err != nil {
+		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
+		log.Printf("Error validating token: %v", err)
+		return
+	}
+
+	// If authorized, respond with 200 OK.
+	w.WriteHeader(http.StatusOK)
+	log.Println("Authorization successful")
+}
+
 func GetLightCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user *models.LightProfileInformation
 
