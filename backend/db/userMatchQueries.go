@@ -304,3 +304,48 @@ func GetReceiverID(matchID string, senderID string) (string, error) {
 
 	return receiverID, nil
 }
+
+
+/*
+
+do one query to get all the data needed for the buddy profile?
+
+from users table 
+	- user_nation
+	- user_city
+	- is_online 
+
+from user profiles
+	- username 
+	- about_me
+	- profile_pic
+
+from user_interest
+	- interest_ids
+
+from 
+
+*/
+
+
+func GetBuddyProfileFrom(matchID string, userID string) (string, error) {
+
+	query := "SELECT user_id_1, user_id_2 FROM user_matches WHERE id = $1"
+	var userID1, userID2 string
+
+	err := DB.QueryRow(query, matchID).Scan(&userID1, &userID2)
+	if err != nil {
+		return "", fmt.Errorf("error getting receiver ID: %w", err)
+	}
+
+	var  buddyID string
+	if userID== userID1 {
+		buddyID = userID2
+	} else if userID == userID2 {
+		buddyID = userID1
+	} else {
+		return "", fmt.Errorf("sender ID not found in the match")
+	}
+
+	return buddyID , nil
+}

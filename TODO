@@ -151,7 +151,67 @@ DONE -The frontend is implemented in React.
 
 CHECK - The application is responsive for mobile and desktop browsers.
 
-// API DEV.
+
+CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
+PAGES for 
+They are recommended
+There is an outstanding connection request ()
+They are connected ( buddies )
+
+CHECK - It is possible to dismiss a recommendation.
+CHECK - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended. 
+(Poor match, not the same language, not at desired distance, not on the same platform, )
+CHECK - Create two users in an empty system, who appear like they should obviously match
+DONE -The user can specify a location from a list   This applies for their own location only. 
+
+
+
+
+TODO - Location Filter! // HANNES 
+
+WIP -Add distance filter
+    -Add logic to filter out based on distance
+
+
+
+TODO - The user can log out. MARKO
+
+TODO -The user only sees recommendations from their location.
+    TODO- additional paratmeters for match query display 
+    TODO - Describe matching logic.
+
+
+TODO -That recommendation is not shown again after it is dismissed.
+    -TODO add logic for returning match response 
+
+TODO Connection requests can be sent.
+    -TODO add logic for returning match response 
+
+TODO- Incoming connection requests can be accepted.
+
+   -TODO add logic for returning match response 
+TODO- Incoming connection requests can be rejected. 
+
+        -TODO add logic for returning match response   
+TODO- It is possible to disconnect with a user.
+
+  -TODO add logic for returning match response 
+
+TODO - Users can only see profile information when properly allowed. ( connected or matched)
+
+
+
+// CHAT
+DONE- The realtime implementation does not rely on polling. (ws)
+DONE- Chats are ordered with the most recently active chat first.
+DONE- Both users see the same chat history.
+TODO- The chat history API data is paginated. (what is this )
+TODO- Chat is only possible between connected profiles. // FE implementation only.
+DONE-The chat works in real time.
+TODO - An unread message icon appears when new chat messages are received in real time.
+TODO - Chat messages feature a date and time.
+
+// API DEV. CHECK
 
 CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
 

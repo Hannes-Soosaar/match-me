@@ -308,3 +308,65 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(buddies)
 }
+
+
+
+type BuddyProfile struct {
+	MatchID                int    `json:"match_id"`
+	MatchScore             int    `json:"match_score"`
+	Status                 string `json:"status"`
+	IsOnline           	   bool   `json:"is_online"`
+	MatchedUserName        string `json:"matched_user_name"`
+	MatchedUserPicture     string `json:"matched_user_picture"`
+	MatchedUserDescription string `json:"matched_user_description"`
+	MatchedUserLocation    string `json:"matched_user_location"`
+}
+// Will get the match ID  and return the buddy profile.
+func GetBuddyProfile(w http.ResponseWriter, r *http.Request) {
+
+	userID1, err := GetCurrentUserID(r)
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+
+	
+	userBuddies, err := db.GetAllConnectedMatchesByUserId(userID1)
+	if err != nil {
+		log.Println("Error getting user connected matches:", err)
+	}
+
+	log.Println(`userBuddies`, userBuddies);
+
+	var buddies []BuddiesResponse
+	var buddy BuddiesResponse
+	var buddyProfile *models.ProfileInformation
+	for _, userMatch := range userBuddies {
+		// Displays correctly the matched Profile user data
+		if userMatch.UserID2 == userID1 {
+			buddyProfile, err = db.GetUserInformation(userMatch.UserID1)
+			if err != nil {
+				log.Println("Error getting user information:", err)
+			}
+		} else {
+			buddyProfile, err = db.GetUserInformation(userMatch.UserID2)
+		}
+
+		if err != nil {
+			log.Println("Error getting user information:", err)
+		}
+		buddy.MatchID = userMatch.ID
+		buddy.Status = userMatch.Status
+		buddy.MatchScore = userMatch.MatchScore
+		buddy.MatchedUserName = buddyProfile.Username
+		buddy.MatchedUserPicture = buddyProfile.Picture
+		buddy.MatchedUserDescription = buddyProfile.About
+		buddy.MatchedUserLocation = buddyProfile.Nation
+		buddies = append(buddies, buddy)
+	}
+
+	log.Println("Buddies:", buddies)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(buddies)
+}

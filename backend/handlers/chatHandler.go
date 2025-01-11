@@ -39,6 +39,8 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 	connections[userID] = conn
 	mu.Unlock()
 	log.Printf("WebSocket connection established for userID: %s\n", userID)
+	log.Printf("Number of connections: %d\n", len(connections))
+	log.Printf("Connections: %d\n" , connections)
 
 	defer func() {
 		mu.Lock()
@@ -167,4 +169,9 @@ func ChatHistoryHandler(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(chatHistory)
+}
+
+// I will add this to check if it can be used for online-offline status extraction HS
+func GetEstablishedConnections() map[string]*websocket.Conn {
+	return connections
 }
