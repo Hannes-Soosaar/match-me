@@ -68,7 +68,7 @@
     height: 70vh;
 }
 
-.chat-input-container {
+.input-container {
     height: 8vh;
     max-height: 8vh;
     display: flex;
@@ -78,7 +78,7 @@
     background-color: #ccc;
 }
 
-.chat-input-container button {
+.input-container button {
     width: 4vw;
     height: 4vh;
     font-size: calc(0.5vh + 0.5vw);
@@ -96,23 +96,38 @@
     box-sizing: content-box;
 }
 
-.chat-input-container button:hover {
+.input-container button:hover {
     color: hsla(0, 0%, 96%, 0.7);
     cursor: pointer;
 }
 
-.chat-input-container input {
+.input-container input {
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: left;
     border: 0px solid #FF6969;
     box-sizing: content-box;
-    width: 40%;
+    width: 60%;
     height: 4vh;
     border-radius: 15px;
     margin: 5px;
     padding-left: 7px;
     outline: none;
     font-size: calc(0.5vh + 0.5vw);
+}
+
+.typing-status-container {
+    width: 30%;
+    height: 8vh;
+    background-color: #ccc;
+    align-items: left;
+    margin-left: 0;
+}
+
+.chat-input-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
 }

@@ -55,12 +55,11 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 			break
 		}
 
-		fmt.Printf("Received message: %s\n", message)
-
 		var msgData struct {
 			SenderID   string `json:"senderID"`
 			ReceiverID string `json:"receiverID"`
 			Message    string `json:"message"`
+			Type       string `json:"type"`
 		}
 
 		if err := json.Unmarshal(message, &msgData); err != nil {
@@ -73,11 +72,20 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 		receiverConn, receiverOnline := connections[msgData.ReceiverID]
 		mu.Unlock()
 
-		returnMessage := string(msgData.Message)
+		//returnMessage := string(msgData.Message)
+
+		if msgData.Type == "typing" || msgData.Type == "stopTyping" {
+			if receiverOnline {
+				err := receiverConn.WriteMessage(websocket.TextMessage, message)
+				if err != nil {
+					log.Println("Error sending typing status to receiver:", err)
+				}
+			}
+		}
 
 		//if sender is online, send message
 		if senderOnline {
-			err := senderConn.WriteMessage(websocket.TextMessage, []byte(returnMessage))
+			err := senderConn.WriteMessage(websocket.TextMessage, message)
 			if err != nil {
 				log.Println("Error sending message to sender:", err)
 			}
@@ -85,7 +93,7 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 
 		//if receiver is online, send message
 		if receiverOnline {
-			err := receiverConn.WriteMessage(websocket.TextMessage, []byte(returnMessage))
+			err := receiverConn.WriteMessage(websocket.TextMessage, message)
 			if err != nil {
 				log.Println("Error sending message to receiver:", err)
 			}

@@ -16,6 +16,7 @@ const Chat = () => {
     const [matchID, setMatchID] = useState(null)
     const [senderID, setSenderID] = useState("")
     const [receiverID, setReceiverID] = useState("")
+    const [typingStatus, setTypingStatus] = useState("");
     const basePictureURL = "http://localhost:4000/uploads/";
     const authToken = localStorage.getItem('token');
 
@@ -81,13 +82,58 @@ const Chat = () => {
         fetchUUID()
     }, [authToken])
 
+    let typingTimeouts = [];
+
     useEffect(() => {
         if (!socket) return;
         socket.onmessage = (event) => {
-            setMessages((prevMessages) => [...(prevMessages || []), event.data])
-        }
+            try {
+                const data = JSON.parse(event.data);
+                console.log('Parsed event data:', data);
 
-    }, [socket])
+                if (senderID === data.receiverID) {
+                    if (data.type === "typing") {
+                        setTypingStatus(`${selectedConnection} is typing.`)
+
+                        typingTimeouts.forEach(timeout => clearTimeout(timeout));
+                        typingTimeouts = [];
+
+                        const timeout1 = setTimeout(() => {
+                            setTypingStatus(`${selectedConnection} is typing..`)
+                        }, 1000)
+
+                        const timeout2 = setTimeout(() => {
+                            setTypingStatus(`${selectedConnection} is typing...`);
+                        }, 2000)
+
+                        const timeout3 = setTimeout(() => {
+                            setTypingStatus("")
+                        }, 3000)
+
+                        typingTimeouts.push(timeout1, timeout2, timeout3);
+                    }
+                }
+                setMessages((prevMessages) => [...(prevMessages || []), data.message])
+            } catch (error) {
+                console.error("Error parsing message data:", error)
+            }
+        }
+        return () => {
+            typingTimeouts.forEach(timeout => clearTimeout(timeout));
+        };
+    }, [socket, senderID, selectedConnection])
+
+    const handleTyping = () => {
+        if (socket) {
+            socket.send(JSON.stringify({ type: "typing", senderID, receiverID }))
+        }
+    }
+
+    /*const handleStopTyping = () => {
+        if (socket) {
+            socket.send(JSON.stringify({ type: "stopTyping", senderID, receiverID }));
+        }
+    };*/
 
     useEffect(() => {
         if (senderID && matchID) {
@@ -161,6 +207,13 @@ const Chat = () => {
         }
     }
 
+    const handleKeyDown = (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault()
+            sendMessage()
+        }
+    }
+
     const handleConnectionClick = (connection) => {
         console.log('Connection clicked:', connection)
         setSelectedConnection(connection.matched_user_name)
@@ -185,17 +238,17 @@ const Chat = () => {
         <>
             <div className="chat-container">
                 <div className="chat-sidebar">
-                    { connections && connections.length > 0 ? (
-                    connections.map((connection, index) => (
-                        <div
-                            key={index}
-                            className={`connection-item ${selectedConnection === connection.matched_user_name ? 'selected' : ''}`}
-                            onClick={() => handleConnectionClick(connection)}
-                        >
-                            <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
-                            <h4>{connection.matched_user_name}</h4>
-                        </div>
-                    ))):(
+                    {connections && connections.length > 0 ? (
+                        connections.map((connection, index) => (
+                            <div
+                                key={index}
+                                className={`connection-item ${selectedConnection === connection.matched_user_name ? 'selected' : ''}`}
+                                onClick={() => handleConnectionClick(connection)}
+                            >
+                                <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
+                                <h4>{connection.matched_user_name}</h4>
+                            </div>
+                        ))) : (
                         <p>No matches found. Try updating your preferences or check back later!</p>
                     )}
                 </div>
@@ -208,14 +261,22 @@ const Chat = () => {
                         }
                     </div>
                     <div className="chat-input-container">
-                        <input
-                            type="text"
-                            value={newMessage}
-                            maxLength={300}
-                            onChange={(e) => setNewMessage(e.target.value)}
-                            placeholder="Type your message..."
-                        />
-                        <button onClick={sendMessage}>Send</button>
+                        <div className="typing-status-container">
+                            <p1>{typingStatus}</p1>
+                        </div>
+                        <div className="input-container">
+                            <input
+                                type="text"
+                                value={newMessage}
+                                maxLength={300}
+                                onChange={(e) => setNewMessage(e.target.value)}
+                                placeholder="Type your message..."
+                                onKeyDown={handleKeyDown}
+                                onKeyPress={handleTyping}
+                            />
+                            <button onClick={sendMessage}>Send</button>
+                        </div>
+                        <div className="typing-status-container"></div>
                     </div>
                 </div>
             </div>
