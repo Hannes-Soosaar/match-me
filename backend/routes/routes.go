@@ -27,6 +27,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/me/uuid", handlers.GetCurrentUserUUID).Methods("GET")
 
 	router.HandleFunc("/online", handlers.GetOnlineStatus).Methods("GET")
+	router.HandleFunc("/online/{id}", handlers.GetOtherOnlineStatus).Methods("GET")
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
 	// Profile routes
