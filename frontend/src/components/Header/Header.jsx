@@ -17,7 +17,8 @@ function Header() {
                             Authorization: `Bearer ${authToken}`,
                         },
                     });
-                    setIsOnline(response.data); // Assuming the backend returns true/false
+                    const data = response.data;
+                    setIsOnline(data.is_online); // Assuming the backend returns true/false
                 } catch (error) {
                     console.error('Error fetching online status:', error);
                 }
