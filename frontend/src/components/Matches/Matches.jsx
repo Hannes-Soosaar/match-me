@@ -47,7 +47,6 @@ const Matches = () => {
                     </div>
                 <div className="body-sides"></div>
             </div>
-
         </>
     );
 };

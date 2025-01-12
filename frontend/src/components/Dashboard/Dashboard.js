@@ -2,7 +2,16 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Dashboard.css';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
+import { Link } from 'react-router-dom';
 
+/* 
+
+
+userData = {
+    "user_id": 1,  
+    "username": "testuser",
+    
+*/
 const Dashboard = () => {
     const [userData, setUserData] = useState(null); // Store user data
     const [loading, setLoading] = useState(true); // Track loading state for user data
@@ -12,7 +21,6 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                // Request location before user data
 
                 const token = localStorage.getItem('token');
                 if (!token) {
@@ -48,6 +56,11 @@ const Dashboard = () => {
         fetchUserData();
     }, []);
 
+    const handleEditProfile = () => {
+        // Redirect to the edit profile page
+        window.location.href = '/profile';
+    }
+
     if (loading) {
         // Show loading for user data
         return <div>Loading user data...</div>;
@@ -75,6 +88,8 @@ const Dashboard = () => {
                         <p>{userData?.age}</p>
                         <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
                         <p>{userData?.about_me}</p>
+                        <button onClick={handleEditProfile} >Edit profile</button>
+
                     </div>
 
                 </div>
