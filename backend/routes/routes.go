@@ -26,7 +26,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/me/bio", handlers.GetMeBioHandler).Methods("GET")
 	router.HandleFunc("/me/uuid", handlers.GetCurrentUserUUID).Methods("GET")
 
-	//router.HandleFunc("/session", handlers.GetSessionDetails).Methods("GET") Building out session management
+	router.HandleFunc("/online", handlers.GetOnlineStatus).Methods("GET")
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
 
 	// Profile routes
@@ -43,7 +43,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/browserlocation", handlers.BrowserHandler).Methods("POST")
 
 	// match routes
-	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET") 
+	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET")
 	router.HandleFunc("/matches/request", handlers.RequestMatch).Methods("PUT")
 	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT")
 	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")

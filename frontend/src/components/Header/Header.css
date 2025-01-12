@@ -47,3 +47,45 @@
     background-color: #333;
     /* Optional: for visualization */
 }
+
+.indicator-text {
+    color: whitesmoke;
+    font-weight: bold;
+    font-size: calc(0.8vw + 0.8vh)/2;
+
+}
+
+.status-light {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px; /* Space between lights */
+}
+
+/* Default light styles for the secondary light */
+.secondary-light {
+    opacity: 0.8; /* Slightly dimmer than the main light */
+}
+
+/* Secondary light status colors */
+.secondary-online {
+    background-color: lightblue; /* Or any color for online status */
+}
+
+.secondary-offline {
+    background-color: lightgray; /* Or any color for offline status */
+}
+
+.secondary-unknown {
+    background-color: orange; /* Or any color for unknown status */
+}
+
+/* Main status light styles */
+.online {
+    background-color: green; /* Green for online */
+}
+
+.offline {
+    background-color: red; /* Red for offline */
+}

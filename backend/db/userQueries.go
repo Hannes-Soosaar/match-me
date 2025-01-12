@@ -365,7 +365,6 @@ func GetUserIDfromUUIDarray(UUIDs []string) ([]string, error) {
 	return userIDs, nil
 }
 
-
 func SetUserOnlineStatus(userID string, status bool) error {
 	query := "UPDATE users SET is_online = $1 WHERE uuid = $2"
 	_, err := DB.Exec(query, status, userID)
@@ -374,4 +373,22 @@ func SetUserOnlineStatus(userID string, status bool) error {
 		return err
 	}
 	return nil
+}
+
+func GetUserOnlineStatus(userID string) (bool, error) {
+	query := "SELECT is_online FROM users WHERE uuid = $1"
+	var isOnline bool
+	err := DB.QueryRow(query, userID).Scan(&isOnline)
+	if err != nil {
+		if err == sql.ErrNoRows {
+
+			log.Printf("No user found with ID: %s", userID)
+			return false, nil
+		}
+
+		log.Printf("Error fetching online status for user %s: %v", userID, err)
+		return false, err
+	}
+
+	return isOnline, nil
 }

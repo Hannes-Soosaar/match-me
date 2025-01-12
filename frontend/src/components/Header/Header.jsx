@@ -1,12 +1,30 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './Header.css'
 
 function Header() {
-    
+    const [isOnline, setIsOnline] = useState(null);
     const isAuthenticated = !!localStorage.getItem('token');
     const authToken = localStorage.getItem('token');
+
+    useEffect(() => {
+        const fetchOnlineStatus = async () => {
+            if (isAuthenticated) {
+                try {
+                    const response = await axios.get('/online', {
+                        headers: {
+                            Authorization: `Bearer ${authToken}`,
+                        },
+                    });
+                    setIsOnline(response.data); // Assuming the backend returns true/false
+                } catch (error) {
+                    console.error('Error fetching online status:', error);
+                }
+            }
+        };
+        fetchOnlineStatus();
+    }, [isAuthenticated, authToken]);
 
 
     const handleLogout = () => {
@@ -61,6 +79,20 @@ function Header() {
                     </div>
                         <div className='nav-container'></div>
                     <div className="nav-right">
+                    {isAuthenticated && (
+                        <div className="online-status">
+                            <span
+                                className={`status-light ${
+                                    isOnline === true
+                                        ? 'online' // Green if online
+                                        : isOnline === false
+                                        ? 'offline' // Red if offline
+                                        : '' // No color if status is unknown
+                                }`}
+                            ></span>
+                            <span className="indicator-text">{isOnline === true ? 'Online' : isOnline === false ? 'Offline' : 'Loading...'}</span>
+                        </div>
+                    )}
                         {!isAuthenticated ? (
                             <Link to="/login" className="signup">
                                 Sign up/Login

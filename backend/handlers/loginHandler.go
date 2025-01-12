@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"database/sql"
 	"encoding/json"
 	"errors"
 	"log"
@@ -8,6 +9,9 @@ import (
 	"match_me_backend/db"
 	"match_me_backend/models"
 	"net/http"
+	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 func LoginHandler(w http.ResponseWriter, r *http.Request) {
@@ -64,9 +68,8 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	
 	err = db.UpdateMatchScoreForUser(existingUser.ID)
-	
+
 	if err != nil {
 		log.Println("Error updating all user scores", err)
 	}
@@ -98,3 +101,70 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "safely logged out!"})
 }
 
+func GetOnlineStatus(w http.ResponseWriter, r *http.Request) {
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
+		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
+		log.Printf("Unauthorized: Missing or invalid token")
+		return
+	}
+
+	token := strings.TrimPrefix(authHeader, "Bearer ")
+
+	currentUserID, err := auth.ExtractUserIDFromToken(token)
+	if err != nil {
+		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
+		log.Printf("Error extracting user ID from token: %v", err)
+		return
+	}
+
+	isOnline, err := db.GetUserOnlineStatus(currentUserID)
+	if err != nil {
+		log.Printf("Error fetching online status for user %s: %v", currentUserID, err)
+
+		if err == sql.ErrNoRows {
+			http.Error(w, "User not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(map[string]bool{"is_online": isOnline})
+	if err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
+
+func GetOtherOnlineStatus(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
+	if userID == "" {
+		http.Error(w, "Bad Request: Missing user ID", http.StatusBadRequest)
+		log.Printf("Bad Request: Missing user ID")
+		return
+	}
+
+	isOnline, err := db.GetUserOnlineStatus(userID)
+	if err != nil {
+		log.Printf("Error fetching online status for user %s: %v", userID, err)
+		if err == sql.ErrNoRows {
+			http.Error(w, "User not found", http.StatusNotFound)
+		} else {
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		}
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	err = json.NewEncoder(w).Encode(isOnline)
+	if err != nil {
+		log.Printf("Error encoding response: %v", err)
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+	}
+}
