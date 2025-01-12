@@ -133,11 +133,12 @@ func BlockMatch(w http.ResponseWriter, r *http.Request) {
 type MatchResponse struct {
 	MatchID                int    `json:"match_id"`
 	MatchScore             int    `json:"match_score"`
-	Status                 string `json:"status"`
+	Status                 string `json:"status"` // Used to determine what to display in the front end
+	MatchedUserID          string `json:"matched_user_id"` // UUID
 	MatchedUserName        string `json:"matched_user_name"`
 	MatchedUserPicture     string `json:"matched_user_picture"`
 	MatchedUserDescription string `json:"matched_user_description"`
-	MatchedUserLocation    string `json:"matched_user_location"`
+	MatchedUserLocation    string `json:"matched_user_location"` 
 }
 
 // returns  10 new matches for the user to see ordered by the best match score
@@ -157,15 +158,19 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	var matches []MatchResponse
 	var match MatchResponse
 	var matchProfile *models.ProfileInformation
+	var buddyID  string
+
 	for _, userMatch := range userMatches {
 		// Displays correctly the matched Profile user data
 		if userMatch.UserID2 == userID1 {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID1)
+			buddyID = userMatch.UserID1
 			if err != nil {
 				log.Println("Error getting user information:", err)
 			}
 		} else {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID2)
+			buddyID = userMatch.UserID1
 		}
 
 		if err != nil {
@@ -174,6 +179,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 		match.MatchID = userMatch.ID
 		match.Status = userMatch.Status
 		match.MatchScore = userMatch.MatchScore
+		match.MatchedUserID = buddyID
 		match.MatchedUserName = matchProfile.Username
 		match.MatchedUserPicture = matchProfile.Picture
 		match.MatchedUserDescription = matchProfile.About
@@ -273,7 +279,7 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error getting user connected matches:", err)
 	}
 
-	log.Println(`userBuddies`, userBuddies);
+	log.Println(`userBuddies`, userBuddies)
 
 	var buddies []BuddiesResponse
 	var buddy BuddiesResponse
@@ -309,18 +315,17 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(buddies)
 }
 
-
-
 type BuddyProfile struct {
 	MatchID                int    `json:"match_id"`
 	MatchScore             int    `json:"match_score"`
 	Status                 string `json:"status"`
-	IsOnline           	   bool   `json:"is_online"`
+	IsOnline               bool   `json:"is_online"`
 	MatchedUserName        string `json:"matched_user_name"`
 	MatchedUserPicture     string `json:"matched_user_picture"`
 	MatchedUserDescription string `json:"matched_user_description"`
 	MatchedUserLocation    string `json:"matched_user_location"`
 }
+
 // Will get the match ID  and return the buddy profile.
 func GetBuddyProfile(w http.ResponseWriter, r *http.Request) {
 
@@ -329,13 +334,12 @@ func GetBuddyProfile(w http.ResponseWriter, r *http.Request) {
 		log.Println("Error getting user Id from token:", err)
 	}
 
-	
 	userBuddies, err := db.GetAllConnectedMatchesByUserId(userID1)
 	if err != nil {
 		log.Println("Error getting user connected matches:", err)
 	}
 
-	log.Println(`userBuddies`, userBuddies);
+	log.Println(`userBuddies`, userBuddies)
 
 	var buddies []BuddiesResponse
 	var buddy BuddiesResponse

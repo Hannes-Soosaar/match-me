@@ -32,7 +32,7 @@ const Chat = () => {
     useEffect(() => {
         const fetchConnections = async () => {
             try {
-                const response = await axios.get('/matches', {
+                const response = await axios.get('/buddies', { 
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },

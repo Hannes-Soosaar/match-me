@@ -1,0 +1,18 @@
+
+.content-container {
+    max-width: 1980px;
+    display: flex;
+    flex-direction: row;
+    border: #333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
+}
+
+.user-info{
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    border: #333;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #f0f0f0;
+}

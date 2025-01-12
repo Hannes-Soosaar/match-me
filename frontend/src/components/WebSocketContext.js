@@ -25,6 +25,7 @@ export const WebSocketProvider = ({ children }) => {
         fetchUUID()
     }, [authToken])
 
+    
     useEffect(() => {
         if (authToken) {
             console.log("ws made for senderID:", senderID)

@@ -43,7 +43,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/browserlocation", handlers.BrowserHandler).Methods("POST")
 
 	// match routes
-	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET") // get 15 all matches
+	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET") 
 	router.HandleFunc("/matches/request", handlers.RequestMatch).Methods("PUT")
 	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT")
 	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")
@@ -55,6 +55,7 @@ func InitRoutes() *mux.Router {
 	/*
 		EXTERNAL API ROUTES
 
+		Premission management
 		Create documentation for the following routes:
 
 		DONE:   /users/{id}: which returns the user's name and link to the profile picture.
@@ -64,7 +65,7 @@ func InitRoutes() *mux.Router {
 
 		/users/{id}/bio: which returns the users biographical data (the data used to power recommendations).
 
-		  DONE AND IN USER:  /me: which is a shortcut to /users/{id}  for the authenticated user. You should also implement
+		DONE AND IN USER:  /me: which is a shortcut to /users/{id}  for the authenticated user. You should also implement
 
 		TODO: router.HandleFunc("/me/bio", handlers.GetCurrentUserHandler).Methods("GET")
 		TODO: router.HandleFunc("/me/profile", handlers.GetCurrentUserHandler).Methods("GET")
