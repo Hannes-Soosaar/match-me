@@ -97,6 +97,28 @@ func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	}
 	return userMatches, nil
 }
+func GetRequestsMatchesByUserId(userID string) ([]models.UsersMatches, error) {
+	log.Println("Getting all requests matches for user:", userID)
+	query := "SELECT id, user_id_1, user_id_2, match_score,status,created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'requested' ORDER BY modified_at DESC"
+	rows, err := DB.Query(query, userID)
+	if err != nil {
+		return nil, fmt.Errorf("error executing query: %w", err)
+	}
+	defer rows.Close()
+	var userMatches []models.UsersMatches
+	for rows.Next() {
+		var userMatch models.UsersMatches
+		err = rows.Scan(&userMatch.ID, &userMatch.UserID1, &userMatch.UserID2, &userMatch.MatchScore, &userMatch.Status, &userMatch.CreatedAt)
+		if err != nil {
+			return nil, fmt.Errorf("error scanning row: %w", err)
+		}
+		userMatches = append(userMatches, userMatch)
+	}
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error during row iterations: %w", err)
+	}
+	return userMatches, nil
+}
 
 func GetConnectionsID(userID string) ([]string, error) {
 	query := `

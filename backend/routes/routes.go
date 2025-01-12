@@ -44,7 +44,8 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/browserlocation", handlers.BrowserHandler).Methods("POST")
 
 	// match routes
-	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET")
+	router.HandleFunc("/matches", handlers.GetMatches).Methods("GET") 
+	router.HandleFunc("/requests", handlers.GetRequests).Methods("GET") 
 	router.HandleFunc("/matches/request", handlers.RequestMatch).Methods("PUT")
 	router.HandleFunc("/matches/connect", handlers.ConfirmMatch).Methods("PUT")
 	router.HandleFunc("/matches/block", handlers.BlockMatch).Methods("PUT")

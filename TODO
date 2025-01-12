@@ -30,6 +30,24 @@ Check what time does a JWT token hold.
 
 - Matches
 
+
+
+HANNES
+
+TODO - Location Filter!
+    -Add distance filter
+
+TODO -The user only sees recommendations from their location.
+
+TODO- additional paratmeters for match query display 
+
+
+TODO - Add requester field to user_matches
+
+TODO- 
+
+
+
 Kood/Jõhvi
 
 
@@ -68,10 +86,12 @@ CHECK- The application is secure. Information is appropriately shown to the corr
 
 CHECK - It is possible to dismiss a recommendation.
 
-TODO - Location Filter! //
+DONE -It recommends obviously good matches.
+DONE- The email address is not shown, except to the owner of the profile.  
 
-    -Add country filter 
-    -Add distance filter
+DONE - The user can see a list of no more than 10 recommendations at a time.
+    DONE- query and return  10 new best matches based on score.
+    DONE- every update gets 10 new matches
 
 TODO - The user can log out.
 
@@ -80,32 +100,24 @@ DONE - It refuses to recommend an obviously poor match.
         -if the user does not play on the same platform there will be no match
         -if the user does not
 
+
 TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
 
 TODO - Create two users in an empty system, who appear like they should obviously match
 
-TODO -It recommends obviously good matches.
-
-TODO- The email address is not shown, except to the owner of the profile.  
 
 TODO -The user can specify a location from a list 
 
-TODO -The user only sees recommendations from their location.
-    TODO- additional paratmeters for match query display 
 
-TODO - The user can see a list of no more than 10 recommendations at a time.
-    TODO- query and return  10 new best matches based on score.
-    TODO- every update gets 10 new matches
+DONE- The recommendations are prioritized with the best first.
 
-TODO- The recommendations are prioritized with the best first.
+DONE- The recommendations behave in line with the student's described matching logic.
+    DONE- Describe matching logic.
 
-TODO- The recommendations behave in line with the student's described matching logic.
-    TODO - Describe matching logic.
-
-TODO -That recommendation is not shown again after it is dismissed.
+DONE -That recommendation is not shown again after it is dismissed.
     -TODO add logic for returning match response 
 
-TODO Connection requests can be sent.
+DONE Connection requests can be sent.
     -TODO add logic for returning match response 
 
 TODO- Incoming connection requests can be accepted.
@@ -121,17 +133,17 @@ TODO- It is possible to disconnect with a user.
 
 // CHAT
 
-TODO- The realtime implementation does not rely on polling. (ws)
+DONE- The realtime implementation does not rely on polling. (ws)
 
-TODO- Chats are ordered with the most recently active chat first.
+DONE - Chats are ordered with the most recently active chat first.
 
-TODO- Both users see the same chat history.
+DONE- Both users see the same chat history.
 
-TODO- The chat history API data is paginated. (what is this )
+TODO- The chat history API data is paginated. (what is this )  //!! This can be done only for the API
 
-TODO- Chat is only possible between connected profiles.
+DONE- Chat is only possible between connected profiles.
 
-TODO -The chat works in real time.
+DONE -The chat works in real time.
 
 TODO - An unread message icon appears when new chat messages are received in real time.
 
@@ -167,7 +179,7 @@ DONE -The user can specify a location from a list   This applies for their own l
 
 
 
-TODO - Location Filter! // HANNES 
+TODO - Location Filter! // HANNES  
 
 WIP -Add distance filter
     -Add logic to filter out based on distance
@@ -176,9 +188,11 @@ WIP -Add distance filter
 
 TODO - The user can log out. MARKO
 
+
 TODO -The user only sees recommendations from their location.
     TODO- additional paratmeters for match query display 
     TODO - Describe matching logic.
+
 
 
 TODO -That recommendation is not shown again after it is dismissed.

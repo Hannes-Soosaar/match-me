@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './Requests.css';
 
 import axios from 'axios';
+import './Requests.css'
 import MatchCard from '../MatchCard/MatchCard.jsx';
 
 
@@ -9,11 +10,14 @@ import MatchCard from '../MatchCard/MatchCard.jsx';
 
     const Requests = () => {
 
+        const [data, setData] = useState([])
         const [matches, setMatches] = useState([])
+
         useEffect(() => {
             const fetchData = async () => {
                 try {
-                    const response = await axios.get('/matches', {
+                    console.log('Try to get the requests');
+                    const response = await axios.get('/requests', {
                         headers: {
                             Authorization: `Bearer ${authToken}`,
                         },
@@ -29,7 +33,7 @@ import MatchCard from '../MatchCard/MatchCard.jsx';
         }, [])
 
 
-
+// TODO: if you are the requester, you can cancel the request but not accept. How to implement it.
 
         return (
             <>
