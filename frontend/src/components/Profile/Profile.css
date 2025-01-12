@@ -104,6 +104,17 @@
     cursor: pointer;
 }
 
+.location-display {
+    width: 100%;
+    max-width: 250px; /* Limit the container's maximum width */
+    margin: 0 auto; /* Center the parent container */
+    padding: 20px; /* Add some padding */
+    box-sizing: border-box; /* Ensure padding is included in width calculations */
+
+    justify-content: center;
+    align-items: center;
+}
+
 .submit-container {
     display: flex;
     gap: 10px;
@@ -161,3 +172,4 @@
 select {
     width: 200px; 
 }
+
