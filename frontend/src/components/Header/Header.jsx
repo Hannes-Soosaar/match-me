@@ -36,19 +36,20 @@ function Header() {
             <div className='body-side'></div>
             <header className="header">
                     <div className="nav-left">
-                        <Link to='/' className="logo">
-                            Match me
-                        </Link>
-                        {isAuthenticated && (
+
+                        {isAuthenticated ?  (
                             <>
                                 <Link to="/dashboard" className="nav-link">
                                     Dashboard
                                 </Link>
-                                <Link to="/profile" className="nav-link">
+                                {/* <Link to="/profile" className="nav-link">
                                     Profile
-                                </Link>
+                                </Link> */}
                                 <Link to="/matches" className="nav-link">
                                     Matches
+                                </Link>
+                                <Link to="/Requests" className="nav-link">
+                                    Requests
                                 </Link>
                                 <Link to="/connections" className="nav-link">
                                     Buddies
@@ -57,6 +58,11 @@ function Header() {
                                     Chat
                                 </Link>
                             </>
+                        ) : ( 
+                            <Link to='/' className="logo">
+                                Gamers Pot
+                            </Link> 
+
                         )}
                     </div>
                         <div className='nav-container'></div>

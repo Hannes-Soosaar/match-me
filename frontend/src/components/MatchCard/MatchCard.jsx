@@ -11,11 +11,19 @@ const authToken = localStorage.getItem('token');
 
 const MatchCard = ({ userProfile }) => {
 
-    const { match_id, match_score,status,matched_user_id, matched_user_name, matched_user_picture,matched_user_description, matched_user_location } = userProfile;  
+    const { match_id,
+        match_score,
+        status,
+        matched_user_id,
+        matched_user_name, 
+        matched_user_picture,
+        matched_user_description, 
+        matched_user_location } = userProfile;  
 
     // Set the default profile picture if no picture is provided
     // const userProfilePic = matched_user_picture ? matched_user_picture : defaultProfilePic;
     const userProfilePic = defaultProfilePic;
+
     const [isModalOpen, setModalOpen] = useState(false);
 
     const handleViewMatchedProfile = () => {
@@ -38,7 +46,6 @@ const MatchCard = ({ userProfile }) => {
                 },
             });
             console.log('Match Remove:', response.data);
-
         } catch (error) {
             console.error('Error removing the match:', error);
         }
@@ -57,7 +64,6 @@ const MatchCard = ({ userProfile }) => {
             console.error('Error connecting to user:', error);
         }
     };
-
 
     const handleRequestMatch = async () => {
         try {
@@ -88,7 +94,52 @@ const MatchCard = ({ userProfile }) => {
     };
 
 
-
+    const renderButtons = () => {
+        switch (status) {
+            case 'new':
+                return (
+                    <>
+                        <button onClick={handleRequestMatch} className="match-card-button">
+                            Request
+                        </button>
+                        <button onClick={handleRemoveMatch} className="match-card-button">
+                            Dismiss match
+                        </button>
+                    </>
+                );
+            case 'requested':
+                return (
+                    <>
+                        <button onClick={handleConnectMatch} className="match-card-button">
+                            Connect
+                        </button>
+                        <button onClick={handleRemoveMatch} className="match-card-button">
+                            Delete
+                        </button>
+                    </>
+                );
+            case 'blocked':
+                return (
+                    <>
+                        <p>
+                            You are not authorized to contact this user.
+                        </p>
+                    </>
+                );
+            default:
+                return (
+                    <>
+                        <button onClick={handleRequestMatch} className="match-card-button">
+                            Request
+                        </button>
+                        
+                        <button onClick={handleRemoveMatch} className="match-card-button">
+                            Dismiss match
+                        </button>
+                    </>
+                );
+        }
+    };
 
     return (
         <>
@@ -103,20 +154,9 @@ const MatchCard = ({ userProfile }) => {
                 </div>
 
                 <div className="match-card-buttons">
-                    <button onClick={handleConnectMatch} className="match-card-button">
-                        Connect
-                    </button>
-                    <button onClick={handleRemoveMatch} className="match-card-button">
-                        Delete
-                    </button>
-                    <button onClick={handleRequestMatch} className="match-card-button">
-                        Request
-                    </button>
-                    <button onClick={handleBlockMatch} className="match-card-button">
-                        Block User
-                    </button>
+                    {renderButtons()}   
                     <button onClick={handleViewMatchedProfile} className="match-card-button">
-                        view Profile
+                        View Profile
                     </button>
                 </div>
             </div>

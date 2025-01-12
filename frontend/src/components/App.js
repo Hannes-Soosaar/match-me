@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import { WebSocketProvider } from './WebSocketContext';
 import { useState, useEffect } from 'react';
 
+
 import Header from './Header/Header';
 import Landing from './Landing/Landing';
 import LoginSignup from './LoginSignup/LoginSignup';
@@ -11,6 +12,7 @@ import Profile from './Profile/Profile';
 import Matches from './Matches/Matches';
 import BuddiesSection from './BuddiesSection/BuddiesSection.jsx';
 import Chat from './Chat/Chat';
+import Requests from './Requests/Requests.jsx';
 
 
 function App() {
@@ -45,7 +47,11 @@ function App() {
             <Route
               path='/chat'
               element={isAuthenticated && profileExists ? <Chat /> : <Navigate to="/" />} />
-          </Routes>
+            
+            <Route
+                path='/Requests'
+                element={isAuthenticated && profileExists ? <Requests/> : <Navigate to="/" />} />
+            </Routes>
         </div>
       </BrowserRouter >
     </WebSocketProvider>
