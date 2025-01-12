@@ -194,6 +194,62 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(matches)
 }
 
+func GetRequests(w http.ResponseWriter, r *http.Request) {
+	log.Println("GetRequests rout")
+
+	userID1, err := GetCurrentUserID(r)
+	if err != nil {
+		log.Println("Error getting user Id from token:", err)
+	}
+	// userMatches, err := db.GetAllUserMatchesByUserId(userID1)
+	// userMatches, err := db.GetTenNewMatchesByUserId(userID1)
+	userMatches, err := db.GetRequestsMatchesByUserId(userID1);
+	if err != nil {
+		log.Println("Error getting user matches:", err)
+	}
+	if err != nil {
+		log.Println("Error getting user matches:", err)
+	}
+	var matches []MatchResponse
+	var match MatchResponse
+	var matchProfile *models.ProfileInformation
+	var buddyID  string
+
+	for _, userMatch := range userMatches {
+		// Displays correctly the matched Profile user data
+		if userMatch.UserID2 == userID1 {
+			matchProfile, err = db.GetUserInformation(userMatch.UserID1)
+			buddyID = userMatch.UserID1
+			if err != nil {
+				log.Println("Error getting user information:", err)
+			}
+		} else {
+			matchProfile, err = db.GetUserInformation(userMatch.UserID2)
+			buddyID = userMatch.UserID1
+		}
+
+		if err != nil {
+			log.Println("Error getting user information:", err)
+		}
+		match.MatchID = userMatch.ID
+		match.Status = userMatch.Status
+		match.MatchScore = userMatch.MatchScore
+		match.MatchedUserID = buddyID
+		match.MatchedUserName = matchProfile.Username
+		match.MatchedUserPicture = matchProfile.Picture
+		match.MatchedUserDescription = matchProfile.About
+		match.MatchedUserLocation = matchProfile.Nation
+		matches = append(matches, match)
+	}
+
+	log.Println("Matches:", matches)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(matches)
+}
+
+
 func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
