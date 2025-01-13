@@ -14,6 +14,7 @@ const MatchCard = ({ userProfile }) => {
     const { match_id,
         match_score,
         status,
+        is_online,
         matched_user_id,
         matched_user_name, 
         matched_user_picture,
@@ -158,6 +159,7 @@ const MatchCard = ({ userProfile }) => {
                     <button onClick={handleViewMatchedProfile} className="match-card-button">
                         View Profile
                     </button>
+                    {is_online ? <p>Online</p> : <p>Offline</p>}
                 </div>
             </div>
 

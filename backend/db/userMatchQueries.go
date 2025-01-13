@@ -305,6 +305,17 @@ func UpdateMatchScoreForUser(user1ID string) error {
 	return nil
 }
 
+func SetRequesterIdForMatch( requesterID string, matchID int) error {
+	query := "UPDATE user_matches SET requester = $1 WHERE id = $2"
+	_, err := DB.Exec(query, requesterID, matchID)
+	if err != nil {
+		log.Println("error setting requester ID for match:", err)
+		return fmt.Errorf("error setting requester ID for match: %w", err)
+	}
+	log.Println("requester ID was set for match")
+	return nil
+}
+
 func GetReceiverID(matchID string, senderID string) (string, error) {
 
 	query := "SELECT user_id_1, user_id_2 FROM user_matches WHERE id = $1"
@@ -326,6 +337,8 @@ func GetReceiverID(matchID string, senderID string) (string, error) {
 
 	return receiverID, nil
 }
+
+
 
 
 /*

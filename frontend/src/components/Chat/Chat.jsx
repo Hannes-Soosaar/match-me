@@ -19,6 +19,7 @@ const Chat = () => {
     const [typingStatus, setTypingStatus] = useState("")
     const [offset, setOffset] = useState(0)
     const [hasMore, setHasMore] = useState(false)
+    const [buttonsDisabled, setButtonsDisabled] = useState(false)
     const basePictureURL = "http://localhost:4000/uploads/";
     const authToken = localStorage.getItem('token');
 
@@ -95,25 +96,29 @@ const Chat = () => {
                 console.log('Data type:', data.type);
 
                 if (senderID === data.receiverID) {
+                    console.log("senderID:", senderID, "\nreceiverID", receiverID, "\ndata.senderID", data.senderID, "\ndata.receiverID", data.receiverID)
                     if (data.type === "typing") {
-                        setTypingStatus(`${selectedConnection} is typing.`)
+                        if (receiverID !== data.senderID) {
+                            console.log(`selectedConnection: ${selectedConnection}, username: ${username}, receiverUsername: ${receiverUsername}`)
+                            setTypingStatus(`${selectedConnection} is typing.`)
 
-                        typingTimeouts.forEach(timeout => clearTimeout(timeout));
-                        typingTimeouts = [];
+                            typingTimeouts.forEach(timeout => clearTimeout(timeout));
+                            typingTimeouts = [];
 
-                        const timeout1 = setTimeout(() => {
-                            setTypingStatus(`${selectedConnection} is typing..`)
-                        }, 1000)
+                            const timeout1 = setTimeout(() => {
+                                setTypingStatus(`${selectedConnection} is typing..`)
+                            }, 1000)
 
-                        const timeout2 = setTimeout(() => {
-                            setTypingStatus(`${selectedConnection} is typing...`);
-                        }, 2000)
+                            const timeout2 = setTimeout(() => {
+                                setTypingStatus(`${selectedConnection} is typing...`);
+                            }, 2000)
 
-                        const timeout3 = setTimeout(() => {
-                            setTypingStatus("")
-                        }, 3000)
+                            const timeout3 = setTimeout(() => {
+                                setTypingStatus("")
+                            }, 3000)
 
-                        typingTimeouts.push(timeout1, timeout2, timeout3);
+                            typingTimeouts.push(timeout1, timeout2, timeout3);
+                        }
                     } else {
                         setOffset((prevOffset) => prevOffset + 1)
                     }
@@ -164,7 +169,7 @@ const Chat = () => {
                 fetchReceiverUUID()
             }
         }
-    }, [matchID, senderID, authToken])
+    }, [matchID, senderID, authToken, selectedConnection])
 
     useEffect(() => {
         const fetchReceiverProfile = async () => {
@@ -184,7 +189,7 @@ const Chat = () => {
         if (receiverID) {
             fetchReceiverProfile()
         }
-    }, [authToken, receiverID])
+    }, [authToken, receiverID, selectedConnection])
 
     const getCurrentDateTime = () => {
         const now = new Date()
@@ -241,10 +246,14 @@ const Chat = () => {
     }
 
     const handleConnectionClick = (connection) => {
+        setTypingStatus("")
         console.log('Connection clicked:', connection)
         if (selectedConnection === connection.matched_user_name) {
+            console.log(selectedConnection, connection.matched_user_name)
             return
         }
+        setHasMore(false)
+        setOffset(0)
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
 
@@ -254,10 +263,12 @@ const Chat = () => {
                 const response = await axios.get('/chatHistory', {
                     params: {
                         matchID: parseInt(connection.match_id, 10),
-                        offset: offset,
                     },
                 })
-                if (response.data.length > 14) {
+                if (response.data == null) {
+                    setMessages([])
+                    setOffset(0)
+                } else if (response.data.length > 14) {
                     setHasMore(true)
                     setOffset(15)
                     setMessages(response.data.slice(0, 15))
@@ -299,6 +310,17 @@ const Chat = () => {
         }
     }
 
+    const handleClick = (connection) => {
+        if (!buttonsDisabled) {
+            setButtonsDisabled(true)
+            handleConnectionClick(connection)
+
+            setTimeout(() => {
+                setButtonsDisabled(false)
+            }, 1000)
+        }
+    }
+
     return (
         <>
             <div className="chat-container">
@@ -308,7 +330,7 @@ const Chat = () => {
                             <div
                                 key={index}
                                 className={`connection-item ${selectedConnection === connection.matched_user_name ? 'selected' : ''}`}
-                                onClick={() => handleConnectionClick(connection)}
+                                onClick={() => !buttonsDisabled && handleClick(connection)}
                             >
                                 <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
                                 <h4>{connection.matched_user_name}</h4>
