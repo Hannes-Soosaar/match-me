@@ -6,6 +6,7 @@ import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png
 import { CitySelect, CountrySelect, StateSelect } from 'react-country-state-city';
 import 'react-country-state-city/dist/react-country-state-city.css';
 import InterestSection from '../InterestSection/InterestSection';
+import InterestPresenter from '../InterestPresenter/InterestPresenter';
 
 const Profile = () => {
     const [countryId, setCountryId] = useState(0);
@@ -18,6 +19,7 @@ const Profile = () => {
     const [profilePic, setProfilePic] = useState(null);
     const [previewPic, setPreviewPic] = useState(null);
     const [isEditingLocation, setIsEditingLocation] = useState(false);
+    const [isEditingInterests, setIsEditingInterests] = useState(false);
     const [formData, setFormData] = useState({
         country: '',
         state: '',
@@ -314,8 +316,26 @@ const Profile = () => {
                             Submit About Me
                         </button>
                     </div>
+                    {!isEditingInterests ? (
+  <>
+    <InterestPresenter />
+    <div className="submit-container">
+      <button className="submit" onClick={() => setIsEditingInterests(true)}>
+        Edit Interests
+      </button>
+    </div>
+  </>
+) : (
+  <>
+    <InterestSection />
+    <div className="submit-container">
+      <button className="submit" onClick={() => setIsEditingInterests(false)}>
+        Close Interests
+      </button>
+    </div>
+  </>
+)}
 
-                    <InterestSection />
 
                     {/* Birthdate Section */}
                     <div className='profile-text'>When were you born?</div>

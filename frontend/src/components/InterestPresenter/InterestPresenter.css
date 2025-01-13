@@ -1,0 +1,54 @@
+.selected {
+    background-color: hsla(276, 94%, 75%, 0.5);
+    }
+
+.unselected {
+    background-color: hsla(0, 0%, 55%, 0.3);
+    }
+
+  button{
+    margin: 5px;
+    padding: 5px;
+    border-radius: 15px;
+    height: fit-content;
+    width: fit-content;
+    border: 1px solid black;
+  }
+
+  .interest-section {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: left;
+    justify-items: left ;
+    margin: 10px;
+  }
+
+  .category-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin: 10px;
+  }
+
+  .button-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    margin: 10px;
+  }
+  .title-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    min-width: 125px;
+    margin: 10px;
+    margin-right: 10px;
+  }
+
+  .heading {
+    color: #FF6969;
+    font-size: 36px;
+    font-weight: bold;
+  }
+
