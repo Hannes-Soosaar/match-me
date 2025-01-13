@@ -95,25 +95,28 @@ const Chat = () => {
                 console.log('Data type:', data.type);
 
                 if (senderID === data.receiverID) {
+                    console.log("senderID:", senderID, "\nreceiverID", receiverID, "\ndata.senderID", data.senderID, "\ndata.receiverID", data.receiverID)
                     if (data.type === "typing") {
-                        setTypingStatus(`${selectedConnection} is typing.`)
+                        if (receiverID !== data.senderID) {
+                            setTypingStatus(`${selectedConnection} is typing.`)
 
-                        typingTimeouts.forEach(timeout => clearTimeout(timeout));
-                        typingTimeouts = [];
+                            typingTimeouts.forEach(timeout => clearTimeout(timeout));
+                            typingTimeouts = [];
 
-                        const timeout1 = setTimeout(() => {
-                            setTypingStatus(`${selectedConnection} is typing..`)
-                        }, 1000)
+                            const timeout1 = setTimeout(() => {
+                                setTypingStatus(`${selectedConnection} is typing..`)
+                            }, 1000)
 
-                        const timeout2 = setTimeout(() => {
-                            setTypingStatus(`${selectedConnection} is typing...`);
-                        }, 2000)
+                            const timeout2 = setTimeout(() => {
+                                setTypingStatus(`${selectedConnection} is typing...`);
+                            }, 2000)
 
-                        const timeout3 = setTimeout(() => {
-                            setTypingStatus("")
-                        }, 3000)
+                            const timeout3 = setTimeout(() => {
+                                setTypingStatus("")
+                            }, 3000)
 
-                        typingTimeouts.push(timeout1, timeout2, timeout3);
+                            typingTimeouts.push(timeout1, timeout2, timeout3);
+                        }
                     } else {
                         setOffset((prevOffset) => prevOffset + 1)
                     }
@@ -241,10 +244,14 @@ const Chat = () => {
     }
 
     const handleConnectionClick = (connection) => {
+        setTypingStatus("")
         console.log('Connection clicked:', connection)
         if (selectedConnection === connection.matched_user_name) {
+            console.log(selectedConnection, connection.matched_user_name)
             return
         }
+        setHasMore(false)
+        setOffset(0)
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
 
@@ -254,10 +261,12 @@ const Chat = () => {
                 const response = await axios.get('/chatHistory', {
                     params: {
                         matchID: parseInt(connection.match_id, 10),
-                        offset: offset,
                     },
                 })
-                if (response.data.length > 14) {
+                if (response.data == null) {
+                    setMessages([])
+                    setOffset(0)
+                } else if (response.data.length > 14) {
                     setHasMore(true)
                     setOffset(15)
                     setMessages(response.data.slice(0, 15))

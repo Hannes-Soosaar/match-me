@@ -132,9 +132,8 @@ CREATE TABLE IF NOT EXISTS user_matches(
     user_id_2 UUID NOT NULL,
     match_score INTEGER,
     status VARCHAR(20),
-    << << << < HEAD requester UUID DEFAULT NULL,
-    == == == = requester UUID DEFAULT NULL,
-    >> >> >> > refs / remotes / origin / main modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    requester UUID DEFAULT NULL,
+    modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     distance FLOAT
 );
