@@ -19,6 +19,7 @@ const Chat = () => {
     const [typingStatus, setTypingStatus] = useState("")
     const [offset, setOffset] = useState(0)
     const [hasMore, setHasMore] = useState(false)
+    const [buttonsDisabled, setButtonsDisabled] = useState(false)
     const basePictureURL = "http://localhost:4000/uploads/";
     const authToken = localStorage.getItem('token');
 
@@ -98,6 +99,7 @@ const Chat = () => {
                     console.log("senderID:", senderID, "\nreceiverID", receiverID, "\ndata.senderID", data.senderID, "\ndata.receiverID", data.receiverID)
                     if (data.type === "typing") {
                         if (receiverID !== data.senderID) {
+                            console.log(`selectedConnection: ${selectedConnection}, username: ${username}, receiverUsername: ${receiverUsername}`)
                             setTypingStatus(`${selectedConnection} is typing.`)
 
                             typingTimeouts.forEach(timeout => clearTimeout(timeout));
@@ -167,7 +169,7 @@ const Chat = () => {
                 fetchReceiverUUID()
             }
         }
-    }, [matchID, senderID, authToken])
+    }, [matchID, senderID, authToken, selectedConnection])
 
     useEffect(() => {
         const fetchReceiverProfile = async () => {
@@ -187,7 +189,7 @@ const Chat = () => {
         if (receiverID) {
             fetchReceiverProfile()
         }
-    }, [authToken, receiverID])
+    }, [authToken, receiverID, selectedConnection])
 
     const getCurrentDateTime = () => {
         const now = new Date()
@@ -308,6 +310,17 @@ const Chat = () => {
         }
     }
 
+    const handleClick = (connection) => {
+        if (!buttonsDisabled) {
+            setButtonsDisabled(true)
+            handleConnectionClick(connection)
+
+            setTimeout(() => {
+                setButtonsDisabled(false)
+            }, 1000)
+        }
+    }
+
     return (
         <>
             <div className="chat-container">
@@ -317,7 +330,7 @@ const Chat = () => {
                             <div
                                 key={index}
                                 className={`connection-item ${selectedConnection === connection.matched_user_name ? 'selected' : ''}`}
-                                onClick={() => handleConnectionClick(connection)}
+                                onClick={() => !buttonsDisabled && handleClick(connection)}
                             >
                                 <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
                                 <h4>{connection.matched_user_name}</h4>
