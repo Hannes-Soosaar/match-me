@@ -60,9 +60,10 @@ VALUES ('Genre'),
     --6
     ('Vibe'),
     --7
-    ('Language'), --8
+    ('Language'),
+    --8
     ('Distance') --9
-    ;
+;
 -- OK
 CREATE TABLE IF NOT EXISTS interests (
     id SERIAL PRIMARY KEY,
@@ -124,7 +125,6 @@ VALUES (1, 'RPG'),
     (9, '500-1000 km'),
     (9, '1000+ km');
 -- if there is a need to do time zone management we should use TIMESTAMPTZ
-
 -- OK 
 CREATE TABLE IF NOT EXISTS user_matches(
     id SERIAL PRIMARY KEY,
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS user_matches(
     user_id_2 UUID NOT NULL,
     match_score INTEGER,
     status VARCHAR(20),
-    requester UUID  NOT NULL DEFAULT "",
+    requester UUID DEFAULT NULL,
     modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     distance FLOAT

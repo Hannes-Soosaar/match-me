@@ -16,7 +16,9 @@ const Chat = () => {
     const [matchID, setMatchID] = useState(null)
     const [senderID, setSenderID] = useState("")
     const [receiverID, setReceiverID] = useState("")
-    const [typingStatus, setTypingStatus] = useState("");
+    const [typingStatus, setTypingStatus] = useState("")
+    const [offset, setOffset] = useState(0)
+    const [hasMore, setHasMore] = useState(false)
     const basePictureURL = "http://localhost:4000/uploads/";
     const authToken = localStorage.getItem('token');
 
@@ -26,6 +28,7 @@ const Chat = () => {
         }
         if (connections.length > 0) {
             handleConnectionClick(connections[0])
+            setOffset(0)
         }
     }, [connections])
 
@@ -89,7 +92,7 @@ const Chat = () => {
         socket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                console.log('Parsed event data:', data);
+                console.log('Data type:', data.type);
 
                 if (senderID === data.receiverID) {
                     if (data.type === "typing") {
@@ -111,9 +114,15 @@ const Chat = () => {
                         }, 3000)
 
                         typingTimeouts.push(timeout1, timeout2, timeout3);
+                    } else {
+                        setOffset((prevOffset) => prevOffset + 1)
                     }
                 }
                 setMessages((prevMessages) => [...(prevMessages || []), data.message])
+                if (data.type !== "typing") {
+                    //test
+                }
+
             } catch (error) {
                 console.error("Error parsing message data:", error)
             }
@@ -206,9 +215,8 @@ const Chat = () => {
             }
 
             const jsonMessage = JSON.stringify(msgToSend)
-
+            setOffset((prevOffset) => prevOffset + 1)
             socket.send(jsonMessage)
-
             try {
                 const response = await axios.post('/saveMessage', {
                     matchID: parseInt(matchID, 10),
@@ -234,6 +242,9 @@ const Chat = () => {
 
     const handleConnectionClick = (connection) => {
         console.log('Connection clicked:', connection)
+        if (selectedConnection === connection.matched_user_name) {
+            return
+        }
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
 
@@ -241,15 +252,51 @@ const Chat = () => {
         const fetchChatHistory = async () => {
             try {
                 const response = await axios.get('/chatHistory', {
-                    params: { matchID: parseInt(connection.match_id, 10) },
+                    params: {
+                        matchID: parseInt(connection.match_id, 10),
+                        offset: offset,
+                    },
                 })
+                if (response.data.length > 14) {
+                    setHasMore(true)
+                    setOffset(15)
+                    setMessages(response.data.slice(0, 15))
+                } else {
+                    setHasMore(false)
+                    setMessages(response.data)
+                }
                 console.log("History received")
-                setMessages(response.data)
+
+                console.log("response", response.data)
             } catch (error) {
                 console.log('Error getting chat history FE', error)
             }
         }
         fetchChatHistory()
+    }
+
+    const fetchMoreHistory = async () => {
+        try {
+            const response = await axios.get('/chatHistory', {
+                params: {
+                    matchID: parseInt(matchID, 10),
+                    offset: offset,
+                },
+            })
+            if (response.data.length > 14) {
+                setHasMore(true)
+                setOffset(offset + 15)
+            } else {
+                setHasMore(false)
+            }
+            console.log("History received")
+            setMessages((prevMessages) => [
+                ...response.data.slice(0, 15),
+                ...(prevMessages || [])
+            ]);
+        } catch (error) {
+            console.log('Error getting chat history FE', error)
+        }
     }
 
     return (
@@ -271,9 +318,11 @@ const Chat = () => {
                     )}
                 </div>
                 <div className="chat-right-container">
-
                     <div className="chat-messages">
                         {/* if there are more than 25 messages in history, display clickable show more button*/}
+                        {hasMore ?
+                            <button onClick={fetchMoreHistory}>Show more</button>
+                            : null}
                         {messages != null ?
                             messages.map((msg, index) => (
                                 <p key={index}>{msg}</p>

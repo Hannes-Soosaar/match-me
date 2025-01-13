@@ -13,11 +13,11 @@ func SaveMessage(message string, matchID int, senderID string, receiverID string
 	return nil
 }
 
-func GetChatHistory(matchID int) ([]string, error) {
-	query := "SELECT message FROM chat_messages WHERE match_id = $1"
+func GetChatHistory(matchID int, offset int, limit int) ([]string, error) {
+	query := "SELECT message FROM chat_messages WHERE match_id = $1 ORDER BY sent_at DESC LIMIT $2 OFFSET $3"
 	var chatHistory []string
 
-	rows, err := DB.Query(query, matchID)
+	rows, err := DB.Query(query, matchID, limit, offset)
 	if err != nil {
 		return nil, fmt.Errorf("error getting chat history (GetChatHistory): %v", err)
 	}

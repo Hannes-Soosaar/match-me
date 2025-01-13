@@ -40,7 +40,7 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 	mu.Unlock()
 	log.Printf("WebSocket connection established for userID: %s\n", userID)
 	log.Printf("Number of connections: %d\n", len(connections))
-	log.Printf("Connections: %d\n" , connections)
+	log.Printf("Connections: %d\n", connections)
 
 	defer func() {
 		mu.Lock()
@@ -161,10 +161,26 @@ func ChatHistoryHandler(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid matchID", http.StatusBadRequest)
 	}
 
-	chatHistory, err := db.GetChatHistory(matchID)
+	offsetStr := r.URL.Query().Get("offset")
+	offset := 0
+	if offsetStr != "" {
+		offset, err = strconv.Atoi(offsetStr)
+		if err != nil {
+			http.Error(w, "Invalid offset", http.StatusBadRequest)
+			return
+		}
+	}
+
+	limit := 15
+
+	chatHistory, err := db.GetChatHistory(matchID, offset, limit)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error getting chat history: %v", err), http.StatusInternalServerError)
 		return
+	}
+
+	for i, j := 0, len(chatHistory)-1; i < j; i, j = i+1, j-1 {
+		chatHistory[i], chatHistory[j] = chatHistory[j], chatHistory[i]
 	}
 
 	w.Header().Set("Content-Type", "application/json")
