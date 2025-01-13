@@ -32,7 +32,7 @@ const Chat = () => {
     useEffect(() => {
         const fetchConnections = async () => {
             try {
-                const response = await axios.get('/buddies', { 
+                const response = await axios.get('/buddies', {
                     headers: {
                         Authorization: `Bearer ${authToken}`,
                     },
@@ -177,9 +177,27 @@ const Chat = () => {
         }
     }, [authToken, receiverID])
 
+    const getCurrentDateTime = () => {
+        const now = new Date()
+
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+
+        const day = now.getDate()
+        const month = monthNames[now.getMonth()]
+        const year = String(now.getFullYear()).slice(-2)
+        let hours = now.getHours()
+        const minutes = String(now.getMinutes()).padStart(2, '0')
+        const ampm = hours >= 12 ? 'PM' : 'AM'
+
+        hours = hours % 12 || 12
+
+        return `(${day}-${month}-${year} ${hours}:${minutes} ${ampm}) `
+    }
+
     const sendMessage = async () => {
         if (socket && newMessage && matchID && senderID && receiverID) {
-            var message = chatUsername + newMessage
+            const currentDateTime = getCurrentDateTime()
+            var message = currentDateTime + chatUsername + newMessage
 
             const msgToSend = {
                 senderID: senderID,
@@ -253,7 +271,9 @@ const Chat = () => {
                     )}
                 </div>
                 <div className="chat-right-container">
+
                     <div className="chat-messages">
+                        {/* if there are more than 25 messages in history, display clickable show more button*/}
                         {messages != null ?
                             messages.map((msg, index) => (
                                 <p key={index}>{msg}</p>
