@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, } from 'react-router-dom';
 import './Header.css'
 
 function Header() {
     const [isOnline, setIsOnline] = useState(null);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const isAuthenticated = !!localStorage.getItem('token');
     const authToken = localStorage.getItem('token');
+
 
     useEffect(() => {
         const fetchOnlineStatus = async () => {
@@ -28,28 +30,32 @@ function Header() {
     }, [isAuthenticated, authToken]);
 
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        if (isLoggingOut) return; 
+        setIsLoggingOut(true);
 
-        const logout = async () => {
-            try {
-                const response = await axios.post('/logout', {
-                    headers: {
-                        Authorization: `Bearer ${authToken}`,
-                    },
-                });
+        try {
+            const response = await axios.get('/logout', {
+                headers: {
+                    Authorization: `Bearer ${authToken}`,
+                },
+            });
+
+            console.log('Logout response:', response.data);
+
+            if (response.data) {
+                localStorage.removeItem('token');
+                localStorage.removeItem('profileExists');
+                window.location.href = '/login';
+            } else {
+                console.error('Logout failed on the backend.');
             }
-            catch (error) {
-                console.error('logging out: ', error)
-                return
-            }
+        } catch (error) {
+            console.error('Error during logout:', error);
+        } finally {
+            setIsLoggingOut(false);
         }
-        logout();
-
-        localStorage.removeItem('token');
-        localStorage.removeItem('profileExists');
-        window.location.href = '/login';
-    }
-
+    };
     return (
         <>
             <div className='body-side'></div>
@@ -106,14 +112,15 @@ function Header() {
                             </Link>
                         ) : (
                             <Link
-                                to="#"
+                                to="/login"
                                 className="signup"
                                 onClick={(e) => {
                                     e.preventDefault();
                                     handleLogout();
                                 }}
+                                disabled={isLoggingOut} 
                             >
-                                Logout
+                               {isLoggingOut ? 'Logging out...' : 'Logout'}
                             </Link>
                         )}
                     </div>

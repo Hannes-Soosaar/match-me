@@ -10,6 +10,7 @@ type ProfileInformation struct {
 	Username  string    `json:"username"`
 	Email     string    `json:"email"`
 	Created   time.Time `json:"created_at"`
+	IsOnline  bool      `json:"is_online"`
 	City      string    `json:"user_city"`
 	Nation    string    `json:"user_nation"`
 	Region    string    `json:"user_region"`

@@ -20,8 +20,6 @@ type UserResponse struct {
 	ProfilePicture string `json:"profile_picture"`
 }
 
-// TODO: move to  db user_queries
-
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
@@ -250,6 +248,3 @@ func GetCurrentUserUUID(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(currentUserID)
 }
-
-//TODO userLogout handler ?
-//TODO Find_User

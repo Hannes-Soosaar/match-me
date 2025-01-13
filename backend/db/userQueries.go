@@ -217,7 +217,7 @@ func GetLightUserInformation(userID string) (*models.LightProfileInformation, er
 func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	query := `
         SELECT 
-            p.username, u.email, u.created_at, u.user_city, u.user_nation, u.user_region, 
+            p.username, u.email, u.created_at, u.is_online, u.user_city, u.user_nation, u.user_region, 
             p.about_me, p.birthdate, p.profile_picture
         FROM 
             users u 
@@ -232,6 +232,7 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 	var username sql.NullString
 	var email sql.NullString
 	var created sql.NullTime
+	var isOnline sql.NullBool
 	var city sql.NullString
 	var nation sql.NullString
 	var region sql.NullString
@@ -243,6 +244,7 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 		&username,
 		&email,
 		&created,
+		&isOnline,
 		&city,
 		&nation,
 		&region,
@@ -317,6 +319,8 @@ func GetUserInformation(userID string) (*models.ProfileInformation, error) {
 		userInfo.Picture = picture.String
 	}
 
+	userInfo.IsOnline = isOnline.Bool
+
 	// Set calculated age
 	userInfo.Age = fmt.Sprintf("%d", age) // Convert age to string for userInfo
 
@@ -366,6 +370,7 @@ func GetUserIDfromUUIDarray(UUIDs []string) ([]string, error) {
 }
 
 func SetUserOnlineStatus(userID string, status bool) error {
+	log.Println("Setting user online status to",status)
 	query := "UPDATE users SET is_online = $1 WHERE uuid = $2"
 	_, err := DB.Exec(query, status, userID)
 	if err != nil {

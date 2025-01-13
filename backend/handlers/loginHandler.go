@@ -86,19 +86,28 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := GetCurrentUserID(r)
+	log.Println("userId after we got it from GetCurrentUserID(r)", userId)
 	if err != nil {
-		sendErrorResponse(w, "Error getting user Id from token", http.StatusUnauthorized)
+		// sendErrorResponse(w, "Error getting user Id from token", http.StatusUnauthorized)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusUnauthorized)
+		json.NewEncoder(w).Encode(false)
+		log.Println("Error getting user Id from token:", err)
+
 		log.Println("Error getting user Id from token:", err)
 		return
 	}
 	err = db.SetUserOnlineStatus(userId, false)
 	if err != nil {
-		sendErrorResponse(w, "Error setting user offline", http.StatusInternalServerError)
+		// sendErrorResponse(w, "Error setting user offline", http.StatusInternalServerError)
+		w.Header().Set("Content-Type", "application/json")
+		w.WriteHeader(http.StatusInternalServerError)
+		json.NewEncoder(w).Encode(false)
 		log.Println("Error setting user offline:", err)
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(map[string]string{"message": "safely logged out!"})
+	json.NewEncoder(w).Encode(true)
 }
 
 func GetOnlineStatus(w http.ResponseWriter, r *http.Request) {
