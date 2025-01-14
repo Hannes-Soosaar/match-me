@@ -62,11 +62,23 @@ func WebsocketHandler(w http.ResponseWriter, r *http.Request) {
 			ReceiverID string `json:"receiverID"`
 			Message    string `json:"message"`
 			Type       string `json:"type"`
+			Username   string `json:"username"`
 		}
 
 		if err := json.Unmarshal(message, &msgData); err != nil {
 			log.Println("Error unmarshaling message:", err)
 			continue
+		}
+
+		if msgData.Type == "login" || msgData.Type == "logout" {
+			mu.Lock()
+			for _, client := range connections {
+				err := client.WriteMessage(websocket.TextMessage, message)
+				if err != nil {
+					log.Println("Error sending login notification:", err)
+				}
+			}
+			mu.Unlock()
 		}
 
 		mu.Lock()

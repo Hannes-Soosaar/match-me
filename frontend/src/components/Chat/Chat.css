@@ -34,6 +34,7 @@
     /* Vertically align the items in the center */
     padding-left: 5px;
     width: 98%;
+    position: relative;
 }
 
 
@@ -130,4 +131,12 @@
     justify-content: space-between;
     align-items: center;
     position: relative;
+}
+
+.connection-item .status-icon {
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }

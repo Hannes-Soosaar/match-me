@@ -21,6 +21,8 @@ const Chat = () => {
     const [hasMore, setHasMore] = useState(false)
     const [buttonsDisabled, setButtonsDisabled] = useState(false)
     const basePictureURL = "http://localhost:4000/uploads/";
+    const onlineURL = "/images/OnlineIconPNG.png"
+    const offlineURL = "/images/OfflineIconPNG.png"
     const authToken = localStorage.getItem('token');
 
     useEffect(() => {
@@ -94,6 +96,22 @@ const Chat = () => {
             try {
                 const data = JSON.parse(event.data);
                 console.log('Data type:', data.type);
+
+                if (data.type === "login") {
+                    console.log('FE logged in:', data)
+                    Object.entries(connections).forEach(([_, connection]) => {
+                        if (connection.matched_user_name === data.username) {
+                            connection.is_online = true
+                        }
+                    })
+                } else if (data.type === "logout") {
+                    console.log('FE logged out', data)
+                    Object.entries(connections).forEach(([_, connection]) => {
+                        if (connection.matched_user_name === data.username) {
+                            connection.is_online = false
+                        }
+                    })
+                }
 
                 if (senderID === data.receiverID) {
                     console.log("senderID:", senderID, "\nreceiverID", receiverID, "\ndata.senderID", data.senderID, "\ndata.receiverID", data.receiverID)
@@ -334,6 +352,11 @@ const Chat = () => {
                             >
                                 <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
                                 <h4>{connection.matched_user_name}</h4>
+                                {connection.is_online ?
+                                    <img src={onlineURL} alt="User online" className="status-icon"></img>
+                                    :
+                                    <img src={offlineURL} alt="User offline" className="status-icon"></img>
+                                }
                             </div>
                         ))) : (
                         <p>No matches found. Try updating your preferences or check back later!</p>

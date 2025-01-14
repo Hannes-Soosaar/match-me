@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import axios from 'axios';
 import { Link, } from 'react-router-dom';
 import './Header.css'
+import { WebSocketContext } from '../WebSocketContext';
 
 function Header() {
+    const socket = useContext(WebSocketContext)
     const [isOnline, setIsOnline] = useState(null);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
     const isAuthenticated = !!localStorage.getItem('token');
@@ -31,9 +33,8 @@ function Header() {
 
 
     const handleLogout = async () => {
-        if (isLoggingOut) return; 
+        if (isLoggingOut) return;
         setIsLoggingOut(true);
-
         try {
             const response = await axios.get('/logout', {
                 headers: {
@@ -44,6 +45,26 @@ function Header() {
             console.log('Logout response:', response.data);
 
             if (response.data) {
+                // Fetch UUID and username
+                const uuidResponse = await axios.get('/me/uuid', {
+                    headers: { Authorization: `Bearer ${authToken}` },
+                });
+                console.log('Fetched currentUserID:', uuidResponse.data);
+
+                if (uuidResponse.data) {
+                    const usernameResponse = await axios.get(`/users/${uuidResponse.data}/profile`, {
+                        headers: { Authorization: `Bearer ${authToken}` },
+                    });
+                    console.log('Fetched currentUsername:', usernameResponse.data.username);
+                    if (socket && socket.readyState === WebSocket.OPEN) {
+                        socket.send(JSON.stringify({ type: 'logout', username: usernameResponse.data.username }));
+                        console.log('Sent logout message:', usernameResponse.data.username);
+                    } else {
+                        console.error('Socket is not open or username is missing.');
+                    }
+                }
+
+                socket.close();
                 localStorage.removeItem('token');
                 localStorage.removeItem('profileExists');
                 window.location.href = '/login';
@@ -60,71 +81,70 @@ function Header() {
         <>
             <div className='body-side'></div>
             <header className="header">
-                    <div className="nav-left">
+                <div className="nav-left">
 
-                        {isAuthenticated ?  (
-                            <>
-                                <Link to="/dashboard" className="nav-link">
-                                    Dashboard
-                                </Link>
-                                {/* <Link to="/profile" className="nav-link">
+                    {isAuthenticated ? (
+                        <>
+                            <Link to="/dashboard" className="nav-link">
+                                Dashboard
+                            </Link>
+                            {/* <Link to="/profile" className="nav-link">
                                     Profile
                                 </Link> */}
-                                <Link to="/matches" className="nav-link">
-                                    Matches
-                                </Link>
-                                <Link to="/Requests" className="nav-link">
-                                    Requests
-                                </Link>
-                                <Link to="/connections" className="nav-link">
-                                    Buddies
-                                </Link>
-                                <Link to="/chat" className="nav-link">
-                                    Chat
-                                </Link>
-                            </>
-                        ) : ( 
-                            <Link to='/' className="logo">
-                                Gamers Pot
-                            </Link> 
+                            <Link to="/matches" className="nav-link">
+                                Matches
+                            </Link>
+                            <Link to="/Requests" className="nav-link">
+                                Requests
+                            </Link>
+                            <Link to="/connections" className="nav-link">
+                                Buddies
+                            </Link>
+                            <Link to="/chat" className="nav-link">
+                                Chat
+                            </Link>
+                        </>
+                    ) : (
+                        <Link to='/' className="logo">
+                            Gamers Pot
+                        </Link>
 
-                        )}
-                    </div>
-                        <div className='nav-container'></div>
-                    <div className="nav-right">
+                    )}
+                </div>
+                <div className='nav-container'></div>
+                <div className="nav-right">
                     {isAuthenticated && (
                         <div className="online-status">
                             <span
-                                className={`status-light ${
-                                    isOnline === true
-                                        ? 'online' // Green if online
-                                        : isOnline === false
+                                className={`status-light ${isOnline === true
+                                    ? 'online' // Green if online
+                                    : isOnline === false
                                         ? 'offline' // Red if offline
                                         : '' // No color if status is unknown
-                                }`}
+                                    }`}
                             ></span>
                             <span className="indicator-text">{isOnline === true ? 'Online' : isOnline === false ? 'Offline' : 'Loading...'}</span>
                         </div>
                     )}
-                        {!isAuthenticated ? (
-                            <Link to="/login" className="signup">
-                                Sign up/Login
-                            </Link>
-                        ) : (
-                            <Link
-                                to="/login"
-                                className="signup"
-                                onClick={(e) => {
-                                    e.preventDefault();
-                                    handleLogout();
-                                }}
-                                disabled={isLoggingOut} 
-                            >
-                               {isLoggingOut ? 'Logging out...' : 'Logout'}
-                            </Link>
-                        )}
-                    </div>
-                </header>
+                    {!isAuthenticated ? (
+                        <Link to="/login" className="signup">
+                            Sign up/Login
+                        </Link>
+                    ) : (
+                        <Link
+                            to="/login"
+                            className="signup"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                handleLogout();
+                            }}
+                            disabled={isLoggingOut}
+                        >
+                            {isLoggingOut ? 'Logging out...' : 'Logout'}
+                        </Link>
+                    )}
+                </div>
+            </header>
             <div className='body-side'></div>
         </>
     );
