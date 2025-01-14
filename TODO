@@ -32,11 +32,6 @@ Check what time does a JWT token hold.
     - Matches (nt. best 5 ?) Connect, Maybe next time
     - Friends online recent logins (rnd 5?) 
 
-- Chat 
-
-- Matches
-
-
 
 HANNES
 
@@ -47,12 +42,7 @@ TODO -The user only sees recommendations from their location.
 
 TODO- additional paratmeters for match query display 
 
-
 TODO - Add requester field to user_matches
-
-TODO- 
-
-
 
 Kood/Jõhvi
 
@@ -99,7 +89,7 @@ DONE - The user can see a list of no more than 10 recommendations at a time.
     DONE- query and return  10 new best matches based on score.
     DONE- every update gets 10 new matches
 
-TODO - The user can log out.
+DONE - The user can log out.
 
 DONE - It refuses to recommend an obviously poor match.
         -If the user do not speak the same language there will be no match
@@ -111,9 +101,7 @@ TODO - Create two users in an empty system with obviously poor matching characte
 
 TODO - Create two users in an empty system, who appear like they should obviously match
 
-
-TODO -The user can specify a location from a list 
-
+DONE -The user can specify a location from a list.
 
 DONE- The recommendations are prioritized with the best first.
 
@@ -124,7 +112,7 @@ DONE -That recommendation is not shown again after it is dismissed.
     -TODO add logic for returning match response 
 
 DONE Connection requests can be sent.
-    -TODO add logic for returning match response 
+
 
 TODO- Incoming connection requests can be accepted.
    -TODO add logic for returning match response 
@@ -145,7 +133,7 @@ DONE - Chats are ordered with the most recently active chat first.
 
 DONE- Both users see the same chat history.
 
-TODO- The chat history API data is paginated. (what is this )  //!! This can be done only for the API
+DONE- The chat history API data is paginated. (what is this )  //!! This can be done only for the API
 
 DONE- Chat is only possible between connected profiles.
 
@@ -153,7 +141,7 @@ DONE -The chat works in real time.
 
 TODO - An unread message icon appears when new chat messages are received in real time.
 
-TODO - Chat messages feature a date and time.
+DONE - Chat messages feature a date and time.
 
 // DEMO
 
@@ -190,46 +178,16 @@ TODO - Location Filter! // HANNES
 WIP -Add distance filter
     -Add logic to filter out based on distance
 
-
-
-TODO - The user can log out. MARKO
-
-
 TODO -The user only sees recommendations from their location.
     TODO- additional paratmeters for match query display 
     TODO - Describe matching logic.
+    TODO add logic for returning match response   
 
 
 
-TODO -That recommendation is not shown again after it is dismissed.
-    -TODO add logic for returning match response 
+DONE- It is possible to disconnect with a user.
+DONE - Users can only see profile information when properly allowed. (connected or matched)
 
-TODO Connection requests can be sent.
-    -TODO add logic for returning match response 
-
-TODO- Incoming connection requests can be accepted.
-
-   -TODO add logic for returning match response 
-TODO- Incoming connection requests can be rejected. 
-
-        -TODO add logic for returning match response   
-TODO- It is possible to disconnect with a user.
-
-  -TODO add logic for returning match response 
-
-TODO - Users can only see profile information when properly allowed. ( connected or matched)
-
-
-
-// CHAT
-DONE- The realtime implementation does not rely on polling. (ws)
-DONE- Chats are ordered with the most recently active chat first.
-DONE- Both users see the same chat history.
-TODO- The chat history API data is paginated. (what is this )
-TODO- Chat is only possible between connected profiles. // FE implementation only.
-DONE-The chat works in real time.
-TODO - An unread message icon appears when new chat messages are received in real time.
-TODO - Chat messages feature a date and time.
 
 // API DEV. CHECK
 
@@ -257,15 +215,15 @@ TODO- This includes when the user is not allowed to see a profile. This is not q
 
 
 
+
+
 // EXTRAS
 TODO -  The user experience is excellent, usable and well designed.
 
-TODO - An offline/online indicator is shown on profile and chat views.
+DONE - An offline/online indicator is shown on profile and chat views.
 
-    - ADD field to user_matches get indication from WS map.
-
-TODO - A typing in progress indicator is shown.
-
-? -The recommendation algorithm is exceptional. The hardest!
+DONE - A typing in progress indicator is shown.
 
 TODO - It implements proximity-based location filtering.
+
+? -The recommendation algorithm is exceptional. The hardest!
