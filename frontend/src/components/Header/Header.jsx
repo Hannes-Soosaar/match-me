@@ -8,6 +8,7 @@ function Header() {
     const socket = useContext(WebSocketContext)
     const [isOnline, setIsOnline] = useState(null);
     const [isLoggingOut, setIsLoggingOut] = useState(false);
+    const [displayName, setDisplayName] = useState("")
     const isAuthenticated = !!localStorage.getItem('token');
     const authToken = localStorage.getItem('token');
 
@@ -29,6 +30,34 @@ function Header() {
             }
         };
         fetchOnlineStatus();
+    }, [isAuthenticated, authToken]);
+
+    useEffect(() => {
+        const fetchUsername = async () => {
+            if (isAuthenticated) {
+                try {
+                    const uuidResponse = await axios.get('/me/uuid', {
+                        headers: { Authorization: `Bearer ${authToken}` },
+                    });
+                    console.log('Fetched currentUserID:', uuidResponse.data);
+
+                    if (uuidResponse.data) {
+                        const usernameResponse = await axios.get(`/users/${uuidResponse.data}/profile`, {
+                            headers: { Authorization: `Bearer ${authToken}` },
+                        });
+                        if (usernameResponse.data.username) {
+                            setDisplayName(usernameResponse.data.username)
+                        } else {
+                            console.error('Error fetching username')
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error fetching online status:', error);
+                }
+
+            };
+        }
+        fetchUsername();
     }, [isAuthenticated, authToken]);
 
 
@@ -115,6 +144,7 @@ function Header() {
                 <div className="nav-right">
                     {isAuthenticated && (
                         <div className="online-status">
+                            <span className="indicator-text">{isOnline === true ? `${displayName} ` : isOnline === false ? `${displayName} ` : 'Loading...'}</span>
                             <span
                                 className={`status-light ${isOnline === true
                                     ? 'online' // Green if online
@@ -123,7 +153,6 @@ function Header() {
                                         : '' // No color if status is unknown
                                     }`}
                             ></span>
-                            <span className="indicator-text">{isOnline === true ? 'Online' : isOnline === false ? 'Offline' : 'Loading...'}</span>
                         </div>
                     )}
                     {!isAuthenticated ? (
