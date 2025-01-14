@@ -9,6 +9,10 @@ const authToken = localStorage.getItem('token');
 const [categories, setCategories] = useState([]);
 const [userInterests, setUserInterests] = useState([]);
 
+
+
+// TODO: do not reload the page after adding an interest, swap the color but update on save and close. 
+
 useEffect(() => {
 // If the user is not logged in send only the interests for FE population if the user in logged in send the interests and the user interests
     const fetchData = async () => {
@@ -69,7 +73,6 @@ const handleInterestClick = (interestId) => {
 
 
 //TODO extract the button element to a separate component
-//TODO have different styling for the buttons that have the same interestId as the user already selected.
   return (
         <div className='interest-section' > 
         <p className='heading'>Select your interest and matching parameters</p>

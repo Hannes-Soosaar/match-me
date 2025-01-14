@@ -9,7 +9,7 @@ const InterestPresenter = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/me/bio', {
+        const response = await axios.get('/me/bio', { // Need to use a different endpoint this endpoint does not ger refreshed for some reason.
           headers: {
             Authorization: `Bearer ${authToken}`,
           },

@@ -7,6 +7,7 @@ import { CitySelect, CountrySelect, StateSelect } from 'react-country-state-city
 import 'react-country-state-city/dist/react-country-state-city.css';
 import InterestSection from '../InterestSection/InterestSection';
 import InterestPresenter from '../InterestPresenter/InterestPresenter';
+import Modal from '../Modal/Modal.jsx';
 
 const Profile = () => {
     const [countryId, setCountryId] = useState(0);
@@ -27,6 +28,17 @@ const Profile = () => {
         latitude: null,
         longitude: null,
     });
+
+// Modal 
+    const [isModalOpen, setModalOpen] = useState(false);
+    const handleEditUserInterests = () => {
+        setModalOpen(true);
+    };
+    const handleCloseModal = () => {
+        setModalOpen(false);
+    };
+
+
     const navigate = useNavigate();
 
     const authToken = localStorage.getItem('token');
@@ -274,6 +286,8 @@ const Profile = () => {
 
     return (
         <div style={{ textAlign: 'center' }}>
+
+
             <div className='profile-container'>
                 <div className='inputs'>
                     {/* Username Section */}
@@ -297,6 +311,7 @@ const Profile = () => {
                         </button>
                     </div>
 
+
                     {/* About Me Section */}
                     <div className='profile-text'>Write something about yourself</div>
                     <div className='input-textarea'>
@@ -316,25 +331,48 @@ const Profile = () => {
                             Submit About Me
                         </button>
                     </div>
-                    {!isEditingInterests ? (
-  <>
-    <InterestPresenter />
-    <div className="submit-container">
-      <button className="submit" onClick={() => setIsEditingInterests(true)}>
-        Edit Interests
-      </button>
-    </div>
-  </>
-) : (
-  <>
-    <InterestSection />
-    <div className="submit-container">
-      <button className="submit" onClick={() => setIsEditingInterests(false)}>
-        Close Interests
-      </button>
-    </div>
-  </>
-)}
+
+
+// use modal ?
+                    {/* {!isEditingInterests ? (
+                    <>
+                        <InterestPresenter />
+                        <div className="submit-container">
+                        <button className="submit" onClick={() => setIsEditingInterests(true)}>
+                            Edit Interests
+                        </button>
+                        </div>
+                    </>
+                    ) : (
+                    <>
+                        <InterestSection />
+                        <div className="submit-container">
+                        <button className="submit" onClick={() => setIsEditingInterests(false)}>
+                            Close Interests
+                        </button>
+                        </div>
+                    </>
+                    )} */}
+
+                    <>
+                    <InterestPresenter/>
+                        <div className="submit-container">
+                            <button onClick={handleEditUserInterests}>
+                                open Interests
+                            </button>
+                        </div>
+
+                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                        <InterestSection />
+                    </Modal>
+                    </>
+                    
+
+
+
+
+
+
 
 
                     {/* Birthdate Section */}
