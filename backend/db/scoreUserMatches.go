@@ -6,7 +6,7 @@ import (
 	"match_me_backend/utils"
 )
 
-func CalculateUserDistance(matchID int,userID1, userID2 string) (float64, error) {
+func CalculateUserDistance(matchID int, userID1, userID2 string) (float64, error) {
 	user1, err := GetUserByID(userID1)
 	if err != nil {
 		log.Println("Error getting user 1", err)
@@ -21,9 +21,9 @@ func CalculateUserDistance(matchID int,userID1, userID2 string) (float64, error)
 		log.Println("Error updating match distance", err)
 	}
 	return distance, err
-}	
+}
 
-// Generates the match score for a new user The interest must already exist!
+// Generates a match profile by combining all similar interests.
 func CalculateMatchScore(userID1, userID2 string) (int, error) {
 
 	user1InterestsPtr, err := GetAllUserInterest(userID1)
@@ -42,6 +42,7 @@ func CalculateMatchScore(userID1, userID2 string) (int, error) {
 
 	var matchProfile []models.Interests
 
+	// Extract distances
 	for _, User1Interest := range user1Interests {
 		for _, User2Interest := range user2Interests {
 			if User1Interest == User2Interest {
@@ -51,6 +52,8 @@ func CalculateMatchScore(userID1, userID2 string) (int, error) {
 	}
 
 	matchScore := CalculateMatchProfile(matchProfile)
+	scoreModifier :=FilterByUserDistancePreference(userID1, userID2, user1Interests, user2Interests)
+	matchScore = matchScore * scoreModifier
 	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }
@@ -107,9 +110,73 @@ func CalculateMatchProfile(matchProfile []models.Interests) int {
 	if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
 		return 0
 	}
-
 	// the score is only derived from the number of interests in the categories of Genre, PlayStyle, Goals, Session and Vibe
-
 	return score
+}
 
+
+//TODO if time permits - Refactor this function to use a switch and case statement and a helper function to return max distance
+// Returns 1 if the match is valid, 0 if the match is invalid -1 if there is an error
+func FilterByUserDistancePreference(user1Id, user2Id string, user1Interests, userInterests2 []models.Interests) int {
+
+	distance, err := GetDistanceBetweenUsers(user1Id, user2Id)
+	if err != nil {
+		log.Println("Error getting distance between users", err)
+		return -1
+	}
+
+	var user1DistanceLimit int
+	var user2DistanceLimit int
+
+	// Gets the higher limit of the distance the user is willing to travel
+	for _, interest := range user1Interests {
+		// Checks to see if the user has marked the distance as preferred
+		if interest.InterestName == UP_TO_ONE_HUNDRED {
+			log.Println("User 1 distance limit is 100")
+			user1DistanceLimit = 100
+		}
+		if interest.InterestName == ONE_HUNDRED_TO_FIVE_HUNDRED {
+			log.Println("User 1 distance limit is 500")
+			user1DistanceLimit = 500
+		}
+		if interest.InterestName == FIVE_HUNDRED_TO_ONE_THOUSAND {
+			log.Println("User 1 distance limit is 1000")
+			user1DistanceLimit = 1000
+		}
+		if interest.InterestName == ONE_THOUSAND_AND_BEYOND {
+			log.Println("User 1 distance limit is 1001")
+			user1DistanceLimit = 1001
+		}
+	}
+
+	for _, interest := range userInterests2 {
+		if interest.InterestName == UP_TO_ONE_HUNDRED {
+			log.Println("User 2 distance limit is 100")
+			user2DistanceLimit = 100
+		}
+		if interest.InterestName == ONE_HUNDRED_TO_FIVE_HUNDRED {
+			log.Println("User 2 distance limit is 500")
+			user2DistanceLimit = 500
+		}
+		if interest.InterestName == FIVE_HUNDRED_TO_ONE_THOUSAND {
+			log.Println("User 2 distance limit is 1000")
+			user2DistanceLimit = 1000
+		}
+		if interest.InterestName == ONE_THOUSAND_AND_BEYOND {
+			log.Println("User 2 distance limit is 1001")
+			user2DistanceLimit = 1001
+		}
+	}
+
+	if user1DistanceLimit == 0 || user2DistanceLimit == 0 {
+		log.Println("Error: Distance limits not properly set for one or both users")
+		return -1
+	}
+
+	// If the distanceLimit is less than the distance between the users
+	if float64(user1DistanceLimit) < distance || float64(user2DistanceLimit) < distance {
+		return 0
+	}
+	// If the distanceLimit is more than the distance between the users, the match is valid
+	return 1
 }

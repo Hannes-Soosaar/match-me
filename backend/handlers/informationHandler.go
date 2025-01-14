@@ -15,8 +15,6 @@ type PostUsernameRequest struct {
 	Username string `json:"username"`
 }
 
-
-
 type PostAboutRequest struct {
 	About string `json:"about"`
 }
@@ -68,7 +66,6 @@ func PostUsername(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Username successfully registered"})
 }
 
-
 type PostCityNameRequest struct {
 	City   string `json:"city"`
 	Nation string `json:"country"`
@@ -77,9 +74,7 @@ type PostCityNameRequest struct {
 	Longitude string `json:"longitude"`
 }
 
-
 func PostCity(w http.ResponseWriter, r *http.Request) {
-	// Extract the Authorization header from the request
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
@@ -87,10 +82,8 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract the token from the Authorization header
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 
-	// Extract the user ID from the JWT token
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
@@ -98,7 +91,6 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse the request body to get city information
 	var body PostCityNameRequest
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
@@ -108,7 +100,6 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// At least the city  is required 
-	// TODO the region and city can be undefined
 	if body.City == "" || body.Region == "" || body.Nation == "" {
 		http.Error(w, "City details cannot be empty", http.StatusBadRequest)
 		log.Printf("Error: City, Longitude, or Latitude cannot be empty")
@@ -118,7 +109,6 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 	latitude64, err := strconv.ParseFloat(body.Latitude, 64)
 	longitude64, err := strconv.ParseFloat(body.Longitude, 64)
 
-	// Call the db function to set the city details for the user
 	err = db.SetCity(currentUserID, body.Nation, body.Region, body.City, latitude64, longitude64)
 	if err != nil {
 		http.Error(w, "Error setting the City", http.StatusInternalServerError)
@@ -126,7 +116,6 @@ func PostCity(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Respond with a success message
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"message": "City successfully registered"})
@@ -176,7 +165,6 @@ func PostAbout(w http.ResponseWriter, r *http.Request) {
 }
 
 func PostBirthdate(w http.ResponseWriter, r *http.Request) {
-	// Extract Authorization header
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
@@ -184,10 +172,8 @@ func PostBirthdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Extract the token by trimming the 'Bearer ' prefix
 	token := strings.TrimPrefix(authHeader, "Bearer ")
 
-	// Extract the user ID from the token
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid token", http.StatusUnauthorized)
@@ -195,7 +181,6 @@ func PostBirthdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Parse the request body to get the birthdate
 	var body PostBirthdateRequest
 	err = json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
@@ -204,14 +189,12 @@ func PostBirthdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Validate that the Birthdate is not empty (optional, depending on your use case)
 	if body.Birthdate.IsZero() {
 		http.Error(w, "Birthdate cannot be empty", http.StatusBadRequest)
 		log.Printf("Error: Birthdate cannot be empty for userID=%s", currentUserID)
 		return
 	}
 
-	// Call the database function to update the birthdate for the user
 	err = db.SetBirthdate(currentUserID, body.Birthdate)
 	if err != nil {
 		http.Error(w, "Error setting the birthdate", http.StatusInternalServerError)
@@ -219,7 +202,6 @@ func PostBirthdate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Respond with a success message
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Birthdate successfully registered"})

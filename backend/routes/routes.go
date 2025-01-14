@@ -28,7 +28,10 @@ func InitRoutes() *mux.Router {
 
 	router.HandleFunc("/online", handlers.GetOnlineStatus).Methods("GET")
 	router.HandleFunc("/online/{id}", handlers.GetOtherOnlineStatus).Methods("GET")
+
+	// Demo and Test routes
 	router.HandleFunc("/test", handlers.GetTestResultHandler).Methods("GET")
+	router.HandleFunc("/spawn/bots", handlers.GetDemoUsers).Methods("GET")
 
 	// Profile routes
 	router.HandleFunc("/userInterests", handlers.GetUserInterests).Methods("GET")
@@ -53,6 +56,8 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/connections", handlers.GetConnections).Methods("GET")
 	router.HandleFunc("/buddies", handlers.GetBuddies).Methods("GET")
 	router.HandleFunc("/recommendations", handlers.GetRecommendationsHandler).Methods("GET")
+
+
 
 	/*
 		EXTERNAL API ROUTES

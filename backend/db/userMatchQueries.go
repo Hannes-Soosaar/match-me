@@ -62,7 +62,7 @@ func GetAllConnectedMatchesByUserId(userID string) ([]models.UsersMatches, error
 	var userConnections []models.UsersMatches
 	for rows.Next() {
 		var userConnection models.UsersMatches
-		err = rows.Scan(&userConnection.ID, &userConnection.UserID1, &userConnection.UserID2,&userConnection.Status, &userConnection.MatchScore, &userConnection.CreatedAt)
+		err = rows.Scan(&userConnection.ID, &userConnection.UserID1, &userConnection.UserID2, &userConnection.Status, &userConnection.MatchScore, &userConnection.CreatedAt)
 		if err != nil {
 			return nil, fmt.Errorf("error scanning row: %w", err)
 		}
@@ -71,10 +71,8 @@ func GetAllConnectedMatchesByUserId(userID string) ([]models.UsersMatches, error
 	if err := rows.Err(); err != nil {
 		return nil, fmt.Errorf("error during row iterations: %w", err)
 	}
-
 	return userConnections, nil
 }
-
 
 func GetTenNewMatchesByUserId(userID string) ([]models.UsersMatches, error) {
 	query := "SELECT id, user_id_1, user_id_2, match_score,status,created_at FROM user_matches WHERE (user_id_1 = $1 OR user_id_2 = $1) AND status = 'new' ORDER BY match_score DESC LIMIT 10"
@@ -305,7 +303,7 @@ func UpdateMatchScoreForUser(user1ID string) error {
 	return nil
 }
 
-func SetRequesterIdForMatch( requesterID string, matchID int) error {
+func SetRequesterIdForMatch(requesterID string, matchID int) error {
 	query := "UPDATE user_matches SET requester = $1 WHERE id = $2"
 	_, err := DB.Exec(query, requesterID, matchID)
 	if err != nil {
@@ -338,31 +336,6 @@ func GetReceiverID(matchID string, senderID string) (string, error) {
 	return receiverID, nil
 }
 
-
-
-
-/*
-
-do one query to get all the data needed for the buddy profile?
-
-from users table 
-	- user_nation
-	- user_city
-	- is_online 
-
-from user profiles
-	- username 
-	- about_me
-	- profile_pic
-
-from user_interest
-	- interest_ids
-
-from 
-
-*/
-
-
 func GetBuddyProfileFrom(matchID string, userID string) (string, error) {
 
 	query := "SELECT user_id_1, user_id_2 FROM user_matches WHERE id = $1"
@@ -373,14 +346,24 @@ func GetBuddyProfileFrom(matchID string, userID string) (string, error) {
 		return "", fmt.Errorf("error getting receiver ID: %w", err)
 	}
 
-	var  buddyID string
-	if userID== userID1 {
+	var buddyID string
+	if userID == userID1 {
 		buddyID = userID2
 	} else if userID == userID2 {
 		buddyID = userID1
 	} else {
 		return "", fmt.Errorf("sender ID not found in the match")
 	}
+	return buddyID, nil
+}
 
-	return buddyID , nil
+func GetDistanceBetweenUsers(user1Id, user2Id string) (float64, error) {
+	query := "SELECT distance FROM user_matches WHERE user_id_1 = $1 and user_id_2 = $2"
+	row := DB.QueryRow(query, user1Id, user2Id)
+	var distance float64
+	err := row.Scan(&distance)
+	if err != nil {
+		return 0, fmt.Errorf("error scanning distance: %w", err)
+	}
+	return distance, nil
 }

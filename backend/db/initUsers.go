@@ -60,11 +60,16 @@ func CreateProfile() {
 	birthdate, err := time.Parse("2006-01-02", "1999-01-01")
 	var latitude float64
 	var longitude float64
+	var imageIndex int
+	imageIndex = 0
 	if err != nil {
 		log.Println("Error parsing birthdate: ", err)
 	}
 
 	for i := 0; i < DEMO_USER_COUNT; i++ {
+		if imageIndex == 13 {
+			imageIndex = 0
+		}
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
 		uuid, err := GetUserUUIDFromUserEmail(email) //
@@ -87,7 +92,9 @@ func CreateProfile() {
 		if err != nil {
 			log.Println("Error setting about: ", err)
 		}
-		err = SetPicturePath(uuid, "default_profile_pic.png") // TODO add bot picture no picture or default picture
+		picturePath := fmt.Sprintf("bot%d.png", imageIndex)
+		err = SetPicturePath(uuid, picturePath)
+		imageIndex++
 		if err != nil {
 			log.Println("Error setting picture path: ", err)
 		}
