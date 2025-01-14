@@ -13,6 +13,20 @@ func SaveMessage(message string, matchID int, senderID string, receiverID string
 	return nil
 }
 
+func SaveNotification(receiverID string, status bool) error {
+	query := `
+		INSERT INTO unread_messages (receiver, is_unread)
+		VALUES ($1, $2)
+		ON CONFLICT (receiver)
+		DO UPDATE SET is_unread = EXCLUDED.is_unread
+	`
+	_, err := DB.Exec(query, receiverID, status)
+	if err != nil {
+		return fmt.Errorf("error saving notification status: %v", err)
+	}
+	return nil
+}
+
 func GetChatHistory(matchID int, offset int, limit int) ([]string, error) {
 	query := "SELECT message FROM chat_messages WHERE match_id = $1 ORDER BY sent_at DESC LIMIT $2 OFFSET $3"
 	var chatHistory []string

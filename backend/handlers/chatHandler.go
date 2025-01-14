@@ -157,6 +157,12 @@ func SaveMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	err = db.SaveNotification(messageData.ReceiverID, true)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error saving notification: %v", err), http.StatusInternalServerError)
+		return
+	}
+
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode("Message saved successfully")
 }

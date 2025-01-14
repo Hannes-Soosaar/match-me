@@ -153,3 +153,8 @@ CREATE TABLE IF NOT EXISTS chat_messages (
     receiver_id UUID NOT NULL,
     is_read BOOLEAN DEFAULT FALSE
 );
+CREATE TABLE IF NOT EXISTS unread_messages (
+    id SERIAL PRIMARY KEY,
+    receiver UUID UNIQUE NOT NULL,
+    is_unread BOOLEAN DEFAULT FALSE
+);

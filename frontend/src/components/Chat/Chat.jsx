@@ -25,6 +25,22 @@ const Chat = () => {
     const offlineURL = "/images/OfflineIconPNG.png"
     const authToken = localStorage.getItem('token');
 
+    /*
+    type BuddiesResponse struct {
+        MatchID                int    `json:"match_id"`
+        MatchScore             int    `json:"match_score"`
+        Status                 string `json:"status"`
+        MatchedUserName        string `json:"matched_user_name"`
+        MatchedUserPicture     string `json:"matched_user_picture"`
+        MatchedUserDescription string `json:"matched_user_description"`
+        MatchedUserLocation    string `json:"matched_user_location"`
+        IsOnline			   bool   `json:"is_online"`
+        UserInterests		   []string `json:"user_interests"`
+        add notifications field
+        ChatNotifications bool `json:"has_notification"`
+    }
+        */
+
     useEffect(() => {
         if (connections === null) {
             return
@@ -114,10 +130,8 @@ const Chat = () => {
                 }
 
                 if (senderID === data.receiverID) {
-                    console.log("senderID:", senderID, "\nreceiverID", receiverID, "\ndata.senderID", data.senderID, "\ndata.receiverID", data.receiverID)
                     if (data.type === "typing") {
                         if (receiverID !== data.senderID) {
-                            console.log(`selectedConnection: ${selectedConnection}, username: ${username}, receiverUsername: ${receiverUsername}`)
                             setTypingStatus(`${selectedConnection} is typing.`)
 
                             typingTimeouts.forEach(timeout => clearTimeout(timeout));
@@ -142,9 +156,6 @@ const Chat = () => {
                     }
                 }
                 setMessages((prevMessages) => [...(prevMessages || []), data.message])
-                if (data.type !== "typing") {
-                    //test
-                }
 
             } catch (error) {
                 console.error("Error parsing message data:", error)
@@ -227,6 +238,7 @@ const Chat = () => {
     }
 
     const sendMessage = async () => {
+        //send notification to receiver
         if (socket && newMessage && matchID && senderID && receiverID) {
             const currentDateTime = getCurrentDateTime()
             var message = currentDateTime + chatUsername + newMessage
