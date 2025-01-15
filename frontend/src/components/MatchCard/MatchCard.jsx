@@ -21,9 +21,21 @@ const MatchCard = ({ userProfile }) => {
         matched_user_description, 
         matched_user_location } = userProfile;  
 
+
+
+
+        const basePictureURL = "http://localhost:4000/uploads/";
+        const onlineURL = "/images/OnlineIconPNG.png"
+        const offlineURL = "/images/OfflineIconPNG.png"
+
     // Set the default profile picture if no picture is provided
-    // const userProfilePic = matched_user_picture ? matched_user_picture : defaultProfilePic;
-    const userProfilePic = defaultProfilePic;
+    let userProfilePic = matched_user_picture ? matched_user_picture : defaultProfilePic;
+
+    if (userProfilePic !== defaultProfilePic) {
+        userProfilePic = basePictureURL + userProfilePic;
+    }
+    
+    console.log(userProfilePic);
 
     const [isModalOpen, setModalOpen] = useState(false);
 

@@ -17,6 +17,7 @@ func CalculateUserDistance(matchID int, userID1, userID2 string) (float64, error
 	}
 	distance := utils.GetDistanceBetweenTwoPointsOnEarth(user1.Latitude, user1.Longitude, user2.Latitude, user2.Longitude)
 	err = UpdateMatchDistance(matchID, distance)
+	
 	if err != nil {
 		log.Println("Error updating match distance", err)
 	}
@@ -52,8 +53,12 @@ func CalculateMatchScore(userID1, userID2 string) (int, error) {
 	}
 
 	matchScore := CalculateMatchProfile(matchProfile)
-	scoreModifier :=FilterByUserDistancePreference(userID1, userID2, user1Interests, user2Interests)
-	matchScore = matchScore * scoreModifier
+
+	// //TODO: This is in the wrong place the distance has not yet been set.
+	// scoreModifier :=FilterByUserDistancePreference(userID1, userID2, user1Interests, user2Interests)
+	// matchScore = matchScore * scoreModifier
+
+
 	err = UpdateUserMatchScore(userID1, userID2, matchScore)
 	return matchScore, err
 }
@@ -117,13 +122,7 @@ func CalculateMatchProfile(matchProfile []models.Interests) int {
 
 //TODO if time permits - Refactor this function to use a switch and case statement and a helper function to return max distance
 // Returns 1 if the match is valid, 0 if the match is invalid -1 if there is an error
-func FilterByUserDistancePreference(user1Id, user2Id string, user1Interests, userInterests2 []models.Interests) int {
-
-	distance, err := GetDistanceBetweenUsers(user1Id, user2Id)
-	if err != nil {
-		log.Println("Error getting distance between users", err)
-		return -1
-	}
+func FilterByUserDistancePreference(distance float64, user1Interests, userInterests2 []models.Interests) int {
 
 	var user1DistanceLimit int
 	var user2DistanceLimit int
@@ -179,4 +178,27 @@ func FilterByUserDistancePreference(user1Id, user2Id string, user1Interests, use
 	}
 	// If the distanceLimit is more than the distance between the users, the match is valid
 	return 1
+}
+
+
+func UpdateScoreByDistance(userID1, userID2 string, distance float64) error {
+	user1InterestsPtr, err := GetAllUserInterest(userID1)
+
+	if err != nil {
+		log.Println("Error getting user 1 interest", err)
+	}
+	// user1Interests is []models.Interests
+	user1Interests := *user1InterestsPtr
+	user2InterestsPtr, err := GetAllUserInterest(userID2)
+
+	if err != nil {
+		log.Println("Error getting user 2 interest", err)
+	}
+	// user1Interests is []models.Interests
+	user2Interests := *user2InterestsPtr
+	var matchScore int
+	scoreModifier :=FilterByUserDistancePreference(distance, user1Interests, user2Interests)
+	matchScore = matchScore * scoreModifier
+	err = UpdateUserMatchScore(userID1, userID2, matchScore)
+	return err
 }

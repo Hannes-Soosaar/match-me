@@ -60,16 +60,24 @@ func CreateProfile() {
 	birthdate, err := time.Parse("2006-01-02", "1999-01-01")
 	var latitude float64
 	var longitude float64
-	var imageIndex int
-	imageIndex = 0
+
+	imageIndex := 0
+	distanceInterest := 49
+
 	if err != nil {
 		log.Println("Error parsing birthdate: ", err)
 	}
 
 	for i := 0; i < DEMO_USER_COUNT; i++ {
+
 		if imageIndex == 13 {
 			imageIndex = 0
 		}
+
+		if distanceInterest == 53 {
+			distanceInterest = 49
+		}
+
 		iStr := strconv.Itoa(i)
 		email := iStr + "@" + iStr + ".com"
 		uuid, err := GetUserUUIDFromUserEmail(email) //
@@ -92,10 +100,12 @@ func CreateProfile() {
 		if err != nil {
 			log.Println("Error setting about: ", err)
 		}
+		// create a picture path
 		picturePath := fmt.Sprintf("bot%d.png", imageIndex)
 		err = SetPicturePath(uuid, picturePath)
 		imageIndex++
 		if err != nil {
+
 			log.Println("Error setting picture path: ", err)
 		}
 		err = SetCity(uuid, "Estonia", "Tartu County", "Tartu", latitude, longitude) // all users are from Tartu random lat and long just stars adding distance to users
@@ -178,12 +188,9 @@ func CreateProfile() {
 			log.Printf("Error adding Language interest to user %s: %v", uuid, err)
 		}
 
-		// err = AddUserMatchForAllExistingUsers(uuid)
-		// if err != nil {
-		// 	log.Println("Error adding user match for all existing users: ", err)
-		// }
+		err = AddInterestToUser(distanceInterest, uuid)
+		distanceInterest++
 	}
-
 }
 
 func GenerateRandomNumber(min, max int) (int, error) {

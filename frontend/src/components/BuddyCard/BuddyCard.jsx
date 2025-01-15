@@ -10,11 +10,16 @@ const authToken = localStorage.getItem('token');
 const BuddyCard = ({ buddyProfile }) => {
 
     const { match_id, match_score,status,matched_user_id, matched_user_name, matched_user_picture,matched_user_description, matched_user_location } = buddyProfile;  
+        const basePictureURL = "http://localhost:4000/uploads/";
+        const onlineURL = "/images/OnlineIconPNG.png"
+        const offlineURL = "/images/OfflineIconPNG.png"
 
+    // Set the default profile picture if no picture is provided
+    let userProfilePic = matched_user_picture ? matched_user_picture : defaultProfilePic;
 
-    // Temporary, sest the pictrue to be always the defaultProfilePic
-       const userProfilePic = defaultProfilePic;
-
+    if (userProfilePic !== defaultProfilePic) {
+        userProfilePic = basePictureURL + userProfilePic;
+    }
 
 
     useEffect(() => {
