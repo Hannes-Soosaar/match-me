@@ -178,8 +178,6 @@ const Chat = () => {
                         }, 3000)
 
                         typingTimeouts.push(timeout1, timeout2, timeout3);
-                    } else if (data.type === "top-connection") {
-                        //rearrange connections so that data.Username is set as top connection in the list
                     }
                 } else {
                     setOffset((prevOffset) => prevOffset + 1)
@@ -191,24 +189,28 @@ const Chat = () => {
                 if ((receiverID === data.senderID && senderID === data.receiverID) || senderID === data.senderID) {
                     setMessages((prevMessages) => [...(prevMessages || []), data.message])
                 }
-                setConnections(prevConnections => {
-                    // Create a copy of the connections array
-                    const updatedConnections = [...prevConnections];
+                console.log("DATATYPE: ", data.type)
+                if (data.type !== "login" && data.type !== "logout" && data.type !== "typing") {
+                    setConnections(prevConnections => {
+                        // Create a copy of the connections array
+                        const updatedConnections = [...prevConnections];
 
-                    // Iterate through the connections and move the matched connection to the start
-                    updatedConnections.forEach((connection, index, array) => {
-                        if (connection.matched_user_name === data.username) {
-                            // Remove the matched connection from its current position
-                            const [matchedConnection] = array.splice(index, 1);
+                        // Iterate through the connections and move the matched connection to the start
+                        updatedConnections.forEach((connection, index, array) => {
+                            if (connection.matched_user_name === data.username) {
+                                // Remove the matched connection from its current position
+                                const [matchedConnection] = array.splice(index, 1);
 
-                            // Insert it at the start of the array
-                            array.unshift(matchedConnection);
-                        }
+                                // Insert it at the start of the array
+                                array.unshift(matchedConnection);
+                            }
+                        });
+
+                        // Return the updated array
+                        return updatedConnections;
                     });
+                }
 
-                    // Return the updated array
-                    return updatedConnections;
-                });
 
 
 
