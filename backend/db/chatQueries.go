@@ -2,6 +2,10 @@ package db
 
 import (
 	"fmt"
+	"log"
+	"time"
+
+	"github.com/lib/pq"
 )
 
 func SaveMessage(message string, matchID int, senderID string, receiverID string) error {
@@ -13,15 +17,19 @@ func SaveMessage(message string, matchID int, senderID string, receiverID string
 	return nil
 }
 
-func SaveNotification(receiverID string, status bool) error {
+func SaveNotification(matchID int, status bool) error {
 	query := `
-		INSERT INTO unread_messages (receiver, is_unread)
-		VALUES ($1, $2)
-		ON CONFLICT (receiver)
-		DO UPDATE SET is_unread = EXCLUDED.is_unread
+		INSERT INTO unread_messages (match_id, latest_message, is_unread)
+		VALUES ($1, $2, $3)
+		ON CONFLICT (match_id)
+		DO UPDATE SET latest_message = EXCLUDED.latest_message, is_unread = EXCLUDED.is_unread
 	`
-	_, err := DB.Exec(query, receiverID, status)
+
+	currentTime := time.Now()
+
+	_, err := DB.Exec(query, matchID, currentTime, status)
 	if err != nil {
+		log.Println(err)
 		return fmt.Errorf("error saving notification status: %v", err)
 	}
 	return nil
@@ -50,4 +58,43 @@ func GetChatHistory(matchID int, offset int, limit int) ([]string, error) {
 	}
 
 	return chatHistory, nil
+}
+
+func GetLatestMessages(matchIDs []int) ([]struct {
+	MatchID       int       `json:"match_id"`
+	LatestMessage time.Time `json:"latest_message"`
+}, error) {
+	query := `
+		SELECT match_id, latest_message
+		FROM unread_messages
+		WHERE match_id = ANY($1)
+	`
+
+	rows, err := DB.Query(query, pq.Array(matchIDs))
+	if err != nil {
+		return nil, fmt.Errorf("error fetching latest messages: %v", err)
+	}
+	defer rows.Close()
+
+	var latestMessages []struct {
+		MatchID       int       `json:"match_id"`
+		LatestMessage time.Time `json:"latest_message"`
+	}
+
+	for rows.Next() {
+		var msg struct {
+			MatchID       int       `json:"match_id"`
+			LatestMessage time.Time `json:"latest_message"`
+		}
+		if err := rows.Scan(&msg.MatchID, &msg.LatestMessage); err != nil {
+			return nil, fmt.Errorf("error scanning row: %v", err)
+		}
+		latestMessages = append(latestMessages, msg)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("error processing rows: %v", err)
+	}
+
+	return latestMessages, nil
 }

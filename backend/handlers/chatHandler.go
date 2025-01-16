@@ -157,7 +157,7 @@ func SaveMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.SaveNotification(messageData.ReceiverID, true)
+	err = db.SaveNotification(messageData.MatchID, true)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error saving notification: %v", err), http.StatusInternalServerError)
 		return
@@ -208,4 +208,28 @@ func ChatHistoryHandler(w http.ResponseWriter, r *http.Request) {
 // I will add this to check if it can be used for online-offline status extraction HS
 func GetEstablishedConnections() map[string]*websocket.Conn {
 	return connections
+}
+
+type LatestMessageRequest struct {
+	MatchIDs []int `json:"match_ids"`
+}
+
+func ChatMessageHandler(w http.ResponseWriter, r *http.Request) {
+	var request LatestMessageRequest
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	matchIDs := request.MatchIDs
+
+	latestMessages, err := db.GetLatestMessages(matchIDs)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error getting latest message info: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(latestMessages)
 }

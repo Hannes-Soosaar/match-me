@@ -37,7 +37,7 @@ const Chat = () => {
         IsOnline			   bool   `json:"is_online"`
         UserInterests		   []string `json:"user_interests"`
         add notifications field
-        ChatNotifications bool `json:"has_notification"`
+        LatestMessage timestamp `json:"latest_message"`
     }
         */
 
@@ -63,8 +63,33 @@ const Chat = () => {
                     },
                 })
 
-                setConnections(response.data)
-                console.log(response.data)
+                //sort connections based on latest message
+                const matchIDs = response.data.map(connection => connection.match_id)
+
+                const postResponse = await axios.post('/latestMessage', {
+                    match_ids: matchIDs,
+                })
+
+                if (postResponse.data) {
+                    // Create a mapping of match_id to latest_message timestamp
+                    const timestampMap = postResponse.data.reduce((acc, { match_id, latest_message }) => {
+                        acc[match_id] = latest_message;
+                        return acc;
+                    }, {})
+
+                    // Sort the connections based on the latest_message timestamp from the timestampMap
+                    const sortedConnections = response.data.sort((a, b) => {
+                        const timestampA = timestampMap[a.match_id] ? new Date(timestampMap[a.match_id]) : new Date(0);
+                        const timestampB = timestampMap[b.match_id] ? new Date(timestampMap[b.match_id]) : new Date(0);
+                        return timestampB - timestampA;  // Sort descending (most recent first)
+                    });
+                    setConnections(sortedConnections);
+                } else {
+                    setConnections(response.data)
+                }
+
+
+
             } catch (error) {
                 console.error('Error getting connections profiles:', error)
             }

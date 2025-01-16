@@ -57,8 +57,6 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/buddies", handlers.GetBuddies).Methods("GET")
 	router.HandleFunc("/recommendations", handlers.GetRecommendationsHandler).Methods("GET")
 
-
-
 	/*
 		EXTERNAL API ROUTES
 
@@ -91,6 +89,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/receiver", handlers.ChatDataHandler).Methods("GET")
 	router.HandleFunc("/saveMessage", handlers.SaveMessageHandler).Methods("POST")
 	router.HandleFunc("/chatHistory", handlers.ChatHistoryHandler).Methods("GET")
+	router.HandleFunc("/latestMessage", handlers.ChatMessageHandler).Methods("POST")
 
 	return router
 }
