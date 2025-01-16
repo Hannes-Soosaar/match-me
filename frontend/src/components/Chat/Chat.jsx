@@ -165,26 +165,25 @@ const Chat = () => {
                 )
                 if ((receiverID === data.senderID && senderID === data.receiverID) || senderID === data.senderID) {
                     setMessages((prevMessages) => [...(prevMessages || []), data.message])
-                    setConnections(prevConnections => {
-                        // Create a copy of the connections array
-                        const updatedConnections = [...prevConnections];
+                }
+                setConnections(prevConnections => {
+                    // Create a copy of the connections array
+                    const updatedConnections = [...prevConnections];
 
-                        // Iterate through the connections and move the matched connection to the start
-                        updatedConnections.forEach((connection, index, array) => {
-                            if (connection.matched_user_name === data.username) {
-                                // Remove the matched connection from its current position
-                                const [matchedConnection] = array.splice(index, 1);
+                    // Iterate through the connections and move the matched connection to the start
+                    updatedConnections.forEach((connection, index, array) => {
+                        if (connection.matched_user_name === data.username) {
+                            // Remove the matched connection from its current position
+                            const [matchedConnection] = array.splice(index, 1);
 
-                                // Insert it at the start of the array
-                                array.unshift(matchedConnection);
-                            }
-                        });
-
-                        // Return the updated array
-                        return updatedConnections;
+                            // Insert it at the start of the array
+                            array.unshift(matchedConnection);
+                        }
                     });
 
-                }
+                    // Return the updated array
+                    return updatedConnections;
+                });
 
 
 
