@@ -42,13 +42,16 @@ const Chat = () => {
         */
 
     useEffect(() => {
-        if (connections === null) {
-            return
+        if (!selectedConnection) {
+            if (connections === null) {
+                return
+            }
+            if (connections.length > 0) {
+                handleConnectionClick(connections[0])
+                setOffset(0)
+            }
         }
-        if (connections.length > 0) {
-            handleConnectionClick(connections[0])
-            setOffset(0)
-        }
+
     }, [connections])
 
     useEffect(() => {
@@ -129,33 +132,61 @@ const Chat = () => {
                     })
                 }
 
-                if (senderID === data.receiverID) {
+
+                if (receiverID === data.senderID && senderID === data.receiverID) {
                     if (data.type === "typing") {
-                        if (receiverID !== data.senderID) {
-                            setTypingStatus(`${selectedConnection} is typing.`)
+                        setTypingStatus(`${selectedConnection} is typing.`)
 
-                            typingTimeouts.forEach(timeout => clearTimeout(timeout));
-                            typingTimeouts = [];
+                        typingTimeouts.forEach(timeout => clearTimeout(timeout));
+                        typingTimeouts = [];
 
-                            const timeout1 = setTimeout(() => {
-                                setTypingStatus(`${selectedConnection} is typing..`)
-                            }, 1000)
+                        const timeout1 = setTimeout(() => {
+                            setTypingStatus(`${selectedConnection} is typing..`)
+                        }, 1000)
 
-                            const timeout2 = setTimeout(() => {
-                                setTypingStatus(`${selectedConnection} is typing...`);
-                            }, 2000)
+                        const timeout2 = setTimeout(() => {
+                            setTypingStatus(`${selectedConnection} is typing...`);
+                        }, 2000)
 
-                            const timeout3 = setTimeout(() => {
-                                setTypingStatus("")
-                            }, 3000)
+                        const timeout3 = setTimeout(() => {
+                            setTypingStatus("")
+                        }, 3000)
 
-                            typingTimeouts.push(timeout1, timeout2, timeout3);
-                        }
-                    } else {
-                        setOffset((prevOffset) => prevOffset + 1)
+                        typingTimeouts.push(timeout1, timeout2, timeout3);
+                    } else if (data.type === "top-connection") {
+                        //rearrange connections so that data.Username is set as top connection in the list
                     }
+                } else {
+                    setOffset((prevOffset) => prevOffset + 1)
                 }
-                setMessages((prevMessages) => [...(prevMessages || []), data.message])
+
+                console.log(
+                    "receiverID:", receiverID, "\n", "senderID:", senderID, "\n", "data.receiverID:", data.receiverID, "\n", "data.senderID:", data.senderID, "\n",
+                )
+                if ((receiverID === data.senderID && senderID === data.receiverID) || senderID === data.senderID) {
+                    setMessages((prevMessages) => [...(prevMessages || []), data.message])
+                    setConnections(prevConnections => {
+                        // Create a copy of the connections array
+                        const updatedConnections = [...prevConnections];
+
+                        // Iterate through the connections and move the matched connection to the start
+                        updatedConnections.forEach((connection, index, array) => {
+                            if (connection.matched_user_name === data.username) {
+                                // Remove the matched connection from its current position
+                                const [matchedConnection] = array.splice(index, 1);
+
+                                // Insert it at the start of the array
+                                array.unshift(matchedConnection);
+                            }
+                        });
+
+                        // Return the updated array
+                        return updatedConnections;
+                    });
+
+                }
+
+
 
             } catch (error) {
                 console.error("Error parsing message data:", error)
@@ -164,7 +195,7 @@ const Chat = () => {
         return () => {
             typingTimeouts.forEach(timeout => clearTimeout(timeout));
         };
-    }, [socket, senderID, selectedConnection])
+    }, [socket, senderID, receiverID, selectedConnection])
 
     const handleTyping = () => {
         if (socket) {
@@ -198,7 +229,7 @@ const Chat = () => {
                 fetchReceiverUUID()
             }
         }
-    }, [matchID, senderID, authToken, selectedConnection])
+    }, [matchID, senderID, authToken])
 
     useEffect(() => {
         const fetchReceiverProfile = async () => {
@@ -218,7 +249,7 @@ const Chat = () => {
         if (receiverID) {
             fetchReceiverProfile()
         }
-    }, [authToken, receiverID, selectedConnection])
+    }, [authToken, receiverID])
 
     const getCurrentDateTime = () => {
         const now = new Date()
@@ -246,7 +277,8 @@ const Chat = () => {
             const msgToSend = {
                 senderID: senderID,
                 receiverID: receiverID,
-                message: message
+                message: message,
+                username: username
             }
 
             const jsonMessage = JSON.stringify(msgToSend)
