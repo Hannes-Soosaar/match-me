@@ -2,13 +2,17 @@
  >>> BUGS >>>>
     A user can match with self.
     When you close all tabs and windows localstorage is not cleared.  handele Using BroadcastChannel (Modern Approach)
+    When a new user is created and they switch to mathches they will see a match score of 0 with everyone. The score is recalculated when you login.
  <<<<<<>>>>>>
 
-TODO - Location Filter! // HANNES  
-WIP -Add distance filter
+DONE - Location Filter! // HANNES  
+DONE-Add distance filter
     -Add logic to filter out based on distance
+
+TODO - in the SQL for matches make it so that any matches with the score 0 are not included.
 TODO -The user only sees recommendations from their location.
 TODO- additional paratmeters for match query display.
+
 
 TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
 TODO - Create two users in an empty system, who appear like they should obviously match

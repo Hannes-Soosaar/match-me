@@ -68,12 +68,12 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	log.Println("Starting match Updated", )
 	err = db.UpdateMatchScoreForUser(existingUser.ID)
-
 	if err != nil {
 		log.Println("Error updating all user scores", err)
 	}
-
+	log.Println("Starting to set User online", )
 	err = db.SetUserOnlineStatus(existingUser.ID, true)
 
 	if err != nil {

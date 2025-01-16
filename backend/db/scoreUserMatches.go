@@ -182,11 +182,18 @@ func ValidateMatchDistancePreference(distance float64, user1Interests, userInter
 		return ERR
 	}
 
+	log.Println("Distance between users is", distance)
+	log.Println("User 1 distance limit is", user1DistanceLimit)
+	log.Println("User 2 distance limit is", user2DistanceLimit)
+	
+
 	// If the distanceLimit is less than the distance between the users
 	if float64(user1DistanceLimit) < distance || float64(user2DistanceLimit) < distance {
+		log.Println("Distance is more than the distance limit Returns ", NOK)
 		return NOK
 	}
 	// If the distanceLimit is more than the distance between the users, the match is valid
+	log.Println("Distance is less than the distance limit Returns ", OK )
 	return OK
 }
 

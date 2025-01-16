@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS users (
     user_city VARCHAR(50),
     user_nation VARCHAR(50),
     user_region VARCHAR(50),
-    latitude FLOAT,
-    longitude FLOAT,
+    latitude FLOAT DEFAULT -0.0,
+    longitude FLOAT DEFAULT -0.0,
     register_location GEOGRAPHY(POINT, 4326),
     browser_location GEOGRAPHY(POINT, 4326),
     is_online BOOLEAN DEFAULT FALSE

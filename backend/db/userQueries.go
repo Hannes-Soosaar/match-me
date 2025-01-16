@@ -81,6 +81,8 @@ func GetUserByUsername(username string) (*models.User, error) {
 }
 
 // UUID gets mapped as ID
+
+
 func GetUserByID(userID string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash,latitude,longitude FROM users WHERE uuid = $1"
 	var user models.User
