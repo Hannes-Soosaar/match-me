@@ -367,3 +367,14 @@ func GetDistanceBetweenUsers(user1Id, user2Id string) (float64, error) {
 	}
 	return distance, nil
 }
+
+func GetMatchIdByUserIDs(user1Id, user2ID string) (int, error) {
+	query := "SELECT id FROM user_matches WHERE user_id_1 = $1 AND user_id_2 = $2"
+	row := DB.QueryRow(query, user1Id, user2ID)
+	var matchID int
+	err := row.Scan(&matchID)
+	if err != nil {
+		log.Println("Error scanning match id:", err)
+	}
+	return matchID, err
+}

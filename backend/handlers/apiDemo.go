@@ -12,6 +12,7 @@ import (
 
 func GetDemoUsers(w http.ResponseWriter, r *http.Request) {
 
+	// Set environment variable for creating demo users true.
 
 	if db.InitDemoUsers() {
 		userMatches, err := db.GetAllUserMatches()
@@ -20,12 +21,14 @@ func GetDemoUsers(w http.ResponseWriter, r *http.Request) {
 		}
 
 		for _, userMatch := range userMatches {
+			db.CalculateUserDistance(userMatch.UserID1, userMatch.UserID2)
 			db.CalculateMatchScore(userMatch.UserID1, userMatch.UserID2)
-			db.CalculateUserDistance(userMatch.ID , userMatch.UserID1, userMatch.UserID2)
 		}
 
 	}
 	successMessage := "Demo bots spawned and are on the loose!"
+
+	// set environment variable for creating demo users false.
 
 	log.Println("Success!", successMessage)
 

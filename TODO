@@ -1,192 +1,25 @@
 
  >>> BUGS >>>>
     A user can match with self.
+    When you close all tabs and windows localstorage is not cleared.  handele Using BroadcastChannel (Modern Approach)
  <<<<<<>>>>>>
 
-
-
-FE- Display of all user interest.
-
-Get to show all profiles 
-- TODO: use the matches as base for showing all profile
-
-Get to show all matches
-- FE for matches is ready
-- TODO: backend for matches
-
-Design Dashboard
-- The data is connected and accesible for the user information.
-
-Start work on websockets
-
-Start a photo server. TODO: store photos in the public folder so it can be accessed via standard ENV option. - Done - the dir variable in pictureHandlers.go and the fileDirectory variable in routes.go dictate where pictures are stored and which folder is the public folder.
-
-    - Matches pages has all matches
-
-
-Check what time does a JWT token hold.
-
--Dashboard
-
-    - User Profile 
-    - Matches (nt. best 5 ?) Connect, Maybe next time
-    - Friends online recent logins (rnd 5?) 
-
-
-HANNES
-
-TODO - Location Filter!
-    -Add distance filter
-
-TODO -The user only sees recommendations from their location.
-
-TODO- additional paratmeters for match query display 
-
-TODO - Add requester field to user_matches
-
-Kood/Jõhvi
-
-
-// USER MANAGEMENT
-
-DONE - All user responses return an id in the payload. (the payload is the JWT)
-
-DONE - The users endpoints return HTTP404 when the id is not found.
-
-// PROFILE
-
-DONE -The profile endpoint returns "about me" type information.
-
-DONE - A profile picture can be set.
-
-DONE -The user has a minimum of 5 biographical points to configure.
-
-DONE  -It is possible to register with a username and password.
-
-DONE -The user can change their biographical data.
-
-DONE -The user can specify preference which target biographical data points. get Interpertation
-
-DONE- The email address is not returned in API calls for other users
-
-NOT YET (Empty matches and empty connections create an empty map error) - The application works with a single user.
-
-DONE -The user is not shown any recommendations until they have completed their profile.
-DONE (changed OK,  how to remove) - The profile picture can be removed or changed.
-
-CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
-    PAGES for 
-        They are recommended
-        There is an outstanding connection request ()
-        They are connected ( buddies )
-
-CHECK - It is possible to dismiss a recommendation.
-
-DONE -It recommends obviously good matches.
-DONE- The email address is not shown, except to the owner of the profile.  
-
-DONE - The user can see a list of no more than 10 recommendations at a time.
-    DONE- query and return  10 new best matches based on score.
-    DONE- every update gets 10 new matches
-
-DONE - The user can log out.
-
-DONE - It refuses to recommend an obviously poor match.
-        -If the user do not speak the same language there will be no match
-        -if the user does not play on the same platform there will be no match
-        -if the user does not
-
-
-TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
-
-TODO - Create two users in an empty system, who appear like they should obviously match
-
-DONE -The user can specify a location from a list.
-
-DONE- The recommendations are prioritized with the best first.
-
-DONE- The recommendations behave in line with the student's described matching logic.
-    DONE- Describe matching logic.
-
-DONE -That recommendation is not shown again after it is dismissed.
-    -TODO add logic for returning match response 
-
-DONE Connection requests can be sent.
-
-
-TODO- Incoming connection requests can be accepted.
-   -TODO add logic for returning match response 
-TODO- Incoming connection requests can be rejected. 
-        -TODO add logic for returning match response 
-
-TODO- It is possible to disconnect with a user.
-  -TODO add logic for returning match response 
-
-  TODO- Users can only see profile information when properly allowed. ( connected or matched)
-
-
-// CHAT
-
-DONE- The realtime implementation does not rely on polling. (ws)
-
-DONE - Chats are ordered with the most recently active chat first.
-
-DONE- Both users see the same chat history.
-
-DONE- The chat history API data is paginated. (what is this )  //!! This can be done only for the API
-
-DONE- Chat is only possible between connected profiles.
-
-DONE -The chat works in real time.
-
-TODO - An unread message icon appears when new chat messages are received in real time.
-
-DONE - Chat messages feature a date and time.
-
-// DEMO
-
-DONE- A method was provided to load fictitious users into the system (minimum 100).
-
-//SYSTEM
-
-DONE -A PostgreSQL database is used as the primary application database.
-
-DONE -The backend is implemented in Go.
-
-DONE -The frontend is implemented in React.
-
-CHECK - The application is responsive for mobile and desktop browsers.
-
-
-CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
-PAGES for 
-They are recommended
-There is an outstanding connection request ()
-They are connected ( buddies )
-
-CHECK - It is possible to dismiss a recommendation.
-CHECK - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended. 
-(Poor match, not the same language, not at desired distance, not on the same platform, )
-CHECK - Create two users in an empty system, who appear like they should obviously match
-DONE -The user can specify a location from a list   This applies for their own location only. 
-
-
-
-
 TODO - Location Filter! // HANNES  
-
 WIP -Add distance filter
     -Add logic to filter out based on distance
-
 TODO -The user only sees recommendations from their location.
-    TODO- additional paratmeters for match query display 
-    TODO - Describe matching logic.
-    TODO add logic for returning match response   
+TODO- additional paratmeters for match query display.
 
+TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
+TODO - Create two users in an empty system, who appear like they should obviously match
 
+WIP- Incoming connection requests can be accepted.
+   -TODO add logic for returning match response 
 
-DONE- It is possible to disconnect with a user.
-DONE - Users can only see profile information when properly allowed. (connected or matched)
+WIP- Incoming connection requests can be rejected. 
+        -TODO add logic for returning match response 
+TODO - Describe matching logic.
+TODO - An unread message icon appears when new chat messages are received in real time.
 
 
 // API DEV. CHECK
@@ -199,31 +32,89 @@ CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
 /me: which is a shortcut to /users/{id} for the authenticated user. You should also implement /me/profile and /me/bio.
 /users/{id}/bio:
 
-
-
 TODO- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
-
 TODO- The connections endpoint only returns a list of ids. (make /connections return a list of ID's )
-
 TODO- A chat history can be reached from the connected user's profile.
-
 TODO- The recommendations endpoint only returns a list of ids. (make /recommendations return a list of ID's )
-
 TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
-
 TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
-
-
-
-
 
 // EXTRAS
 TODO -  The user experience is excellent, usable and well designed.
-
 DONE - An offline/online indicator is shown on profile and chat views.
-
 DONE - A typing in progress indicator is shown.
-
 TODO - It implements proximity-based location filtering.
-
 ? -The recommendation algorithm is exceptional. The hardest!
+
+----------CHECK--------------
+
+CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
+    PAGES for 
+        They are recommended
+        There is an outstanding connection request ()
+        They are connected ( buddies )
+CHECK - It is possible to dismiss a recommendation.
+CHECK - The application is responsive for mobile and desktop browsers.
+CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
+PAGES for 
+They are recommended
+There is an outstanding connection request ()
+They are connected ( buddies )
+CHECK - It is possible to dismiss a recommendation.
+CHECK - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended. 
+(Poor match, not the same language, not at desired distance, not on the same platform, )
+CHECK - Create two users in an empty system, who appear like they should obviously match
+-------------DONE--------------
+Kood/Jõhvi
+// USER MANAGEMENT
+DONE - All user responses return an id in the payload. (the payload is the JWT)
+DONE - The users endpoints return HTTP404 when the id is not found.
+// PROFILE
+DONE -The profile endpoint returns "about me" type information.
+DONE - A profile picture can be set.
+DONE -The user has a minimum of 5 biographical points to configure.
+DONE  -It is possible to register with a username and password.
+DONE -The user can change their biographical data.
+DONE -The user can specify preference which target biographical data points. get Interpertation
+DONE- The email address is not returned in API calls for other users
+DONE- (Empty matches and empty connections create an empty map error) - The application works with a single user.
+DONE -The user is not shown any recommendations until they have completed their profile.
+DONE (changed OK,  how to remove) - The profile picture can be removed or changed.
+DONE -It recommends obviously good matches.
+DONE- The email address is not shown, except to the owner of the profile.  
+DONE - The user can see a list of no more than 10 recommendations at a time.
+    DONE- query and return  10 new best matches based on score.
+    DONE- every update gets 10 new matches
+DONE - The user can log out.
+DONE - It refuses to recommend an obviously poor match.
+        -If the user do not speak the same language there will be no match
+        -if the user does not play on the same platform there will be no match
+        -if the user does not
+DONE -The user can specify a location from a list.
+DONE- The recommendations are prioritized with the best first.
+DONE- The recommendations behave in line with the student's described matching logic.
+    DONE- Describe matching logic.
+DONE Connection requests can be sent.
+
+// CHAT
+DONE- The realtime implementation does not rely on polling. (ws)
+DONE - Chats are ordered with the most recently active chat first.
+DONE- Both users see the same chat history.
+DONE- The chat history API data is paginated. (what is this )  //!! This can be done only for the API
+DONE- Chat is only possible between connected profiles.
+DONE -The chat works in real time.
+DONE - Chat messages feature a date and time.
+// DEMO
+DONE- A method was provided to load fictitious users into the system (minimum 100).
+//SYSTEM
+DONE -A PostgreSQL database is used as the primary application database.
+DONE -The backend is implemented in Go.
+DONE -The frontend is implemented in React.
+DONE -The user can specify a location from a list   This applies for their own location only. 
+DONE- It is possible to disconnect with a user.
+DONE - Users can only see profile information when properly allowed. (connected or matched)
+//OTHER
+DONE- It is possible to disconnect with a user.
+DONE- Users can only see profile information when properly allowed. ( connected or matched)
+DONE -That recommendation is not shown again after it is dismissed.
+DONE - Add requester field to user_matches
