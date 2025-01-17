@@ -120,8 +120,6 @@ func CalculateMatchProfile(matchProfile []models.Interests) int {
 		}
 	}
 
-	/* THE BELOW SECTION HAS BEEN REMOVED BECAUSE OF ALMOST NO MATCHES */
-	// If the user has less than 1 interest in any of these category, the match score is set to 0
 	if languageCount < 1 || platformCount < 1 || communicationCount < 1 {
 		return 0
 	}

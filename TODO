@@ -5,25 +5,13 @@
     When a new user is created and they switch to mathches they will see a match score of 0 with everyone. The score is recalculated when you login.
  <<<<<<>>>>>>
 
-DONE - Location Filter! // HANNES  
-DONE-Add distance filter
-    -Add logic to filter out based on distance
 
-TODO - in the SQL for matches make it so that any matches with the score 0 are not included.
-TODO -The user only sees recommendations from their location.
-TODO- additional paratmeters for match query display.
-
-
-TODO - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
-TODO - Create two users in an empty system, who appear like they should obviously match
-
-WIP- Incoming connection requests can be accepted.
-   -TODO add logic for returning match response 
 
 WIP- Incoming connection requests can be rejected. 
-        -TODO add logic for returning match response 
+        -TODO add logic for returning match respons on the front end
 TODO - Describe matching logic.
 TODO - An unread message icon appears when new chat messages are received in real time.
+TODO - API documentation. for minimum API DEV.
 
 
 // API DEV. CHECK
@@ -38,20 +26,20 @@ CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
 
 TODO- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
 TODO- The connections endpoint only returns a list of ids. (make /connections return a list of ID's )
-TODO- A chat history can be reached from the connected user's profile.
+
 TODO- The recommendations endpoint only returns a list of ids. (make /recommendations return a list of ID's )
 TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
 TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
 
 // EXTRAS
 TODO -  The user experience is excellent, usable and well designed.
-DONE - An offline/online indicator is shown on profile and chat views.
-DONE - A typing in progress indicator is shown.
-TODO - It implements proximity-based location filtering.
+
 ? -The recommendation algorithm is exceptional. The hardest!
 
 ----------CHECK--------------
 
+CHECK - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
+CHECK - Create two users in an empty system, who appear like they should obviously match
 CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
     PAGES for 
         They are recommended
@@ -70,6 +58,16 @@ CHECK - Create two users in an empty system with obviously poor matching charact
 CHECK - Create two users in an empty system, who appear like they should obviously match
 -------------DONE--------------
 Kood/Jõhvi
+DONE - An offline/online indicator is shown on profile and chat views.
+DONE - A typing in progress indicator is shown.
+DONE - It implements proximity-based location filtering.
+DONE - Location Filter! // HANNES  
+DONE-Add distance filter
+    -Add logic to filter out based on distance
+DONE -The user only sees recommendations from their location.
+DONE- additional paratmeters for match query display.
+DONE - in the SQL for matches make it so that any matches with the score 0 are not included.
+
 // USER MANAGEMENT
 DONE - All user responses return an id in the payload. (the payload is the JWT)
 DONE - The users endpoints return HTTP404 when the id is not found.
