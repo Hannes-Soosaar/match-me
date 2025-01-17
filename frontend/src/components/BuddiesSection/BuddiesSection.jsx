@@ -40,7 +40,7 @@ const Matches = () => {
 
     return (
         <>
-            <h1>Matches</h1>
+            <h1>Buddies</h1>
             <div className="body-div">
                 <div className="body-sides"></div>
                 <div className='body-content'>

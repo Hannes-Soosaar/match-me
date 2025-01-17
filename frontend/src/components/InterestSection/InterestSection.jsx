@@ -8,6 +8,7 @@ const authToken = localStorage.getItem('token');
 
 const [categories, setCategories] = useState([]);
 const [userInterests, setUserInterests] = useState([]);
+const save = 'Save';
 
 
 
@@ -53,6 +54,13 @@ useEffect(() => {
 const handleInterestClick = (interestId) => {
     console.log(`Interest ID clicked: ${interestId}`);
 
+    const updatedInterests = userInterests.includes(interestId)
+      ? userInterests.filter((id) => id !== interestId) // Remove if already selected
+      : [...userInterests, interestId]; // Add if not selected
+    // console.log(`Interest IDs: ${interestIds}`);
+
+    setUserInterests(updatedInterests);
+
     try {
         axios.post('/userInterest', {
             interestId,
@@ -62,7 +70,7 @@ const handleInterestClick = (interestId) => {
                 Authorization: `Bearer ${authToken}`,
             },
         })  .then((response) => {
-            window.location.reload(); 
+            // window.location.reload(); 
         }).catch((error) => {
             console.error('Error adding interest:', error);
         });
@@ -72,27 +80,29 @@ const handleInterestClick = (interestId) => {
   };
 
 
-//TODO extract the button element to a separate component
   return (
         <div className='interest-section' > 
         <p className='heading'>Select your interest and matching parameters</p>
             {categories.map((category) => (
-              <>
+              <React.Fragment key={category.category_id}>
                 <div className ='category-section' key={category.category_id}>
                 <p className='title-section' key={category.category_id}>{category.category}</p>
                   {category.interests.map((interest) => (
                     <button
-                      key={interest.id}
-                      onClick={() => handleInterestClick(interest.id)}
-                      className={userInterests.includes(interest.id) ? 'selected' : 'unselected'}
+                    key={interest.id}
+                    onClick={() => handleInterestClick(interest.id)}
+                    className={userInterests.includes(interest.id) ? 'selected' : 'unselected'}
                     >
                       {interest.interestName}
                     </button>
                   ))}       
                 </div>
                 <br/>
-                </>
+                </React.Fragment>
               ))}
+            <button key={save} className='save-button' onClick={() =>  window.location.reload() }>
+            Save interest and exit
+            </button>
         </div>
   );
 
