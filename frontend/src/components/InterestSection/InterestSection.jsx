@@ -10,12 +10,8 @@ const [categories, setCategories] = useState([]);
 const [userInterests, setUserInterests] = useState([]);
 const save = 'Save';
 
-
-
-// TODO: do not reload the page after adding an interest, swap the color but update on save and close. 
-
 useEffect(() => {
-// If the user is not logged in send only the interests for FE population if the user in logged in send the interests and the user interests
+// If the user is not logged in send only the interests for FE population
     const fetchData = async () => {
         try {
             const response1 = await axios.get('/interests', {
@@ -55,9 +51,8 @@ const handleInterestClick = (interestId) => {
     console.log(`Interest ID clicked: ${interestId}`);
 
     const updatedInterests = userInterests.includes(interestId)
-      ? userInterests.filter((id) => id !== interestId) // Remove if already selected
-      : [...userInterests, interestId]; // Add if not selected
-    // console.log(`Interest IDs: ${interestIds}`);
+      ? userInterests.filter((id) => id !== interestId) 
+      : [...userInterests, interestId]; 
 
     setUserInterests(updatedInterests);
 
