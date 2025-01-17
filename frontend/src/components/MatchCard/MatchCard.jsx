@@ -9,7 +9,7 @@ import BuddyCard from "../BuddyCard/BuddyCard.jsx";
 
 const authToken = localStorage.getItem('token');
 
-const MatchCard = ({ userProfile }) => {
+const MatchCard = ({ userProfile, onUpdate }) => {
 
     const { match_id,
         match_score,
@@ -21,21 +21,15 @@ const MatchCard = ({ userProfile }) => {
         matched_user_description, 
         matched_user_location } = userProfile;  
 
-
-
-
-        const basePictureURL = "http://localhost:4000/uploads/";
-        const onlineURL = "/images/OnlineIconPNG.png"
-        const offlineURL = "/images/OfflineIconPNG.png"
-
+    const basePictureURL = "http://localhost:4000/uploads/";
+    const onlineURL = "/images/OnlineIconPNG.png"
+    const offlineURL = "/images/OfflineIconPNG.png"
     // Set the default profile picture if no picture is provided
     let userProfilePic = matched_user_picture ? matched_user_picture : defaultProfilePic;
 
     if (userProfilePic !== defaultProfilePic) {
         userProfilePic = basePictureURL + userProfilePic;
     }
-    
-    console.log(userProfilePic);
 
     const [isModalOpen, setModalOpen] = useState(false);
 
@@ -47,10 +41,6 @@ const MatchCard = ({ userProfile }) => {
         setModalOpen(false);
     };
 
-
-
-    //TODO build the logic on which buttons are shown based on the status of the match
-
     const handleRemoveMatch = async () => {
         try {
             const response = await axios.put('/matches/remove', { match_id }, {
@@ -59,6 +49,7 @@ const MatchCard = ({ userProfile }) => {
                 },
             });
             console.log('Match Remove:', response.data);
+            onUpdate(match_id);
         } catch (error) {
             console.error('Error removing the match:', error);
         }
@@ -73,6 +64,7 @@ const MatchCard = ({ userProfile }) => {
                 },
             });
             console.log('Match accepted:', response.data);
+            onUpdate(match_id);
         } catch (error) {
             console.error('Error connecting to user:', error);
         }
@@ -86,6 +78,7 @@ const MatchCard = ({ userProfile }) => {
                 },
             });
             console.log('Requested to match:', response.data);
+            onUpdate(match_id);
             // You can implement additional logic like updating the UI or showing a success message
         } catch (error) {
             console.error('Error requesting to connect:', error);
@@ -100,6 +93,7 @@ const MatchCard = ({ userProfile }) => {
                 },
             });
             console.log('Match Blocked:', response.data);
+            onUpdate(match_id);
             // You can implement additional logic like updating the UI or showing a success message
         } catch (error) {
             console.error('Error blocking user:', error);
@@ -158,7 +152,7 @@ const MatchCard = ({ userProfile }) => {
         <>
             <div className="match-card">
                 <div className="match-card-info">
-                    <img className="match-card-image" src={userProfilePic}></img>
+                    <img className="match-card-image" src={userProfilePic} alt ="User"></img>
                     <h2>{matched_user_location }</h2>
                     <h3>MatchScore:</h3>
                     <p>{match_score}</p>

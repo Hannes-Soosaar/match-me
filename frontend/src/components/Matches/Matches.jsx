@@ -8,11 +8,14 @@ import MatchCard from '../MatchCard/MatchCard.jsx';
 const authToken = localStorage.getItem('token');
 
 const Matches = () => {
-
+    const [loading, setLoading] = useState(true)
     const [data, setData] = useState([])
     const [matches, setMatches] = useState([])
+
+
     useEffect(() => {
-        const fetchData = async () => {
+        const fetchMatches = async () => {
+            setLoading(true);
             try {
                 const response = await axios.get('/matches', {
                     headers: {
@@ -24,10 +27,14 @@ const Matches = () => {
             }
             catch (error) {
                 console.error('Error fetching data: ', error)
-            }
+            } 
         }
-        fetchData();
+        fetchMatches();
     }, [])
+
+    const handleMatchUpdate =(match_id) => {
+        setMatches((prevMatches) => {prevMatches.filter((match) => match.match_id !== match_id)});
+    }
 
     return (
         <>
@@ -35,15 +42,23 @@ const Matches = () => {
             <div className="body-div">
                 <div className="body-sides"></div>
                 <div className="body-content">
-                    {matches && matches.length > 0 ? (
-                        matches.map((item, index) => (
-                            <p key={index}>
-                                <MatchCard userProfile={item} key={index} />
-                            </p>
-                        ))
-                    ) : (
-                        <p>No matches found. Try updating your preferences or check back later!</p>
-                    )}
+                {Array.isArray(matches) && matches.length > 0 ? (
+                    matches.map((item) => (
+                        <MatchCard
+                            key={item.match_id}
+                            userProfile={item}
+                            onUpdate={handleMatchUpdate} // Pass callback to update matches
+                        />
+                    ))
+                ) : (
+                    <p>No matches found. Try updating your preferences or check back later!</p>
+                )}
+                <button
+                    className="load-more-button"
+                    onClick={() => window.location.reload()} // Reload the page
+                >
+                    Load More Matches
+                </button>
                     </div>
                 <div className="body-sides"></div>
             </div>
