@@ -20,6 +20,7 @@ const Chat = () => {
     const [offset, setOffset] = useState(0)
     const [hasMore, setHasMore] = useState(false)
     const [buttonsDisabled, setButtonsDisabled] = useState(false)
+    const [notificationsList, setNotificationsList] = useState([])
     const basePictureURL = "http://localhost:4000/uploads/";
     const onlineURL = "/images/OnlineIconPNG.png"
     const offlineURL = "/images/OfflineIconPNG.png"
@@ -37,7 +38,7 @@ const Chat = () => {
         IsOnline			   bool   `json:"is_online"`
         UserInterests		   []string `json:"user_interests"`
         add notifications field
-        LatestMessage timestamp `json:"latest_message"`
+        ChatNotifications      bool   `json:"has_notification"`
     }
         */
 
@@ -183,14 +184,20 @@ const Chat = () => {
                     setOffset((prevOffset) => prevOffset + 1)
                 }
 
-                console.log(
-                    "receiverID:", receiverID, "\n", "senderID:", senderID, "\n", "data.receiverID:", data.receiverID, "\n", "data.senderID:", data.senderID, "\n",
-                )
                 if ((receiverID === data.senderID && senderID === data.receiverID) || senderID === data.senderID) {
                     setMessages((prevMessages) => [...(prevMessages || []), data.message])
                 }
-                console.log("DATATYPE: ", data.type)
+
                 if (data.type !== "login" && data.type !== "logout" && data.type !== "typing") {
+                    console.log(selectedConnection, data.username)
+                    if (selectedConnection !== data.username) {
+                        Object.entries(connections).forEach(([_, connection]) => {
+                            if (connection.matched_user_name === data.username) {
+                                connection.has_notification = true
+                                setNotificationsList(prevList => [...prevList, connection.matched_user_name])
+                            }
+                        })
+                    }
                     setConnections(prevConnections => {
                         // Create a copy of the connections array
                         const updatedConnections = [...prevConnections];
@@ -334,6 +341,14 @@ const Chat = () => {
     }
 
     const handleConnectionClick = (connection) => {
+        console.log('notiflist', notificationsList)
+        if (notificationsList.includes(connection.matched_user_name)) {
+            connection.has_notification = false
+            console.log("hasnotif", connection.has_notification)
+            setNotificationsList(prevList => {
+                return prevList.filter(name => name !== connection.matched_user_name)
+            })
+        }
         setTypingStatus("")
         console.log('Connection clicked:', connection)
         if (selectedConnection === connection.matched_user_name) {
@@ -421,7 +436,7 @@ const Chat = () => {
                                 onClick={() => !buttonsDisabled && handleClick(connection)}
                             >
                                 <img src={basePictureURL + connection.matched_user_picture} alt={connection.matched_user_name} />
-                                <h4>{connection.matched_user_name}</h4>
+                                <h4 className={connection.has_notification ? 'highlight' : ''}>{connection.matched_user_name}</h4>
                                 {connection.is_online ?
                                     <img src={onlineURL} alt="User online" className="status-icon"></img>
                                     :

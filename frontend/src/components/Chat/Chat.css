@@ -140,3 +140,7 @@
     top: 5px;
     right: 5px;
 }
+
+.highlight {
+    color: red;
+}

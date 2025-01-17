@@ -328,6 +328,7 @@ type BuddiesResponse struct {
 	MatchedUserLocation    string   `json:"matched_user_location"`
 	IsOnline               bool     `json:"is_online"`
 	UserInterests          []string `json:"user_interests"`
+	ChatNotifications      bool     `json:"has_notification"`
 }
 
 // Returns the user's buddies who are connected
@@ -369,6 +370,7 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 		buddy.MatchedUserDescription = buddyProfile.About
 		buddy.MatchedUserLocation = buddyProfile.Nation
 		buddy.IsOnline = buddyProfile.IsOnline
+		buddy.ChatNotifications = false
 		buddies = append(buddies, buddy)
 	}
 

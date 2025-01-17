@@ -157,7 +157,7 @@ func SaveMessageHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err = db.SaveNotification(messageData.MatchID, true)
+	err = db.SaveNotification(messageData.MatchID)
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error saving notification: %v", err), http.StatusInternalServerError)
 		return

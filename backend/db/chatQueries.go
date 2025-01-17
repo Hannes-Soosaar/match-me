@@ -17,17 +17,17 @@ func SaveMessage(message string, matchID int, senderID string, receiverID string
 	return nil
 }
 
-func SaveNotification(matchID int, status bool) error {
+func SaveNotification(matchID int) error {
 	query := `
-		INSERT INTO unread_messages (match_id, latest_message, is_unread)
-		VALUES ($1, $2, $3)
+		INSERT INTO unread_messages (match_id, latest_message)
+		VALUES ($1, $2)
 		ON CONFLICT (match_id)
-		DO UPDATE SET latest_message = EXCLUDED.latest_message, is_unread = EXCLUDED.is_unread
+		DO UPDATE SET latest_message = EXCLUDED.latest_message
 	`
 
 	currentTime := time.Now()
 
-	_, err := DB.Exec(query, matchID, currentTime, status)
+	_, err := DB.Exec(query, matchID, currentTime)
 	if err != nil {
 		log.Println(err)
 		return fmt.Errorf("error saving notification status: %v", err)
