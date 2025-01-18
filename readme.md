@@ -30,3 +30,5 @@
 Check if the docker container is running with ```docker ps```.<br>
 Start only the database server by running ```make start-db``` in the project root directory.<br>
 Reset the database with ```make reset-db``` in the project root directory.<br>
+
+creating 150 demo users takes 4 min.

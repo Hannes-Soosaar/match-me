@@ -85,6 +85,8 @@ func CreateProfile() {
 		if err != nil {
 			log.Println("Error getting user uuid: ", err)
 		}
+
+		// tartu is base
 		latitude = 58.378025 + float64(i)
 		longitude = 26.728493 + float64(i)
 
@@ -107,11 +109,20 @@ func CreateProfile() {
 		if err != nil {
 
 			log.Println("Error setting picture path: ", err)
+
+			
 		}
+		
+		// tartu is base
+		latitude = 58.378025 + float64(i)
+		longitude = 26.728493 + float64(i)
+
 		err = SetCity(uuid, "Estonia", "Tartu County", "Tartu", latitude, longitude) // all users are from Tartu random lat and long just stars adding distance to users
 		if err != nil {
 			log.Println("Error setting city: ", err)
 		}
+
+		
 		// Add two Genres
 
 		for j := 0; j <= 3; j++ {
