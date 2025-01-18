@@ -24,7 +24,7 @@ const (
 	DELETED   = "deleted"   // this is used if the user has deleted the connection but there is still a possibility of the other party to reach out via message ect.
 
 	//change the number base on how many bots you want to spawn
-	DEMO_USER_COUNT = 10
+	DEMO_USER_COUNT = 100
 
 	//easier to read distance categories
 	UP_TO_ONE_HUNDRED            = "0-100 km"

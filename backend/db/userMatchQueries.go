@@ -253,7 +253,6 @@ func UpdateUserMatchScore(currentUserID, userID2 string, userScore int) error {
 	if err != nil {
 		return fmt.Errorf("error updating user match score: %w", err)
 	}
-
 	return nil
 }
 
