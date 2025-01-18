@@ -414,7 +414,7 @@ func GetUserNotifications(userID1 string, userID2 string) (bool, error) {
 		`
 
 	err := DB.QueryRow(query, userID1, userID2).Scan(&notificationStatus)
-	fmt.Println("Notification status:", notificationStatus)
+
 	if err != nil {
 		log.Println(err)
 		return notificationStatus, fmt.Errorf("error saving notification status: %v", err)

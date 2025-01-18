@@ -105,7 +105,6 @@ const Chat = () => {
                 })
                 setChatUsername(response.data.username + ": ")
                 setUsername(response.data.username)
-                console.log('Profile/me:', response.data)
             } catch (error) {
                 console.error('Error getting username:', error)
             }
@@ -122,7 +121,6 @@ const Chat = () => {
                     },
                 })
                 setSenderID(response.data)
-                console.log('Profile/me/uuid:', response.data)
             } catch (error) {
                 console.error('Error getting sender UUID:', error)
             }
@@ -137,17 +135,16 @@ const Chat = () => {
         socket.onmessage = (event) => {
             try {
                 const data = JSON.parse(event.data);
-                console.log('Data type:', data.type);
 
                 if (data.type === "login") {
-                    console.log('FE logged in:', data)
+
                     Object.entries(connections).forEach(([_, connection]) => {
                         if (connection.matched_user_name === data.username) {
                             connection.is_online = true
                         }
                     })
                 } else if (data.type === "logout") {
-                    console.log('FE logged out', data)
+
                     Object.entries(connections).forEach(([_, connection]) => {
                         if (connection.matched_user_name === data.username) {
                             connection.is_online = false
@@ -186,7 +183,6 @@ const Chat = () => {
                 }
 
                 if (data.type !== "login" && data.type !== "logout" && data.type !== "typing") {
-                    console.log(selectedConnection, data.username)
                     if (selectedConnection !== data.username) {
                         Object.entries(connections).forEach(([_, connection]) => {
                             if (connection.matched_user_name === data.username) {
@@ -255,10 +251,9 @@ const Chat = () => {
                         params: { senderID, matchID }
                     })
                     setReceiverID(response.data)
-                    console.log('/receiver:', response.data)
 
                 } catch (error) {
-                    console.log('Error getting receiver UUID', error)
+                    console.error('Error getting receiver UUID', error)
                 }
             }
             if (matchID) {
@@ -275,11 +270,11 @@ const Chat = () => {
                         Authorization: `Bearer ${authToken}`,
                     }
                 })
-                console.log('/users/receiverID:', response.data)
+
                 setReceiverUsername(response.data.username)
                 setReceiverProfilePicture(response.data.profile_picture)
             } catch (error) {
-                console.log('Error getting receiver profile', error)
+                console.error('Error getting receiver profile', error)
             }
         }
         if (receiverID) {
@@ -319,14 +314,13 @@ const Chat = () => {
             setOffset((prevOffset) => prevOffset + 1)
             socket.send(jsonMessage)
             try {
-                const response = await axios.post('/saveMessage', {
+                await axios.post('/saveMessage', {
                     matchID: parseInt(matchID, 10),
                     senderID: senderID,
                     receiverID: receiverID,
                     message: message,
                 })
 
-                console.log("Message saved:", response.data)
             } catch (error) {
                 console.error('Error saving message:', error)
             }
@@ -342,7 +336,7 @@ const Chat = () => {
     }
 
     const handleConnectionClick = (connection) => {
-        console.log("has_notification:", connection.has_notification)
+        console.log('Connection clicked:', connection)
         if (notificationsList.includes(connection.matched_user_name)) {
             connection.has_notification = false
             setNotificationsList(prevList => {
@@ -351,18 +345,11 @@ const Chat = () => {
         }
 
         setTypingStatus("")
-        console.log('Connection clicked:', connection)
-        if (selectedConnection === connection.matched_user_name) {
-            console.log(selectedConnection, connection.matched_user_name)
-            return
-        }
         setHasMore(false)
         setOffset(0)
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
 
-
-        console.log("HAS NOTIFICATIONS")
         connection.has_notification = false
         axios.get('/receiver', {
             headers: {
@@ -403,11 +390,9 @@ const Chat = () => {
                     setHasMore(false)
                     setMessages(response.data)
                 }
-                console.log("History received")
 
-                console.log("response", response.data)
             } catch (error) {
-                console.log('Error getting chat history FE', error)
+                console.error('Error getting chat history FE', error)
             }
         }
         fetchChatHistory()
@@ -427,13 +412,13 @@ const Chat = () => {
             } else {
                 setHasMore(false)
             }
-            console.log("History received")
+
             setMessages((prevMessages) => [
                 ...response.data.slice(0, 15),
                 ...(prevMessages || [])
             ]);
         } catch (error) {
-            console.log('Error getting chat history FE', error)
+            console.error('Error getting chat history FE', error)
         }
     }
 
