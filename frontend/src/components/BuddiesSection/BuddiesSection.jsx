@@ -5,6 +5,7 @@ import axios from 'axios';
 import './BuddiesSection.css'
 import '../MatchCard/MatchCard.jsx'
 import MatchCard from '../MatchCard/MatchCard.jsx';
+import BuddyCard from '../BuddyCard/BuddyCard.jsx';
 
 const authToken = localStorage.getItem('token');
 
@@ -47,7 +48,7 @@ const Matches = () => {
                     {matches.length > 0 ? (
                     matches.map((item, index) =>
                     (<p key={index}>
-                        <MatchCard userProfile={item} key={index}></MatchCard>
+                        <BuddyCard buddyProfile={item} key={index}></BuddyCard>
                     </p>
                     ))):(<p>No matches found. Try updating your preferences or check back later!</p>)}
                 </div>

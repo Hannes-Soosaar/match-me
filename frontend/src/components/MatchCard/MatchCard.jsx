@@ -58,6 +58,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         } catch (error) {
             console.error('Error removing the match:', error);
         }
+        window.location.reload()
     };
 
 
@@ -73,6 +74,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         } catch (error) {
             console.error('Error connecting to user:', error);
         }
+        window.location.reload()
     };
 
     const handleRequestMatch = async () => {
@@ -88,6 +90,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         } catch (error) {
             console.error('Error requesting to connect:', error);
         }
+        window.location.reload()
     };
 
     const handleBlockMatch = async () => {
@@ -103,6 +106,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         } catch (error) {
             console.error('Error blocking user:', error);
         }
+        window.location.reload()
     };
 
 

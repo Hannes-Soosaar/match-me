@@ -7,22 +7,21 @@
     When a new user is created and they switch to mathches they will see a match score of 0 with everyone. The score is recalculated when you login.
  <<<<<<>>>>>>
 
-TODO- Landing page to  Dashboard  unless initial loading. 
+TODO- Landing page to  Dashboard  unless initial loading.
 TODO- Hot reload of matches. on profile update
 TODO- Add interests to View profile
 
 
 
 
-TODO- Request do not connect if you are the requester
-TODO- Buddies  remove " request"
-TODO- Dismis match  sub with delete contact 
+DONE- Request do not connect if you are the requester
+DONE- Buddies  remove "request"
+DONE- Dismis match  sub with delete contact 
 TODO- Matches to be visible on Dashboard
-TODO- if buddied be able to open chat. // view profile
-TODO- load more matches button only if 10 connections. 
+WIP- if buddied be able to open chat. // view profile
+DONE- load more matches button only if 10 connections. 
 TODO- check layout on mobile.
-
-TODO- online offline to be subbed with indication button -- component 
+DONE- online offline to be subbed with indication button -- component 
 
 
 
