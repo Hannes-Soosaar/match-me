@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"match_me_backend/db"
 	"match_me_backend/models"
@@ -348,6 +349,7 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 	var buddies []BuddiesResponse
 	var buddy BuddiesResponse
 	var buddyProfile *models.ProfileInformation
+	var HasNotifications bool
 	for _, userMatch := range userBuddies {
 		// Displays correctly the matched Profile user data
 		if userMatch.UserID2 == userID1 {
@@ -355,8 +357,21 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 			if err != nil {
 				log.Println("Error getting user information:", err)
 			}
+			fmt.Println(userID1, userMatch.UserID1)
+			HasNotifications, err = db.GetUserNotifications(userID1, userMatch.UserID1)
+			if err != nil {
+				log.Println("Error getting HasNotifications:", err)
+			}
 		} else {
 			buddyProfile, err = db.GetUserInformation(userMatch.UserID2)
+			if err != nil {
+				log.Println("Error getting user information:", err)
+			}
+			fmt.Println(userID1, userMatch.UserID2)
+			HasNotifications, err = db.GetUserNotifications(userID1, userMatch.UserID2)
+			if err != nil {
+				log.Println("Error getting HasNotifications:", err)
+			}
 		}
 
 		if err != nil {
@@ -370,7 +385,7 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 		buddy.MatchedUserDescription = buddyProfile.About
 		buddy.MatchedUserLocation = buddyProfile.Nation
 		buddy.IsOnline = buddyProfile.IsOnline
-		buddy.ChatNotifications = false
+		buddy.ChatNotifications = HasNotifications
 		buddies = append(buddies, buddy)
 	}
 

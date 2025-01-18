@@ -98,3 +98,21 @@ func GetLatestMessages(matchIDs []int) ([]struct {
 
 	return latestMessages, nil
 }
+
+func SaveNotifications(user1 string, user2 string, HasNotification bool) error {
+	query := `
+		UPDATE user_notifications 
+		SET
+			user_id_1_notification = CASE WHEN user_id_1 = $2 THEN $3 ELSE user_id_1_notification END,
+			user_id_2_notification = CASE WHEN user_id_2 = $2 THEN $3 ELSE user_id_2_notification END
+		WHERE (user_id_1 = $1 AND user_id_2 = $2)
+		OR (user_id_1 = $2 AND user_id_2 = $1)
+	`
+
+	_, err := DB.Exec(query, user1, user2, HasNotification)
+	if err != nil {
+		log.Println(err)
+		return fmt.Errorf("error saving notification status: %v", err)
+	}
+	return nil
+}

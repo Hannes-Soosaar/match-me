@@ -82,7 +82,6 @@ func GetUserByUsername(username string) (*models.User, error) {
 
 // UUID gets mapped as ID
 
-
 func GetUserByID(userID string) (*models.User, error) {
 	query := "SELECT uuid, email, password_hash,latitude,longitude FROM users WHERE uuid = $1"
 	var user models.User
@@ -372,7 +371,7 @@ func GetUserIDfromUUIDarray(UUIDs []string) ([]string, error) {
 }
 
 func SetUserOnlineStatus(userID string, status bool) error {
-	log.Println("Setting user online status to",status)
+	log.Println("Setting user online status to", status)
 	query := "UPDATE users SET is_online = $1 WHERE uuid = $2"
 	_, err := DB.Exec(query, status, userID)
 	if err != nil {
@@ -398,4 +397,27 @@ func GetUserOnlineStatus(userID string) (bool, error) {
 	}
 
 	return isOnline, nil
+}
+
+func GetUserNotifications(userID1 string, userID2 string) (bool, error) {
+	var notificationStatus bool
+	query := `
+			SELECT
+				CASE
+					WHEN user_id_1 = $2 THEN user_id_1_notification
+					WHEN user_id_2 = $2 THEN user_id_2_notification
+				ELSE FALSE END
+			FROM user_notifications
+			WHERE (user_id_1 = $1 AND user_id_2 = $2)
+			OR (user_id_1 = $2 AND user_id_2 = $1)
+			LIMIT 1
+		`
+
+	err := DB.QueryRow(query, userID1, userID2).Scan(&notificationStatus)
+	fmt.Println("Notification status:", notificationStatus)
+	if err != nil {
+		log.Println(err)
+		return notificationStatus, fmt.Errorf("error saving notification status: %v", err)
+	}
+	return notificationStatus, nil
 }

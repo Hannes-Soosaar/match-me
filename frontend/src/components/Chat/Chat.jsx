@@ -193,8 +193,13 @@ const Chat = () => {
                     if (selectedConnection !== data.username) {
                         Object.entries(connections).forEach(([_, connection]) => {
                             if (connection.matched_user_name === data.username) {
+                                //api call to saveNotification with senderID, data.senderID, senderID_notification = true
                                 connection.has_notification = true
-                                setNotificationsList(prevList => [...prevList, connection.matched_user_name])
+                                axios.post('/saveNotification', {
+                                    user1: senderID,
+                                    user2: data.senderID,
+                                    has_notification: true,
+                                })
                             }
                         })
                     }
@@ -254,6 +259,7 @@ const Chat = () => {
                     })
                     setReceiverID(response.data)
                     console.log('/receiver:', response.data)
+
                 } catch (error) {
                     console.log('Error getting receiver UUID', error)
                 }
@@ -341,14 +347,14 @@ const Chat = () => {
     }
 
     const handleConnectionClick = (connection) => {
-        console.log('notiflist', notificationsList)
+        console.log("has_notification:", connection.has_notification)
         if (notificationsList.includes(connection.matched_user_name)) {
             connection.has_notification = false
-            console.log("hasnotif", connection.has_notification)
             setNotificationsList(prevList => {
                 return prevList.filter(name => name !== connection.matched_user_name)
             })
         }
+
         setTypingStatus("")
         console.log('Connection clicked:', connection)
         if (selectedConnection === connection.matched_user_name) {
@@ -359,6 +365,29 @@ const Chat = () => {
         setOffset(0)
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
+
+
+        console.log("HAS NOTIFICATIONS")
+        connection.has_notification = false
+        axios.get('/receiver', {
+            headers: {
+                Authorization: `Bearer ${authToken}`,
+            },
+            params: {
+                senderID,
+                matchID: connection.match_id,
+            },
+        })
+            .then(response => {
+                axios.post('/saveNotification', {
+                    user1: senderID,
+                    user2: response.data,
+                    has_notification: false,
+                })
+            })
+            .catch(error => {
+                console.error('Error fetching receiver data:', error)
+            })
 
         //TODO: Make API for pulling all messages with match id equal to connection.match_id a.k.a matchID, then setMessages(array of all pulled messages)
         const fetchChatHistory = async () => {

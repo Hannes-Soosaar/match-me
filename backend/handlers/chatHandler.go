@@ -233,3 +233,31 @@ func ChatMessageHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(latestMessages)
 }
+
+type SetNotificationRequest struct {
+	User1           string `json:"user1"`
+	User2           string `json:"user2"`
+	HasNotification bool   `json:"has_notification"`
+}
+
+func ChatNotificationHandler(w http.ResponseWriter, r *http.Request) {
+	var request SetNotificationRequest
+	err := json.NewDecoder(r.Body).Decode(&request)
+	if err != nil {
+		http.Error(w, "Invalid request body", http.StatusBadRequest)
+		return
+	}
+
+	User1 := request.User1
+	User2 := request.User2
+	HasNotification := request.HasNotification
+
+	err = db.SaveNotifications(User1, User2, HasNotification)
+	if err != nil {
+		http.Error(w, fmt.Sprintf("Error saving notifications: %v", err), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode("Notification saved!")
+}

@@ -90,6 +90,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/saveMessage", handlers.SaveMessageHandler).Methods("POST")
 	router.HandleFunc("/chatHistory", handlers.ChatHistoryHandler).Methods("GET")
 	router.HandleFunc("/latestMessage", handlers.ChatMessageHandler).Methods("POST")
+	router.HandleFunc("/saveNotification", handlers.ChatNotificationHandler).Methods("POST")
 
 	return router
 }

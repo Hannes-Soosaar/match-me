@@ -137,7 +137,32 @@ CREATE TABLE IF NOT EXISTS user_matches(
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     distance FLOAT
 );
---OK
+CREATE TABLE IF NOT EXISTS user_notifications(
+    id SERIAL PRIMARY KEY,
+    user_id_1 UUID NOT NULL,
+    user_id_2 UUID NOT NULL,
+    user_id_1_notification BOOLEAN DEFAULT FALSE,
+    user_id_2_notification BOOLEAN DEFAULT FALSE
+);
+CREATE OR REPLACE FUNCTION add_user_notification() RETURNS TRIGGER AS $$ BEGIN IF NEW.status = 'connected' THEN IF NOT EXISTS (
+        SELECT 1
+        FROM user_notifications
+        WHERE user_id_1 = NEW.user_id_1
+            AND user_id_2 = NEW.user_id_2
+    ) THEN
+INSERT INTO user_notifications (user_id_1, user_id_2)
+VALUES (NEW.user_id_1, NEW.user_id_2);
+END IF;
+END IF;
+RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+CREATE TRIGGER trigger_add_notification
+AFTER
+INSERT
+    OR
+UPDATE OF status ON user_matches FOR EACH ROW
+    WHEN (NEW.status = 'connected') EXECUTE FUNCTION add_user_notification();
 CREATE TABLE IF NOT EXISTS user_interests (
     id SERIAL PRIMARY KEY,
     user_id UUID NOT NULL,
