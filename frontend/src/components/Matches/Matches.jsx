@@ -33,10 +33,13 @@ const Matches = () => {
     }, [])
 
     const handleMatchUpdate =(match_id) => {
-        setMatches((prevMatches) => {prevMatches.filter((match) => match.match_id !== match_id)});
+        // setMatches((prevMatches) => {prevMatches.filter((match) => match.match_id !== match_id)});
+        window.location.reload()
     }
 
     return (
+
+        // There is an issue with getting a undefined value when requesting a connection.
         <>
             <h1>Matches</h1>
             <div className="body-div">
@@ -53,12 +56,14 @@ const Matches = () => {
                 ) : (
                     <p>No matches found. Try updating your preferences or check back later!</p>
                 )}
-                <button
-                    className="load-more-button"
-                    onClick={() => window.location.reload()} // Reload the page
-                >
-                    Load More Matches
-                </button>
+                {Array.isArray(matches) && matches.length === 10 && ( 
+                    <button
+                        className="load-more-button"
+                        onClick={() => window.location.reload()} // Reload the page
+                    >
+                        Load More Matches
+                    </button>
+                )}
                     </div>
                 <div className="body-sides"></div>
             </div>

@@ -77,7 +77,6 @@ const Chat = () => {
                         acc[match_id] = latest_message;
                         return acc;
                     }, {})
-
                     // Sort the connections based on the latest_message timestamp from the timestampMap
                     const sortedConnections = response.data.sort((a, b) => {
                         const timestampA = timestampMap[a.match_id] ? new Date(timestampMap[a.match_id]) : new Date(0);
@@ -88,8 +87,6 @@ const Chat = () => {
                 } else {
                     setConnections(response.data)
                 }
-
-
 
             } catch (error) {
                 console.error('Error getting connections profiles:', error)
@@ -286,9 +283,7 @@ const Chat = () => {
 
     const getCurrentDateTime = () => {
         const now = new Date()
-
         const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-
         const day = now.getDate()
         const month = monthNames[now.getMonth()]
         const year = String(now.getFullYear()).slice(-2)
@@ -360,7 +355,7 @@ const Chat = () => {
         setSelectedConnection(connection.matched_user_name)
         setMatchID(connection.match_id)
 
-        //TODO: Make API for pulling all messages with match id equal to connection.match_id a.k.a matchID, then setMessages(array of all pulled messages)
+//TODO: Make API for pulling all messages with match id equal to connection.match_id a.k.a matchID, then setMessages(array of all pulled messages)
         const fetchChatHistory = async () => {
             try {
                 const response = await axios.get('/chatHistory', {
