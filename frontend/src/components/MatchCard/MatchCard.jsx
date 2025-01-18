@@ -8,13 +8,18 @@ import BuddyCard from "../BuddyCard/BuddyCard.jsx";
 
 
 const authToken = localStorage.getItem('token');
+const onlineURL = "/images/OnlineIconPNG.png"
+const offlineURL = "/images/OfflineIconPNG.png"
 
 const MatchCard = ({ userProfile, onUpdate }) => {
+
+    console.log( "User profile from requests: ", userProfile);
 
     const { match_id,
         match_score,
         status,
         is_online,
+        requester,
         matched_user_id,
         matched_user_name, 
         matched_user_picture,
@@ -101,6 +106,8 @@ const MatchCard = ({ userProfile, onUpdate }) => {
     };
 
 
+    const isRequester = requester === "true";
+
     const renderButtons = () => {
         switch (status) {
             case 'new':
@@ -117,12 +124,24 @@ const MatchCard = ({ userProfile, onUpdate }) => {
             case 'requested':
                 return (
                     <>
-                        <button onClick={handleConnectMatch} className="match-card-button">
-                            Connect
-                        </button>
-                        <button onClick={handleRemoveMatch} className="match-card-button">
-                            Delete
-                        </button>
+                    {!isRequester && (
+                        <>
+                            <button onClick={handleConnectMatch} className="match-card-button">
+                                Connect
+                            </button>
+                        </>
+                    )}
+                    {isRequester && (
+                        <>
+                        <div>Your Buddy Request is pending</div>
+                        </>
+                    )}
+                    <div>
+                            <button onClick={handleRemoveMatch} className="match-card-button">
+                                Delete
+                            </button>
+                    
+                    </div>
                     </>
                 );
             case 'blocked':
@@ -151,13 +170,21 @@ const MatchCard = ({ userProfile, onUpdate }) => {
     return (
         <>
             <div className="match-card">
+                <div className="match-card-status">
+                <div className="user-name" >{matched_user_name}</div>  
+                {is_online ? <img src={onlineURL} alt="User online" className="status-icon"></img>
+                    :
+                <img src={offlineURL} alt="User offline" className="status-icon"></img>
+                }
+                </div>
+
                 <div className="match-card-info">
                     <img className="match-card-image" src={userProfilePic} alt ="User"></img>
+
                     <h2>{matched_user_location }</h2>
                     <h3>MatchScore:</h3>
                     <p>{match_score}</p>
-                    <h3>Name:</h3>
-                    <p>{matched_user_name}</p>
+                    
                 </div>
 
                 <div className="match-card-buttons">
@@ -165,10 +192,8 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                     <button onClick={handleViewMatchedProfile} className="match-card-button">
                         View Profile
                     </button>
-                    {is_online ? <p>Online</p> : <p>Offline</p>}
                 </div>
             </div>
-
             <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                 <BuddyCard buddyProfile={userProfile} />
             </Modal>

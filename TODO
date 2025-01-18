@@ -2,15 +2,49 @@
  >>> BUGS >>>>
     A user can match with self.
     When you close all tabs and windows localstorage is not cleared.  handele Using BroadcastChannel (Modern Approach)
+
+ 
     When a new user is created and they switch to mathches they will see a match score of 0 with everyone. The score is recalculated when you login.
  <<<<<<>>>>>>
+
+TODO- Landing page to  Dashboard  unless initial loading. 
+TODO- Hot reload of matches. on profile update
+TODO- Add interests to View profile
+
+
+
+
+TODO- Request do not connect if you are the requester
+TODO- Buddies  remove " request"
+TODO- Dismis match  sub with delete contact 
+TODO- Matches to be visible on Dashboard
+TODO- if buddied be able to open chat. // view profile
+TODO- load more matches button only if 10 connections. 
+TODO- check layout on mobile.
+
+TODO- online offline to be subbed with indication button -- component 
+
+
+
+
+DONE- Always clears localstorage when Logout
+
+Hot reload of matches. on profile update
+
+
+
 
 
 
 WIP- Incoming connection requests can be rejected. 
         -TODO add logic for returning match respons on the front end
-TODO - Describe matching logic.
+TODO - Describe matching logic. -- HANNES 
+
+TODO - return all marked interest not one per category -- MARKO
+
 TODO - An unread message icon appears when new chat messages are received in real time.
+TODO - if you requested match connection you can not accept.
+TODO - Match notification.
 TODO - API documentation. for minimum API DEV.
 
 

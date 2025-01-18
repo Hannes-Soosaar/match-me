@@ -54,13 +54,10 @@ function Header() {
                 } catch (error) {
                     console.error('Error fetching online status:', error);
                 }
-
             };
         }
         fetchUsername();
     }, [isAuthenticated, authToken]);
-
-
     const handleLogout = async () => {
         if (isLoggingOut) return;
         setIsLoggingOut(true);
@@ -70,16 +67,13 @@ function Header() {
                     Authorization: `Bearer ${authToken}`,
                 },
             });
-
             console.log('Logout response:', response.data);
-
             if (response.data) {
                 // Fetch UUID and username
                 const uuidResponse = await axios.get('/me/uuid', {
                     headers: { Authorization: `Bearer ${authToken}` },
                 });
                 console.log('Fetched currentUserID:', uuidResponse.data);
-
                 if (uuidResponse.data) {
                     const usernameResponse = await axios.get(`/users/${uuidResponse.data}/profile`, {
                         headers: { Authorization: `Bearer ${authToken}` },
@@ -92,16 +86,19 @@ function Header() {
                         console.error('Socket is not open or username is missing.');
                     }
                 }
-
                 socket.close();
                 localStorage.removeItem('token');
                 localStorage.removeItem('profileExists');
                 window.location.href = '/login';
             } else {
                 console.error('Logout failed on the backend.');
+                localStorage.removeItem('token');
+                localStorage.removeItem('profileExists');
             }
         } catch (error) {
             console.error('Error during logout:', error);
+            localStorage.removeItem('token');
+            localStorage.removeItem('profileExists');
         } finally {
             setIsLoggingOut(false);
         }

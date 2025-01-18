@@ -138,7 +138,7 @@ type MatchResponse struct {
 	MatchScore             int    `json:"match_score"`
 	Status                 string `json:"status"`          // Used to determine what to display in the front end
 	MatchedUserID          string `json:"matched_user_id"` // UUID
-	Requester              string `json:"requester"`       // UUID
+	Requester              string `json:"requester"`
 	MatchedUserName        string `json:"matched_user_name"`
 	MatchedUserPicture     string `json:"matched_user_picture"`
 	MatchedUserDescription string `json:"matched_user_description"`
@@ -205,7 +205,6 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 
 func GetRequests(w http.ResponseWriter, r *http.Request) {
 	log.Println("GetRequests rout")
-
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
@@ -234,10 +233,16 @@ func GetRequests(w http.ResponseWriter, r *http.Request) {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID2)
 			buddyID = userMatch.UserID1
 		}
-
 		if err != nil {
 			log.Println("Error getting user information:", err)
 		}
+
+		if userID1 == userMatch.Requester {
+			match.Requester = "true"
+		} else {
+			match.Requester = "false"
+		}
+		
 		match.MatchID = userMatch.ID
 		match.Status = userMatch.Status
 		match.MatchScore = userMatch.MatchScore

@@ -17,8 +17,9 @@ const InterestPresenter = () => {
         console.log('Fetched data:', response.data);
 
         // Extract and store only the values from the response
-        const values = Object.values(response.data);
+        const values = Object.values(response.data).flat();
         setBioValues(values);
+        console.log(values)
       } catch (error) {
         console.error('Error fetching bio data:', error);
       }

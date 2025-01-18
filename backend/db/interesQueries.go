@@ -111,9 +111,9 @@ func GetAllUserInterest(userID string) (*[]models.Interests, error) {
 	return &interests, nil
 }
 
-func GetUserBioByID(userID string) (map[string]string, error) {
-	// Map to store interest ID and its corresponding category
-	interestsAndCategories := make(map[string]string)
+func GetUserBioByID(userID string) (map[string][]string, error) {
+	// Map to store category and its corresponding list of interests
+	interestsAndCategories := make(map[string][]string)
 
 	// Query to get interest IDs for the user
 	query := "SELECT interest_id FROM user_interests WHERE user_id = $1"
@@ -127,12 +127,18 @@ func GetUserBioByID(userID string) (map[string]string, error) {
 	for rows.Next() {
 		var interestID string
 		var interest string
+
+		// Get the interest for the current interest ID
 		interestsQuery := "SELECT interest FROM interests WHERE id = $1::integer"
 		if err := rows.Scan(&interestID); err != nil {
 			log.Printf("Error scanning interest for uuid=%s: %v", userID, err)
 			return nil, err
 		}
 		err := DB.QueryRow(interestsQuery, interestID).Scan(&interest)
+		if err != nil {
+			log.Printf("Error fetching interest for interest_id=%s: %v", interestID, err)
+			return nil, err
+		}
 
 		// Fetch the category for the current interest ID
 		var category string
@@ -143,8 +149,8 @@ func GetUserBioByID(userID string) (map[string]string, error) {
 			return nil, err
 		}
 
-		// Add interest and its category to the map
-		interestsAndCategories[category] = interest
+		// Add the interest to the appropriate category in the map
+		interestsAndCategories[category] = append(interestsAndCategories[category], interest)
 	}
 
 	if err := rows.Err(); err != nil {

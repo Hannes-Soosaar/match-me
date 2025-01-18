@@ -5,6 +5,8 @@ import (
 	"log"
 	"match_me_backend/db"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 func GetUserInterests(w http.ResponseWriter, r *http.Request) {
@@ -12,6 +14,19 @@ func GetUserInterests(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error:", err)
 	}
+	userInterestIDs, err := db.GetAllUserInterestIDs(userID)
+	if err != nil {
+		log.Println("Error in GetUserInterestsId's", err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(userInterestIDs)
+}
+
+func GetIDUserInterests(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userID := vars["id"]
+
 	userInterestIDs, err := db.GetAllUserInterestIDs(userID)
 	if err != nil {
 		log.Println("Error in GetUserInterestsId's", err)

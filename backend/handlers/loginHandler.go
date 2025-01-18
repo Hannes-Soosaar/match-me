@@ -93,8 +93,6 @@ func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusUnauthorized)
 		json.NewEncoder(w).Encode(false)
 		log.Println("Error getting user Id from token:", err)
-
-		log.Println("Error getting user Id from token:", err)
 		return
 	}
 	err = db.SetUserOnlineStatus(userId, false)

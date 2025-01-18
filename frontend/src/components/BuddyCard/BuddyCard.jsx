@@ -41,19 +41,7 @@ const BuddyCard = ({ buddyProfile }) => {
     }, [matched_user_id]);
 
     
-
-/*
-Need to have the picture 
-Need to have the Username // by default the first half of the email?
-Need to have the location
-Need to show interests
-*/
-
-
-
-
     return (
-
 <>
         <div className='content-container'>
 
