@@ -26,7 +26,6 @@ func GetUserInterests(w http.ResponseWriter, r *http.Request) {
 func GetIDUserInterests(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	userInterestIDs, err := db.GetAllUserInterestIDs(userID)
 	if err != nil {
 		log.Println("Error in GetUserInterestsId's", err)
@@ -37,9 +36,7 @@ func GetIDUserInterests(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetInterests(w http.ResponseWriter, r *http.Request) {
-
 	interests, err := db.GetInterestResponseBody()
-
 	if err != nil {
 		log.Println("Error getting interest response ", err)
 	}
@@ -70,6 +67,7 @@ func UpdateUserInterest(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Error adding interest to user", http.StatusInternalServerError)
 		return
 	}
+	db.UpdateMatchScoreForUser(userID)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(map[string]string{"message": "Interest added successfully"})

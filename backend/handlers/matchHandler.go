@@ -24,21 +24,16 @@ func RemoveMatch(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
-
 	matchId := payload.MatchId
-
 	if matchId == 0 {
 		http.Error(w, "Missing matchId", http.StatusBadRequest)
 		return
 	}
-	// checks if the user is logged in
 	_, err = GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
 	}
-
 	successMessage, err := db.UpdateUserMatchStatus(matchId, db.REMOVED)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{
@@ -47,33 +42,25 @@ func RemoveMatch(w http.ResponseWriter, r *http.Request) {
 }
 
 func RequestMatch(w http.ResponseWriter, r *http.Request) {
-
 	var payload MatchRequest
-
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
 		log.Println("Error decoding request body:", err)
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
 		return
 	}
-
 	matchId := payload.MatchId
-
 	if matchId == 0 {
 		http.Error(w, "Missing matchId", http.StatusBadRequest)
 		return
 	}
-
 	requesterId, err := GetCurrentUserID(r)
-
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
-
 	}
 	var successMessage string
 	err = db.SetRequesterIdForMatch(requesterId, matchId)
 	successMessage, err = db.UpdateUserMatchStatus(matchId, db.REQUESTED)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(map[string]string{
@@ -107,7 +94,6 @@ func ConfirmMatch(w http.ResponseWriter, r *http.Request) {
 }
 
 func BlockMatch(w http.ResponseWriter, r *http.Request) {
-
 	var payload MatchRequest
 	err := json.NewDecoder(r.Body).Decode(&payload)
 	if err != nil {
@@ -131,8 +117,6 @@ func BlockMatch(w http.ResponseWriter, r *http.Request) {
 		"message": successMessage,
 	})
 }
-
-// is online ?
 type MatchResponse struct {
 	MatchID                int    `json:"match_id"`
 	MatchScore             int    `json:"match_score"`
@@ -146,13 +130,12 @@ type MatchResponse struct {
 	IsOnline               bool   `json:"is_online"`
 }
 
-// returns  10 new matches for the user to see ordered by the best match score
+// Returns 10 best matches with the 'new' status
 func GetMatches(w http.ResponseWriter, r *http.Request) {
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
 	}
-	// userMatches, err := db.GetAllUserMatchesByUserId(userID1)
 	userMatches, err := db.GetTenNewMatchesByUserId(userID1)
 	if err != nil {
 		log.Println("Error getting user matches:", err)
@@ -164,9 +147,7 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 	var match MatchResponse
 	var matchProfile *models.ProfileInformation
 	var buddyID string
-
 	for _, userMatch := range userMatches {
-		// Displays correctly the matched Profile user data
 		if userMatch.UserID2 == userID1 {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID1)
 			buddyID = userMatch.UserID1
@@ -177,7 +158,6 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID2)
 			buddyID = userMatch.UserID1
 		}
-
 		if err != nil {
 			log.Println("Error getting user information:", err)
 		}
@@ -192,19 +172,12 @@ func GetMatches(w http.ResponseWriter, r *http.Request) {
 		match.IsOnline = matchProfile.IsOnline
 		matches = append(matches, match)
 	}
-
-	log.Println("Matches:", matches)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(matches)
 }
 
-// userMatches, err := db.GetAllUserMatchesByUserId(userID1)
-// userMatches, err := db.GetTenNewMatchesByUserId(userID1)
-
 func GetRequests(w http.ResponseWriter, r *http.Request) {
-	log.Println("GetRequests rout")
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
@@ -220,9 +193,7 @@ func GetRequests(w http.ResponseWriter, r *http.Request) {
 	var match MatchResponse
 	var matchProfile *models.ProfileInformation
 	var buddyID string
-
 	for _, userMatch := range userMatches {
-		// Displays correctly the matched Profile user data
 		if userMatch.UserID2 == userID1 {
 			matchProfile, err = db.GetUserInformation(userMatch.UserID1)
 			buddyID = userMatch.UserID1
@@ -236,13 +207,11 @@ func GetRequests(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			log.Println("Error getting user information:", err)
 		}
-
 		if userID1 == userMatch.Requester {
 			match.Requester = "true"
 		} else {
 			match.Requester = "false"
 		}
-		
 		match.MatchID = userMatch.ID
 		match.Status = userMatch.Status
 		match.MatchScore = userMatch.MatchScore
@@ -254,7 +223,6 @@ func GetRequests(w http.ResponseWriter, r *http.Request) {
 		match.IsOnline = matchProfile.IsOnline
 		matches = append(matches, match)
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(matches)
@@ -267,7 +235,6 @@ func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	// Get all user matches for the current user
 	userMatches, err := db.GetAllUserMatchesByUserId(userID1)
 	if err != nil {
 		log.Println("Error getting user matches:", err)
@@ -275,7 +242,6 @@ func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(`userMatches`, userMatches)
-	// Transform userMatches into MatchResponse objects
 	var matches []MatchResponse
 	for _, userMatch := range userMatches {
 		matchProfile, err := db.GetUserInformation(userMatch.UserID2)
@@ -295,15 +261,12 @@ func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		matches = append(matches, match)
 	}
-	// Sort matches by MatchScore in descending order
 	sort.Slice(matches, func(i, j int) bool {
 		return matches[i].MatchScore > matches[j].MatchScore
 	})
-	// Take the top 10 matches
 	if len(matches) > 10 {
 		matches = matches[:10]
 	}
-	// Encode the matches as JSON and send the response
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 	json.NewEncoder(w).Encode(matches)
@@ -339,7 +302,6 @@ type BuddiesResponse struct {
 
 // Returns the user's buddies who are connected
 func GetBuddies(w http.ResponseWriter, r *http.Request) {
-
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
@@ -348,15 +310,11 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Println("Error getting user connected matches:", err)
 	}
-
-	log.Println(`userBuddies`, userBuddies)
-
 	var buddies []BuddiesResponse
 	var buddy BuddiesResponse
 	var buddyProfile *models.ProfileInformation
 	var HasNotifications bool
 	for _, userMatch := range userBuddies {
-		// Displays correctly the matched Profile user data
 		if userMatch.UserID2 == userID1 {
 			buddyProfile, err = db.GetUserInformation(userMatch.UserID1)
 			if err != nil {
@@ -378,7 +336,6 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 				log.Println("Error getting HasNotifications:", err)
 			}
 		}
-
 		if err != nil {
 			log.Println("Error getting user information:", err)
 		}
@@ -393,9 +350,6 @@ func GetBuddies(w http.ResponseWriter, r *http.Request) {
 		buddy.ChatNotifications = HasNotifications
 		buddies = append(buddies, buddy)
 	}
-
-	log.Println("Buddies:", buddies)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(buddies)
@@ -416,34 +370,27 @@ type BuddyProfile struct {
 
 // Will get the match ID  and return the buddy profile.
 func GetBuddyProfile(w http.ResponseWriter, r *http.Request) {
-
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
 	}
-
 	userBuddies, err := db.GetAllConnectedMatchesByUserId(userID1)
 	if err != nil {
 		log.Println("Error getting user connected matches:", err)
 	}
-
 	log.Println(`userBuddies`, userBuddies)
-
 	var buddies []BuddiesResponse
 	var buddy BuddiesResponse
 	var buddyProfile *models.ProfileInformation
 	for _, userMatch := range userBuddies {
-		// Displays correctly the matched Profile user data
 		if userMatch.UserID2 == userID1 {
 			buddyProfile, err = db.GetUserInformation(userMatch.UserID1)
-
 			if err != nil {
 				log.Println("Error getting user information:", err)
 			}
 		} else {
 			buddyProfile, err = db.GetUserInformation(userMatch.UserID2)
 		}
-
 		if err != nil {
 			log.Println("Error getting user information:", err)
 		}
@@ -457,9 +404,6 @@ func GetBuddyProfile(w http.ResponseWriter, r *http.Request) {
 		buddy.IsOnline = buddyProfile.IsOnline
 		buddies = append(buddies, buddy)
 	}
-
-	log.Println("Buddies:", buddies)
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(buddies)

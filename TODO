@@ -8,12 +8,10 @@
  <<<<<<>>>>>>
 
 TODO- Landing page to  Dashboard  unless initial loading.
-TODO- Hot reload of matches. on profile update
 TODO- Add interests to View profile
 
 
-
-
+TODO- Hot reload of matches. on profile update
 DONE- Request do not connect if you are the requester
 DONE- Buddies  remove "request"
 DONE- Dismis match  sub with delete contact 
@@ -22,9 +20,6 @@ WIP- if buddied be able to open chat. // view profile
 DONE- load more matches button only if 10 connections. 
 TODO- check layout on mobile.
 DONE- online offline to be subbed with indication button -- component 
-
-
-
 
 DONE- Always clears localstorage when Logout
 
@@ -37,8 +32,8 @@ Hot reload of matches. on profile update
 
 WIP- Incoming connection requests can be rejected. 
         -TODO add logic for returning match respons on the front end
-TODO - Describe matching logic. -- HANNES 
 
+TODO - Describe matching logic. -- HANNES 
 TODO - return all marked interest not one per category -- MARKO
 
 TODO - An unread message icon appears when new chat messages are received in real time.

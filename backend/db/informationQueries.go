@@ -13,7 +13,6 @@ func SetUsername(userID, username string) error {
 		log.Printf("Error updating username for uuid=%s: %v", userID, err)
 		return fmt.Errorf("could not update username: %w", err)
 	}
-
 	return nil
 }
 
@@ -27,9 +26,8 @@ func GetUsername(userID string) string {
 	}
 	return queriedUsername
 }
-//TODO pass in a struct instead of multiple parameters
-func SetCity(userID, nation, region, city string, latitude, longitude float64) error {
 
+func SetCity(userID, nation, region, city string, latitude, longitude float64) error {
 	log.Println("Setting city", city, "for user", userID, "with latitude", latitude, "and longitude", longitude)
 	userQuery := `
 	UPDATE users 
@@ -40,13 +38,12 @@ func SetCity(userID, nation, region, city string, latitude, longitude float64) e
 		latitude = $4,
 		longitude = $5
 	WHERE uuid = $6
-`
+	`
 	_, err := DB.Exec(userQuery, city, nation, region, latitude, longitude, userID)
 	if err != nil {
 		log.Printf("Error updating city for uuid=%s: %v", userID, err)
 		return fmt.Errorf("could not update city: %w", err)
 	}
-
 	return nil
 }
 
@@ -68,7 +65,6 @@ func SetAbout(userID, about string) error {
 		log.Printf("Error updating about me for uuid=%s: %v", userID, err)
 		return fmt.Errorf("could not update the about me: %w", err)
 	}
-
 	return nil
 }
 
@@ -90,7 +86,6 @@ func SetBirthdate(userID string, birthdate time.Time) error {
 		log.Printf("Error updating birthdate for uuid=%s: %v", userID, err)
 		return fmt.Errorf("could not update birthdate: %w", err)
 	}
-
 	return nil
 }
 
@@ -106,20 +101,16 @@ func GetBirthdate(userID string) (string, int) {
 	if queriedBirthdate != "" {
 		birthdayTime, err := time.Parse("2006-01-02T15:04:05Z", queriedBirthdate)
 		if err != nil {
-
 			log.Printf("Error parsing birthday for user_id %s: %v", userID, err)
 			return "", 0
 		}
-
 		currentYear := time.Now().Year()
 		age = currentYear - birthdayTime.Year()
 		if birthdayTime.After(time.Now().AddDate(-age, 0, 0)) {
 			age--
 		}
 	} else {
-
 		age = 0
 	}
-
 	return queriedBirthdate, age
 }

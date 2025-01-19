@@ -17,11 +17,9 @@ func InitDB() error {
 	if err != nil {
 		return fmt.Errorf("error opening database: %w", err)
 	}
-
 	if err := db.Ping(); err != nil {
 		return fmt.Errorf("error connecting to database: %w", err)
 	}
-
 	DB = db
 	fmt.Println("Database connected successfully")
 	return nil

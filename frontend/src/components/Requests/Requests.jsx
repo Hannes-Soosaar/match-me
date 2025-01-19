@@ -32,9 +32,6 @@ import MatchCard from '../MatchCard/MatchCard.jsx';
             fetchData();
         }, [])
 
-
-// TODO: if you are the requester, you can cancel the request but not accept. How to implement it.
-
         return (
             <>
             <h1>Requests</h1>

@@ -144,7 +144,6 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                             <button onClick={handleRemoveMatch} className="match-card-button">
                                 Delete
                             </button>
-                    
                     </div>
                     </>
                 );

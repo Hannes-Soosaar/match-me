@@ -23,7 +23,6 @@ type UserResponse struct {
 func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	user, err := db.GetUserByID(userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -35,7 +34,6 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
@@ -43,7 +41,6 @@ func GetUserHandler(w http.ResponseWriter, r *http.Request) {
 func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	profile, err := db.GetUserProfileByID(userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -55,7 +52,6 @@ func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(profile)
 }
@@ -63,7 +59,6 @@ func GetUserProfileHandler(w http.ResponseWriter, r *http.Request) {
 func GetUserBioHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	userID := vars["id"]
-
 	profile, err := db.GetUserBioByID(userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -75,10 +70,8 @@ func GetUserBioHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(profile)
-
 }
 
 func GetMeBioHandler(w http.ResponseWriter, r *http.Request) {
@@ -88,16 +81,13 @@ func GetMeBioHandler(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Unauthorized: Missing or invalid token")
 		return
 	}
-
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
 		log.Printf("Error extracting user ID from token: %v", err)
 		return
 	}
-
 	profile, err := db.GetUserBioByID(currentUserID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -109,7 +99,6 @@ func GetMeBioHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(profile)
 
@@ -117,23 +106,19 @@ func GetMeBioHandler(w http.ResponseWriter, r *http.Request) {
 
 func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user *models.ProfileInformation
-
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
 		log.Printf("Unauthorized: Missing or invalid token")
 		return
 	}
-
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
 		log.Printf("Error extracting user ID from token: %v", err)
 		return
 	}
-
 	user, err = db.GetUserInformation(currentUserID)
 	if err != nil {
 		if err.Error() == "user not found" {
@@ -145,55 +130,43 @@ func GetCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
 func AuthorizationHandler(w http.ResponseWriter, r *http.Request) {
-	// Get Authorization header.
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
 		log.Printf("Unauthorized: Missing or invalid token")
 		return
 	}
-
-	// Extract token from the header.
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-
-	// Validate the token and check authorization.
 	_, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
 		log.Printf("Error validating token: %v", err)
 		return
 	}
-
-	// If authorized, respond with 200 OK.
 	w.WriteHeader(http.StatusOK)
 	log.Println("Authorization successful")
 }
 
 func GetLightCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 	var user *models.LightProfileInformation
-
 	authHeader := r.Header.Get("Authorization")
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		http.Error(w, "Unauthorized: Missing or invalid token", http.StatusUnauthorized)
 		log.Printf("Unauthorized: Missing or invalid token")
 		return
 	}
-
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
 		log.Printf("Error extracting user ID from token: %v", err)
 		return
 	}
-
 	user, err = db.GetLightUserInformation(currentUserID)
 	if err != nil {
 		if err.Error() == "user not found" {
@@ -205,22 +178,17 @@ func GetLightCurrentUserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(user)
 }
 
 func GetCurrentUserID(r *http.Request) (string, error) {
-
 	authHeader := r.Header.Get("Authorization")
-
 	if authHeader == "" || !strings.HasPrefix(authHeader, "Bearer ") {
 		log.Printf("Unauthorized: Missing or invalid token")
 		return "", errors.New("unauthorized: Missing or invalid token in header")
 	}
-
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		return "", err
@@ -235,16 +203,13 @@ func GetCurrentUserUUID(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Unauthorized: Missing or invalid token")
 		return
 	}
-
 	token := strings.TrimPrefix(authHeader, "Bearer ")
-
 	currentUserID, err := auth.ExtractUserIDFromToken(token)
 	if err != nil {
 		http.Error(w, "Unauthorized: Invalid or expired token", http.StatusUnauthorized)
 		log.Printf("Error extracting user ID from token: %v", err)
 		return
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(currentUserID)
 }
