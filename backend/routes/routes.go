@@ -36,6 +36,7 @@ func InitRoutes() *mux.Router {
 	// Profile routes
 	router.HandleFunc("/userInterests", handlers.GetUserInterests).Methods("GET")
 	router.HandleFunc("/userInterest", handlers.UpdateUserInterest).Methods("POST")
+	router.HandleFunc("/interests/{id}", handlers.GetUserBioHandler).Methods("GET")
 	router.HandleFunc("/interests", handlers.GetInterests).Methods("GET")
 	router.HandleFunc("/username", handlers.PostUsername).Methods("POST")
 	router.HandleFunc("/city", handlers.PostCity).Methods("POST")

@@ -37,6 +37,30 @@ const MatchCard = ({ userProfile, onUpdate }) => {
     }
 
     const [isModalOpen, setModalOpen] = useState(false);
+    const [userInterests, setUserInterests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    useEffect(() => {
+        // Fetch the interests of the matched user
+        const fetchInterests = async () => {
+            try {
+                const response = await axios.get(`/interests/${matched_user_id}`, {
+                    headers: {
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+                console.log('Interests:', response.data);
+                const values = Object.values(response.data || {}).flat();
+                setUserInterests(values);
+
+            } catch (error) {
+                console.error('Error fetching interests:', error);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+        fetchInterests();
+    }, [matched_user_id]);
 
     const handleViewMatchedProfile = () => {
         setModalOpen(true);
@@ -187,6 +211,13 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                     <h2>{matched_user_location }</h2>
                     <h3>MatchScore:</h3>
                     <p>{match_score}</p>
+                    <p>{isLoading ? (
+                        <p>Loading interests...</p>
+                        ) : userInterests.length > 0 ? (
+                            <p>{userInterests.join(', ')}</p> // Join array elements with commas and spaces
+                            ) : (
+                                <p>No interests available</p>
+                                )}</p>
                     
                 </div>
 

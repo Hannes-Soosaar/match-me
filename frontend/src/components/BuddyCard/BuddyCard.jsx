@@ -37,6 +37,8 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
     }
 
     const [isModalOpen, setModalOpen] = useState(false);
+    const [userInterests, setUserInterests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const handleViewMatchedProfile = () => {
         setModalOpen(true);
@@ -72,9 +74,13 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
                     },
                 });
                 console.log('Interests:', response.data);
-                // setUserInterests(response.data);
+                const values = Object.values(response.data || {}).flat();
+                setUserInterests(values);
+
             } catch (error) {
                 console.error('Error fetching interests:', error);
+            } finally {
+                setIsLoading(false);
             }
         };
         fetchInterests();
@@ -129,7 +135,13 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
                     <h2>{matched_user_location }</h2>
                     <h3>MatchScore:</h3>
                     <p>{match_score}</p>
-                    
+                    <p>{isLoading ? (
+                        <p>Loading interests...</p>
+                        ) : userInterests.length > 0 ? (
+                            <p>{userInterests.join(', ')}</p> // Join array elements with commas and spaces
+                            ) : (
+                                <p>No interests available</p>
+                                )}</p>
                 </div>
 
                 <div className="match-card-buttons">
