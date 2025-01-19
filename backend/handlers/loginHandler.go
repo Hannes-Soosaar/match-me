@@ -73,6 +73,54 @@ func LoginHandler(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"token": token})
 }
 
+
+func LoginAPIHandler(w http.ResponseWriter, r *http.Request) {
+    email := r.URL.Query().Get("email")
+    password := r.URL.Query().Get("password")
+    if password == "" || email == "" {
+        sendErrorResponse(w, "Email and password are required", http.StatusBadRequest)
+        log.Println("Email and password are required")
+        return
+    }
+    existingUser, err := db.GetUserByEmail(email)
+    if err != nil {
+        if errors.Is(err, db.ErrUserNotFound) {
+            sendErrorResponse(w, "Email or password is incorrect", http.StatusUnauthorized)
+            log.Println("Email or password is incorrect")
+            return
+        }
+        sendErrorResponse(w, "Error checking user existence", http.StatusInternalServerError)
+        log.Printf("Error checking user existence: %v", err)
+        return
+    }
+    if existingUser == nil || !auth.ComparePasswords(existingUser.PasswordHash, password) {
+        sendErrorResponse(w, "Email or password is incorrect", http.StatusUnauthorized)
+        log.Println("Email or password is incorrect")
+        return
+    }
+    token, err := auth.GenerateJWT(existingUser.ID)
+    if err != nil {
+        sendErrorResponse(w, "Error generating JWT", http.StatusInternalServerError)
+        log.Printf("Error generating JWT: %v", err)
+        return
+    }
+    if token == "" {
+        sendErrorResponse(w, "No token generated", http.StatusInternalServerError)
+        log.Println("Error token is empty")
+        return
+    }
+    err = db.UpdateMatchScoreForUser(existingUser.ID)
+    if err != nil {
+        log.Println("Error updating match score:", err)
+    }
+    err = db.SetUserOnlineStatus(existingUser.ID, true)
+    if err != nil {
+        log.Println("Error setting user online status:", err)
+    }
+    w.Header().Set("Content-Type", "application/json")
+    json.NewEncoder(w).Encode(map[string]string{"token": token})
+}
+
 func LogoutHandler(w http.ResponseWriter, r *http.Request) {
 	userId, err := GetCurrentUserID(r)
 	log.Println("userId after we got it from GetCurrentUserID(r)", userId)

@@ -31,4 +31,23 @@ Check if the docker container is running with ```docker ps```.<br>
 Start only the database server by running ```make start-db``` in the project root directory.<br>
 Reset the database with ```make reset-db``` in the project root directory.<br>
 
-creating 150 demo users takes 4 min.
+## Demo bots.
+
+To create 100 demo users send a request localhost:4000/spawn/bots to the backend server.By default the backend server <br>
+will be running on localhost:4000 for the default case running  in the browser <br>
+of machine that is running the server will create 100 demo users.
+
+the demo users will be named as numbers. Example 1@1.com will be user1 and the password will be 1. starting from user 0@0.com
+
+The amount of demo users created can be modified from the backend backend/db/const.go file by modifying the <br>
+"DEMO_USER_COUNT" constant. As the demo accounts are created using the same paths as creating a regular user <br>
+with all the matching scores calculated for each connection adding a lot of demo users at once can take <br>
+a while.
+
+## API
+
+To get the authorization token.
+
+localhost:4000/login/api/?email=value1&password=value2
+http://localhost:4000/login/api?email=1@1.com&password=1
+

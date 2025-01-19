@@ -16,6 +16,7 @@ func InitRoutes() *mux.Router {
 	// user routes
 	router.HandleFunc("/authorization", handlers.AuthorizationHandler).Methods("POST")
 	router.HandleFunc("/login", handlers.LoginHandler).Methods("POST")
+	router.HandleFunc("/login/api", handlers.LoginAPIHandler).Methods("GET")
 	router.HandleFunc("/logout", handlers.LogoutHandler).Methods("GET")
 	router.HandleFunc("/register", handlers.RegisterHandler).Methods("POST")
 	router.HandleFunc("/users/{id}", handlers.GetUserHandler).Methods("GET")
@@ -57,6 +58,7 @@ func InitRoutes() *mux.Router {
 	router.HandleFunc("/connections", handlers.GetConnections).Methods("GET")
 	router.HandleFunc("/buddies", handlers.GetBuddies).Methods("GET")
 	router.HandleFunc("/recommendations", handlers.GetRecommendationsHandler).Methods("GET")
+
 
 	/*
 		EXTERNAL API ROUTES
