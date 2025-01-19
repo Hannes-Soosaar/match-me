@@ -274,7 +274,7 @@ const Profile = () => {
     };
 
     useEffect(() => {
-        setUsernameText("Set your username");
+        setUsernameText("Username");
         const formattedDate = formatDateForInput(rawbirthdate);
         setBirthdate(formattedDate);
     }, [rawbirthdate]);
@@ -335,7 +335,7 @@ const Profile = () => {
                            </button>
                        </div>
                        {/* About Me Section */}
-                        <div className='profile-text'>Write something about yourself</div>
+                        <div className='profile-text'>About Me</div>
                         <div className='input-textarea'>
                             <textarea
                                 placeholder='About me'
@@ -356,7 +356,8 @@ const Profile = () => {
             </section>
             <section className="profile-right">
                 {/* Interests Modal */}
-                        <>
+                        <div className='interest-display'>
+                        <div className='profile-text'>Interests</div>
                         <InterestPresenter/>
                             <div className="submit-container">
                                 <button className='submit' onClick={handleEditUserInterests}>
@@ -367,9 +368,10 @@ const Profile = () => {
                         <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                             <InterestSection />
                         </Modal>
-                        </>
+                        </div>
                         {/* Birthdate Section */}
-                        <div className='profile-text'>When were you born?</div>
+                        <div className='interest-display'>
+                        <div className='profile-text'>Birthday</div>
                         <div className='input'>
                             <input
                                 type="date"
@@ -386,9 +388,10 @@ const Profile = () => {
                                 Submit Birthdate
                             </button>
                         </div>
+                        </div>
                         {/* Location Section */}
-                        <div className='profile-text'>Your Location</div>
-                        <div className="location-display">
+                        <div className='profile-text'>Location</div>
+                        <div className="interest-display">
                             {!isEditingLocation ? (
                                 <>
                                     <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>

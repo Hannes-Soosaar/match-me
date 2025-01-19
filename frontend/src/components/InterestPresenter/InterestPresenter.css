@@ -47,6 +47,7 @@
   }
 
   .heading {
+    display: flex;
     color: #FF6969;
     font-size: 36px;
     font-weight: bold;

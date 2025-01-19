@@ -30,7 +30,6 @@ const InterestPresenter = () => {
 
   return (
     <div className="interest-section">
-      <p className="heading">Your interests:</p>
       {bioValues.length > 0 ? (
         <div className="interests-container">
           {bioValues.map((value, index) => (
@@ -40,7 +39,7 @@ const InterestPresenter = () => {
           ))}
         </div>
       ) : (
-        <p>Choose your interests</p>
+        <></>
       )}
     </div>
   );

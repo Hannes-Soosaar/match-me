@@ -117,6 +117,21 @@
     align-items: center;
 }
 
+.interest-display {
+    display: flex; /* Use Flexbox for layout */
+    flex-direction: column; /* Stack elements vertically */
+    flex-wrap: wrap; /* Allow wrapping to handle multiple buttons */
+    justify-content: center; /* Center items horizontally */
+    align-items: center; /* Center items vertically */
+    gap: 10px; /* Space between buttons */
+    padding: 20px; /* Optional padding inside the box */
+    border-radius: 10px; /* Optional rounded corners */
+    max-width: 600px; /* Limit the width of the box */
+    margin: 0 auto; /* Center the box itself horizontally */
+    min-height: 200px; /* Optional: set a minimum height for the box */
+}
+
+
 .submit-container {
     display: flex;
     gap: 10px;
