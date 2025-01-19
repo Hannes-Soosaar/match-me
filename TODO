@@ -1,37 +1,23 @@
-
- >>> BUGS >>>>
-    A user can match with self.
-    When you close all tabs and windows localstorage is not cleared.  handele Using BroadcastChannel (Modern Approach)
-
- 
-    When a new user is created and they switch to mathches they will see a match score of 0 with everyone. The score is recalculated when you login.
- <<<<<<>>>>>>
-
-
- The email address is not shown, except to the owner of the profile.
-        The email address is not returned in API calls for other users
-        The chat history API data is paginated.
+DONE- The user experience is excellent, usable and well designed.
 
 TODO- Landing page to  Dashboard  unless initial loading.
-TODO- Add interests to View profile
-TODO- check layout on mobile.
+
+WIP- Add interests to View profile
+
+TODO- check layout on mobile. When checking
+
 TODO- Matches to be visible on Dashboard
-TODO - Describe matching logic. -- HANNES 
-TODO -  The user experience is excellent, usable and well designed.
+
+
+
+WIP - Describe matching logic. -- HANNES 
 WIP- if buddied be able to open chat. // view profile
 
-
 // OPTIONAL
-
-TODO - Match notification. ? is this needed..
-TODO - API documentation. for minimum API DEV.
-
-TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
-
+DONE - API documentation. for minimum API DEV.
+DONE- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
 
 // API DEV. CHECK
-
-
 returns all connections for the user
 API GET /connections
 response
@@ -56,7 +42,6 @@ API GET /recommendations
     "2c434578-9bd4-49bb-a264-d399d07b5c75",
     "c4c40123-d3f0-40cc-ac90-009f86109636"
 ]
-
 
 returns the users Profile data for the user with the included ID
 API GET /users/{id}/profile: 
@@ -107,7 +92,7 @@ Response
     "age": "25",
     "profile_picture": "bot1.png"
 }
- 
+
 returns the users biographical data for the logged in user (the data used to power recommendations).
 API GET /me/bio. 
 
@@ -193,8 +178,6 @@ DONE- The recommendations endpoint only returns a list of ids. (make /recommenda
 DONE- The bio endpoint returns biographical data. (make /bio  return biographical data)
 
 // EXTRAS
-
-
 
 ----------CHECK--------------
 CHECK - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
