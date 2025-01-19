@@ -7,7 +7,6 @@ import (
 	"match_me_backend/db"
 	"match_me_backend/models"
 	"net/http"
-	"sort"
 )
 
 // Handle match requests from the front end
@@ -242,34 +241,55 @@ func GetRecommendationsHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	log.Println(`userMatches`, userMatches)
-	var matches []MatchResponse
+	var matchIDs []string
+	var buddyID string
 	for _, userMatch := range userMatches {
-		matchProfile, err := db.GetUserInformation(userMatch.UserID2)
+		if userMatch.UserID2 == userID1 {
+			buddyID = userMatch.UserID1
+			if err != nil {
+				log.Println("Error getting user information:", err)
+			}
+		} else {
+			buddyID = userMatch.UserID1
+		}
+		
 		if err != nil {
 			log.Println("Error getting user information:", err)
-			continue // Skip this match if there's an error
 		}
-		match := MatchResponse{
-			MatchID:                userMatch.ID,
-			Status:                 userMatch.Status,
-			MatchScore:             userMatch.MatchScore,
-			MatchedUserName:        matchProfile.Username,
-			MatchedUserPicture:     matchProfile.Picture,
-			MatchedUserDescription: matchProfile.About,
-			MatchedUserLocation:    matchProfile.Nation,
-			IsOnline:               matchProfile.IsOnline,
-		}
-		matches = append(matches, match)
+		match := buddyID
+		
+		matchIDs= append(matchIDs, match)
 	}
-	sort.Slice(matches, func(i, j int) bool {
-		return matches[i].MatchScore > matches[j].MatchScore
-	})
-	if len(matches) > 10 {
-		matches = matches[:10]
-	}
+	
+	// for _, userMatch := range userMatches {
+	// 	matchProfile, err := db.GetUserInformation(userMatch.UserID2)
+	// 	if err != nil {
+	// 		log.Println("Error getting user information:", err)
+	// 		continue 
+	// 	}
+	// 	match := MatchResponse{
+	// 		MatchedUserID:             userMatch.UserID1
+	// 		M
+			// MatchID:                userMatch.ID,
+			// Status:                 userMatch.Status,
+			// MatchScore:             userMatch.MatchScore,
+			// MatchedUserName:        matchProfile.Username,
+			// MatchedUserPicture:     matchProfile.Picture,
+			// MatchedUserDescription: matchProfile.About,
+			// MatchedUserLocation:    matchProfile.Nation,
+			// IsOnline:               matchProfile.IsOnline,
+	// 	}
+	// 	matches = append(matches, match)
+	// }
+	// sort.Slice(matches, func(i, j int) bool {
+	// 	return matches[i].MatchScore > matches[j].MatchScore
+	// })
+	// if len(matches) > 10 {
+	// 	matches = matches[:10]
+	// }
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(matches)
+	json.NewEncoder(w).Encode(matchIDs)
 }
 
 func GetConnections(w http.ResponseWriter, r *http.Request) {

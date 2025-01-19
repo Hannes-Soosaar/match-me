@@ -24,7 +24,6 @@ TRUNCATE TABLE profiles
 
 */
 
-
 // RUN ONLY ONCE WHEN NEEDED. DO NOT RUN AGAIN BEFORE REMOVING ALL ENTRIES FROM THE TABLES
 func InitDemoUsers() bool {
 	for i := 0; i < DEMO_USER_COUNT; i++ {

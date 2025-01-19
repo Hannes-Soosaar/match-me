@@ -7,6 +7,11 @@
     When a new user is created and they switch to mathches they will see a match score of 0 with everyone. The score is recalculated when you login.
  <<<<<<>>>>>>
 
+
+ The email address is not shown, except to the owner of the profile.
+        The email address is not returned in API calls for other users
+        The chat history API data is paginated.
+
 TODO- Landing page to  Dashboard  unless initial loading.
 TODO- Add interests to View profile
 TODO- check layout on mobile.
@@ -21,21 +26,171 @@ WIP- if buddied be able to open chat. // view profile
 TODO - Match notification. ? is this needed..
 TODO - API documentation. for minimum API DEV.
 
+TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
+
 
 // API DEV. CHECK
 
-CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
-/users/{id}: which returns the user's name and link to the profile picture.
-/users/{id}/profile: which returns the users "about me" type information.
-/users/{id}/bio: which returns the users biographical data (the data used to power recommendations).
-/me: which is a shortcut to /users/{id} for the authenticated user. You should also implement /me/profile and /me/bio.
-/users/{id}/bio:
 
-TODO- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
-TODO- The connections endpoint only returns a list of ids. (make /connections return a list of ID's )
-TODO- The recommendations endpoint only returns a list of ids. (make /recommendations return a list of ID's )
-TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
-TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
+returns all connections for the user
+API GET /connections
+response
+[
+    "9a5721fc-3499-4b8f-85cb-0dce0480daf6",
+    "6e5e70f1-7931-40bb-b54f-374f63c72512",
+    "db863918-54f0-4496-8a7e-599252ffc9ff",
+    "9d5744b0-7b87-47be-8113-cd4f62a0300b",
+    "ea115f4a-d64c-43fc-b09b-35e5649aea22",
+    "369b46cb-20ef-44d9-965a-85ffab4ccd26",
+    "4fe97a4d-ee06-4c25-a855-08a42c79b1cc"
+]
+
+
+returns all recommendations  (it returns the same value as all connections as all connections are recommended if no filters are applied)
+API GET /recommendations 
+[
+    "ef12a23b-21e0-4f61-bfcc-5d4e39213cce",
+    "ea85dc93-2fc8-4f7b-bffe-92c77ed6d7ec",
+    ...
+    "f92dc7aa-c5b2-4619-8c8c-a9ababe309c4",
+    "2c434578-9bd4-49bb-a264-d399d07b5c75",
+    "c4c40123-d3f0-40cc-ac90-009f86109636"
+]
+
+
+returns the users Profile data for the user with the included ID
+API GET /users/{id}/profile: 
+{
+    "id": 0,
+    "uuid": "232e45c5-5d19-4bc0-95c8-46c32a0bad52",
+    "username": "User11",
+    "about_me": "I am a user 11",
+    "profile_picture": "bot11.png",
+    "created_at": "2025-01-19T08:07:23.124022Z",
+    "birthdate": "1999-01-01T00:00:00Z"
+}
+
+returns the users Profile data for the user with the included ID
+
+API GET /users/{id}
+Response
+{
+    "id": "2c434578-9bd4-49bb-a264-d399d07b5c75",
+    "uuid": "",
+    "email": "1@1.com",
+    "password_hash": "$2a$10$xlr4VDCDOMe1QSXmIijE8.y.8m.O26s3FnO1aHENqPE9JwtTTgUai",
+    "created_at": "0001-01-01T00:00:00Z",
+    "user_city": "",
+    "user_nation": "",
+    "user_region": "",
+    "latitude": 59.378025,
+    "longitude": 27.728493,
+    "register_location": "",
+    "brows_location": "",
+    "is_online": false
+}
+
+returns the users Profile data for the logged in user (the data used to power recommendations).
+API GET /me/profile 
+Response
+
+{
+    "username": "User1",
+    "email": "1@1.com",
+    "created_at": "2025-01-19T08:07:22.532912Z",
+    "is_online": false,
+    "user_city": "Tartu",
+    "user_nation": "Estonia",
+    "user_region": "Tartu County",
+    "about_me": "I am a user 1",
+    "birthdate": "1999-01-01T00:00:00Z",
+    "age": "25",
+    "profile_picture": "bot1.png"
+}
+ 
+returns the users biographical data for the logged in user (the data used to power recommendations).
+API GET /me/bio. 
+
+Response Example
+{
+    "Communication": [
+        "voice chat "
+    ],
+    "Distance": [
+        "100-500 km"
+    ],
+    "Genre": [
+        "FPS",
+        "Simulation"
+    ],
+    "Goals": [
+        "Ranking",
+        "Socialize",
+        "For laughs"
+    ],
+    "Language": [
+        "Estonian"
+    ],
+    "Platform": [
+        "X-box"
+    ],
+    "Play Style": [
+        "Enthusiast",
+        "AFK"
+    ],
+    "Session": [
+        "I can go all day, every day."
+    ],
+    "Vibe": [
+        "Chill",
+        "Laid-back"
+    ]
+}
+
+returns the users biographical data for the user with the included ID (the data used to power recommendations).
+API GET /users/{id}/bio:
+{
+    "Communication": [
+        "voice chat "
+    ],
+    "Distance": [
+        "100-500 km"
+    ],
+    "Genre": [
+        "FPS",
+        "Simulation"
+    ],
+    "Goals": [
+        "Ranking",
+        "Socialize",
+        "For laughs"
+    ],
+    "Language": [
+        "Estonian"
+    ],
+    "Platform": [
+        "X-box"
+    ],
+    "Play Style": [
+        "Enthusiast",
+        "AFK"
+    ],
+    "Session": [
+        "I can go all day, every day."
+    ],
+    "Vibe": [
+        "Chill",
+        "Laid-back"
+    ]
+}
+
+DONE- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
+
+DONE- The connections endpoint only returns a list of ids. (make /connections return a list of ID's)
+
+DONE- The recommendations endpoint only returns a list of ids. (make /recommendations return a list of ID's) !!!!
+
+DONE- The bio endpoint returns biographical data. (make /bio  return biographical data)
 
 // EXTRAS
 

@@ -46,8 +46,207 @@ a while.
 
 ## API
 
-To get the authorization token.
+To use the API endpoints, you must first create a regular profile.
 
-localhost:4000/login/api/?email=value1&password=value2
+once you have created your profile, you can now access the API endpoints by logging in.
+
+To login with a default setup
+
 http://localhost:4000/login/api?email=1@1.com&password=1
 
+This will return a string, this is you Bearer Token.
+
+To access endpoints that require authentication you must include the Bearer token with any requests <br>
+including the Bearer Token in the authorization header.
+
+**For testing purposes it is suggested to use the free postman app more information on https://web.postman.co/home**
+
+
+## API Documentation
+
+### Get All Connections
+**Endpoint:** `GET /connections`
+
+**Description:** Returns all connections for the user.
+
+**Response:**
+```json
+[
+    "9a5721fc-3499-4b8f-85cb-0dce0480daf6",
+    "6e5e70f1-7931-40bb-b54f-374f63c72512",
+    "db863918-54f0-4496-8a7e-599252ffc9ff",
+    ... ,
+    "ea115f4a-d64c-43fc-b09b-35e5649aea22",
+    "369b46cb-20ef-44d9-965a-85ffab4ccd26",
+    "4fe97a4d-ee06-4c25-a855-08a42c79b1cc"
+]
+```
+
+### Get All Recommendations
+**Endpoint:** `GET /recommendations`
+
+**Description:** Returns all recommendations. It returns the same value as all connections if no filters are applied.
+
+**Response:**
+```json
+[
+    "ef12a23b-21e0-4f61-bfcc-5d4e39213cce",
+    "ea85dc93-2fc8-4f7b-bffe-92c77ed6d7ec",
+    ... ,
+    "2c434578-9bd4-49bb-a264-d399d07b5c75",
+    "c4c40123-d3f0-40cc-ac90-009f86109636"
+]
+```
+
+### Get User Profile by ID
+**Endpoint:** `GET /users/{id}/profile`
+
+**Description:** Returns the user's profile data for the user with the included ID.
+
+**Response:**
+```json
+{
+    "id": 0,
+    "uuid": "232e45c5-5d19-4bc0-95c8-46c32a0bad52",
+    "username": "User11",
+    "about_me": "I am a user 11",
+    "profile_picture": "bot11.png",
+    "created_at": "2025-01-19T08:07:23.124022Z",
+    "birthdate": "1999-01-01T00:00:00Z"
+}
+```
+
+### Get User Data by ID
+**Endpoint:** `GET /users/{id}`
+
+**Description:** Returns the user's data for the user with the included ID.
+
+**Response:**
+```json
+{
+    "id": "2c434578-9bd4-49bb-a264-d399d07b5c75",
+    "uuid": "",
+    "email": "1@1.com",
+    "password_hash": "$2a$10$xlr4VDCDOMe1QSXmIijE8.y.8m.O26s3FnO1aHENqPE9JwtTTgUai",
+    "created_at": "0001-01-01T00:00:00Z",
+    "user_city": "",
+    "user_nation": "",
+    "user_region": "",
+    "latitude": 59.378025,
+    "longitude": 27.728493,
+    "register_location": "",
+    "brows_location": "",
+    "is_online": false
+}
+```
+
+### Get Logged-in User Profile
+**Endpoint:** `GET /me/profile`
+
+**Description:** Returns the user's profile data for the logged-in user (the data used to power recommendations).
+
+**Response:**
+```json
+{
+    "username": "User1",
+    "email": "1@1.com",
+    "created_at": "2025-01-19T08:07:22.532912Z",
+    "is_online": false,
+    "user_city": "Tartu",
+    "user_nation": "Estonia",
+    "user_region": "Tartu County",
+    "about_me": "I am a user 1",
+    "birthdate": "1999-01-01T00:00:00Z",
+
+
+    "age": "25",
+
+
+    "profile_picture": "bot1.png"
+}
+```
+
+### Get Logged-in User Biographical Data
+**Endpoint:** `GET /me/bio`
+
+**Description:** Returns the user's biographical data for the logged-in user (the data used to power recommendations).
+
+**Response Example:**
+```json
+{
+    "Communication": [
+        "voice chat "
+    ],
+    "Distance": [
+        "100-500 km"
+    ],
+    "Genre": [
+        "FPS",
+        "Simulation"
+    ],
+    "Goals": [
+        "Ranking",
+        "Socialize",
+        "For laughs"
+    ],
+    "Language": [
+        "Estonian"
+    ],
+    "Platform": [
+        "X-box"
+    ],
+    "Play Style": [
+        "Enthusiast",
+        "AFK"
+    ],
+    "Session": [
+        "I can go all day, every day."
+    ],
+    "Vibe": [
+        "Chill",
+        "Laid-back"
+    ]
+}
+```
+
+### Get User Biographical Data by ID
+**Endpoint:** `GET /users/{id}/bio`
+
+**Description:** Returns the user's biographical data for the user with the included ID (the data used to power recommendations).
+
+**Response:**
+```json
+{
+    "Communication": [
+        "voice chat "
+    ],
+    "Distance": [
+        "100-500 km"
+    ],
+    "Genre": [
+        "FPS",
+        "Simulation"
+    ],
+    "Goals": [
+        "Ranking",
+        "Socialize",
+        "For laughs"
+    ],
+    "Language": [
+        "Estonian"
+    ],
+    "Platform": [
+        "X-box"
+    ],
+    "Play Style": [
+        "Enthusiast",
+        "AFK"
+    ],
+    "Session": [
+        "I can go all day, every day."
+    ],
+    "Vibe": [
+        "Chill",
+        "Laid-back"
+    ]
+}
