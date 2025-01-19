@@ -9,43 +9,22 @@
 
 TODO- Landing page to  Dashboard  unless initial loading.
 TODO- Add interests to View profile
-
-
-TODO- Hot reload of matches. on profile update
-DONE- Request do not connect if you are the requester
-DONE- Buddies  remove "request"
-DONE- Dismis match  sub with delete contact 
-TODO- Matches to be visible on Dashboard
-WIP- if buddied be able to open chat. // view profile
-DONE- load more matches button only if 10 connections. 
 TODO- check layout on mobile.
-DONE- online offline to be subbed with indication button -- component 
-
-DONE- Always clears localstorage when Logout
-
-Hot reload of matches. on profile update
-
-
-
-
-
-
-WIP- Incoming connection requests can be rejected. 
-        -TODO add logic for returning match respons on the front end
-
+TODO- Matches to be visible on Dashboard
 TODO - Describe matching logic. -- HANNES 
-TODO - return all marked interest not one per category -- MARKO
+TODO -  The user experience is excellent, usable and well designed.
+WIP- if buddied be able to open chat. // view profile
 
-TODO - An unread message icon appears when new chat messages are received in real time.
-TODO - if you requested match connection you can not accept.
-TODO - Match notification.
+
+// OPTIONAL
+
+TODO - Match notification. ? is this needed..
 TODO - API documentation. for minimum API DEV.
 
 
 // API DEV. CHECK
 
 CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
-
 /users/{id}: which returns the user's name and link to the profile picture.
 /users/{id}/profile: which returns the users "about me" type information.
 /users/{id}/bio: which returns the users biographical data (the data used to power recommendations).
@@ -54,18 +33,15 @@ CHECK -The me endpoints correctly shortcuts to the appropriate users endpoint.
 
 TODO- The users endpoint returns a name and profile link. ( make /users  and make it return name and profile link)
 TODO- The connections endpoint only returns a list of ids. (make /connections return a list of ID's )
-
 TODO- The recommendations endpoint only returns a list of ids. (make /recommendations return a list of ID's )
 TODO- The bio endpoint returns biographical data. (make /bio  return biographical data)
 TODO- This includes when the user is not allowed to see a profile. This is not quite how HTTP404 is described, but it means that a bad actor cannot distinguish between "does not exist", and "has blocked the user".
 
 // EXTRAS
-TODO -  The user experience is excellent, usable and well designed.
 
-? -The recommendation algorithm is exceptional. The hardest!
+
 
 ----------CHECK--------------
-
 CHECK - Create two users in an empty system with obviously poor matching characteristics. Check to make sure that they are not recommended.
 CHECK - Create two users in an empty system, who appear like they should obviously match
 CHECK- The application is secure. Information is appropriately shown to the correct authenticated users only.
@@ -86,6 +62,20 @@ CHECK - Create two users in an empty system with obviously poor matching charact
 CHECK - Create two users in an empty system, who appear like they should obviously match
 -------------DONE--------------
 Kood/Jõhvi
+
+DONE- Hot reload of matches. on profile update --> when an interest is added removed, all matches with that user are updated.
+DONE- Request do not connect if you are the requester
+DONE- Buddies  remove "request"
+DONE- Dismis match  sub with delete contact 
+
+DONE- load more matches button only if 10 connections. 
+DONE- online offline to be subbed with indication button -- component 
+DONE- Always clears localstorage when Logout
+DONE- Incoming connection requests can be rejected. 
+        -DONE add logic for returning match respons on the front end
+DONE - return all marked interest not one per category -- MARKO
+DONE - An unread message icon appears when new chat messages are received in real time.
+DONE - if you requested match connection you can not accept.
 DONE - An offline/online indicator is shown on profile and chat views.
 DONE - A typing in progress indicator is shown.
 DONE - It implements proximity-based location filtering.

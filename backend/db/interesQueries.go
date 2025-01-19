@@ -146,7 +146,6 @@ func GetUserBioByID(userID string) (map[string][]string, error) {
 	return interestsAndCategories, nil
 }
 
-// TODO recalculate all matches for the user
 func AddInterestToUser(interestID int, userID string) error {
 	isInterest, err := UserHasInterestByInterestId(interestID, userID)
 	if err != nil {
@@ -164,7 +163,6 @@ func AddInterestToUser(interestID int, userID string) error {
 	return nil
 }
 
-// TODO recalculate all matches for the user
 func RemoveInterestFromUser(interestID int, userID string) error {
 	query := "DELETE FROM user_interests WHERE user_id = $1 AND interest_id = $2"
 	_, err := DB.Exec(query, userID, interestID)
