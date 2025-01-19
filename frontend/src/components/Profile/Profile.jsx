@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import './Profile.css';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
@@ -20,7 +19,6 @@ const Profile = () => {
     const [profilePic, setProfilePic] = useState(null);
     const [previewPic, setPreviewPic] = useState(null);
     const [isEditingLocation, setIsEditingLocation] = useState(false);
-    const [isEditingInterests, setIsEditingInterests] = useState(false);
     const [formData, setFormData] = useState({
         country: '',
         state: '',
@@ -37,9 +35,6 @@ const Profile = () => {
     const handleCloseModal = () => {
         setModalOpen(false);
     };
-
-
-    const navigate = useNavigate();
 
     const authToken = localStorage.getItem('token');
 
@@ -285,218 +280,180 @@ const Profile = () => {
     }, [rawbirthdate]);
 
     return (
-        <div style={{ textAlign: 'center' }}>
-
-
-            <div className='profile-container'>
-                <div className='inputs'>
-                    {/* Username Section */}
-                    <div className='profile-text'>{usernameText}</div>
-                    <div className='input'>
-                        <input
-                            type='text'
-                            placeholder='Username'
-                            maxLength="20"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className='submit-container'>
-                        <button
-                            className='submit'
-                            onClick={handleSubmitUsername}
-                        >
-                            Submit Username
-                        </button>
-                    </div>
-
-
-                    {/* About Me Section */}
-                    <div className='profile-text'>Write something about yourself</div>
-                    <div className='input-textarea'>
-                        <textarea
-                            placeholder='About me'
-                            maxLength="500"
-                            value={about}
-                            onChange={(e) => setAboutMe(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className='submit-container'>
-                        <button
-                            className='submit'
-                            onClick={handleSubmitAboutMe}
-                        >
-                            Submit About Me
-                        </button>
-                    </div>
-
-
-// use modal ?
-                    {/* {!isEditingInterests ? (
-                    <>
-                        <InterestPresenter />
-                        <div className="submit-container">
-                        <button className="submit" onClick={() => setIsEditingInterests(true)}>
-                            Edit Interests
-                        </button>
+        <body className="profile-body">
+        <main className="profile-main">
+            <section className="profile-left" style={{Align: 'centre'}}>
+                {/* Profile Picture Section */}
+                        <div className='input-profile-pic'>
+                            <label htmlFor="file-input" className="profile-pic-label">
+                                {previewPic ? (
+                                    <img src={previewPic} alt="Preview" />
+                                ) : (
+                                    <img src={defaultProfilePic} alt="Default Profile" />
+                                )}
+                            </label>
+                            <input
+                                id="file-input"
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                style={{ display: 'none' }}
+                            />
                         </div>
-                    </>
-                    ) : (
-                    <>
-                        <InterestSection />
-                        <div className="submit-container">
-                        <button className="submit" onClick={() => setIsEditingInterests(false)}>
-                            Close Interests
-                        </button>
-                        </div>
-                    </>
-                    )} */}
-
-                    <>
-                    <InterestPresenter/>
-                        <div className="submit-container">
-                            <button onClick={handleEditUserInterests}>
-                                open Interests
+                        <div className='submit-container'>
+                            <button
+                                className='submit'
+                                onClick={handleSubmitProfilePic}
+                            >
+                                Submit Picture
+                            </button>
+                            <button
+                                className='submit'
+                                onClick={handleSubmitRemovePicture}
+                            >
+                                Remove Picture
                             </button>
                         </div>
-
-                    <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                        <InterestSection />
-                    </Modal>
-                    </>
-                    
-
-
-
-
-
-
-
-
-                    {/* Birthdate Section */}
-                    <div className='profile-text'>When were you born?</div>
-                    <div className='input'>
-                        <input
-                            type="date"
-                            value={birthdate === '0001-01-01' ? '2000-01-01' : birthdate}
-                            onChange={(e) => setBirthdate(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className='submit-container'>
-                        <button
-                            className='submit'
-                            onClick={handleSubmitBirthdate}
-                        >
-                            Submit Birthdate
-                        </button>
-                    </div>
-
-                    {/* Profile Picture Section */}
-                    <div className='profile-text'>Upload a profile picture</div>
-                    <div className='input-profile-pic'>
-                        <label htmlFor="file-input" className="profile-pic-label">
-                            {previewPic ? (
-                                <img src={previewPic} alt="Preview" />
-                            ) : (
-                                <img src={defaultProfilePic} alt="Default Profile" />
-                            )}
-                        </label>
-                        <input
-                            id="file-input"
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageChange}
-                            style={{ display: 'none' }}
-                        />
-                    </div>
-                    <div className='submit-container'>
-                        <button
-                            className='submit'
-                            onClick={handleSubmitProfilePic}
-                        >
-                            Submit Picture
-                        </button>
-                        <button
-                            className='submit'
-                            onClick={handleSubmitRemovePicture}
-                        >
-                            Remove Picture
-                        </button>
-                    </div>
-
-
-                    {/* Location Section */}
-                    <div className='profile-text'>Your Location</div>
-
-                    <div className="location-display">
-                        {!isEditingLocation ? (
-                            <>
-                                <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>
-                                <p><strong className='location-text'>State:</strong> {formData.state || 'Not Set'}</p>
-                                <p><strong className='location-text'>City:</strong> {formData.city || 'Not Set'}</p>
-                                <div className='submit-container'>
-                                    <button
-                                        className='submit'
-                                        onClick={() => setIsEditingLocation(true)}
-                                    >
-                                        Edit Location
-                                    </button>
-                                </div>
-                            </>
-                        ) : (
-                            <div className="inputGroupLocation">
-                                <div className="inputField">
-                                    <h6>Country:</h6>
-                                    <CountrySelect
-                                        onChange={onCountryChange}
-                                        placeHolder={formData.country || "Select Country"}
-                                    />
-                                </div>
-                                <div className="inputField">
-                                    <h6>State:</h6>
-                                    <StateSelect
-                                        countryid={countryId}
-                                        onChange={onStateChange}
-                                        placeHolder={formData.state || "Select State"}
-                                        disabled={!countryId}
-                                    />
-                                </div>
-                                <div className="inputField">
-                                    <h6>City:</h6>
-                                    <CitySelect
-                                        countryid={countryId}
-                                        stateid={stateId}
-                                        onChange={handleCitySelect}
-                                        placeHolder={formData.city || "Select City"}
-                                        disabled={!countryId || !stateId}
-                                    />
-                                </div>
-                                <div className='submit-container'>
-                                    <button
-                                        className='submit'
-                                        onClick={() => {
-                                            handleSubmitLocation();
-                                            setIsEditingLocation(false);
-                                        }}
-                                    >
-                                        Save Location
-                                    </button>
-                                    <button
-                                        className='submit'
-                                        onClick={() => setIsEditingLocation(false)}
-                                    >
-                                        Cancel
-                                    </button>
-                                </div>
+                {/* Username Section */}
+                        <div className='profile-text'>{usernameText}</div>
+                       <div className='input'>
+                           <input
+                               type='text'
+                               placeholder='Username'
+                               maxLength="20"
+                               value={username}
+                               onChange={(e) => setUsername(e.target.value)}
+                               required
+                           />
+                       </div>
+                       <div className='submit-container'>
+                           <button
+                               className='submit'
+                               onClick={handleSubmitUsername}
+                           >
+                               Submit Username
+                           </button>
+                       </div>
+                       {/* About Me Section */}
+                        <div className='profile-text'>Write something about yourself</div>
+                        <div className='input-textarea'>
+                            <textarea
+                                placeholder='About me'
+                                maxLength="500"
+                                value={about}
+                                onChange={(e) => setAboutMe(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='submit-container'>
+                            <button
+                                className='submit'
+                                onClick={handleSubmitAboutMe}
+                            >
+                                Submit About Me
+                            </button>
+                        </div>
+            </section>
+            <section className="profile-right">
+                {/* Interests Modal */}
+                        <>
+                        <InterestPresenter/>
+                            <div className="submit-container">
+                                <button className='submit' onClick={handleEditUserInterests}>
+                                    Open Interests
+                                </button>
                             </div>
-                        )}
-                    </div>
-                </div>
-            </div>
-        </div>
+    
+                        <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                            <InterestSection />
+                        </Modal>
+                        </>
+                        {/* Birthdate Section */}
+                        <div className='profile-text'>When were you born?</div>
+                        <div className='input'>
+                            <input
+                                type="date"
+                                value={birthdate === '0001-01-01' ? '2000-01-01' : birthdate}
+                                onChange={(e) => setBirthdate(e.target.value)}
+                                required
+                            />
+                        </div>
+                        <div className='submit-container'>
+                            <button
+                                className='submit'
+                                onClick={handleSubmitBirthdate}
+                            >
+                                Submit Birthdate
+                            </button>
+                        </div>
+                        {/* Location Section */}
+                        <div className='profile-text'>Your Location</div>
+                        <div className="location-display">
+                            {!isEditingLocation ? (
+                                <>
+                                    <p><strong className='location-text'>Country:</strong> {formData.country || 'Not Set'}</p>
+                                    <p><strong className='location-text'>State:</strong> {formData.state || 'Not Set'}</p>
+                                    <p><strong className='location-text'>City:</strong> {formData.city || 'Not Set'}</p>
+                                    <div className='submit-container'>
+                                        <button
+                                            className='submit'
+                                            onClick={() => setIsEditingLocation(true)}
+                                        >
+                                            Edit Location
+                                        </button>
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="inputGroupLocation">
+                                    <div className="inputField">
+                                        <h6>Country:</h6>
+                                        <CountrySelect
+                                            onChange={onCountryChange}
+                                            placeHolder={formData.country || "Select Country"}
+                                        />
+                                    </div>
+                                    <div className="inputField">
+                                        <h6>State:</h6>
+                                        <StateSelect
+                                            countryid={countryId}
+                                            onChange={onStateChange}
+                                            placeHolder={formData.state || "Select State"}
+                                            disabled={!countryId}
+                                        />
+                                    </div>
+                                    <div className="inputField">
+                                        <h6>City:</h6>
+                                        <CitySelect
+                                            countryid={countryId}
+                                            stateid={stateId}
+                                            onChange={handleCitySelect}
+                                            placeHolder={formData.city || "Select City"}
+                                            disabled={!countryId || !stateId}
+                                        />
+                                    </div>
+                                    <div className='submit-container'>
+                                        <button
+                                            className='submit'
+                                            onClick={() => {
+                                                handleSubmitLocation();
+                                                setIsEditingLocation(false);
+                                            }}
+                                        >
+                                            Save Location
+                                        </button>
+                                        <button
+                                            className='submit'
+                                            onClick={() => setIsEditingLocation(false)}
+                                        >
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+            </section>
+        </main>
+    </body>
     );
 
 };

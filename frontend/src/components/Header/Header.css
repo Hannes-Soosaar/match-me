@@ -55,12 +55,26 @@
 
 }
 
+.online-status {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.indicator-text {
+    font-size: 1rem;
+}
+
 .status-light {
     width: 10px;
     height: 10px;
+    background-color: gray;
     border-radius: 50%;
     display: inline-block;
     margin-right: 5px; /* Space between lights */
+    position: relative; /* Ensures proper alignment with text */
+    transform: scale(1); /* Prevents scaling with zoom */
+    transform-origin: center; /* Keeps the size consistent */
 }
 
 /* Default light styles for the secondary light */

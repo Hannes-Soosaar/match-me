@@ -90,15 +90,17 @@
 }
 
 .input-profile-pic img {
-    width: 150px;
-    height: 150px;
+    padding: 20px;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     object-fit: cover;
+    text-align: center;
 }
 
 .input-profile-pic img:hover {
-    width: 150px;
-    height: 150px;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     object-fit: cover;
     cursor: pointer;
@@ -173,3 +175,30 @@ select {
     width: 200px; 
 }
 
+.profile-body {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    min-height: 100vh; 
+    margin: 0;
+    padding: 0;
+}
+
+.profile-main {
+    display: flex;
+    width: 90%; 
+    max-width: 1200px;
+    gap: 20px; 
+}
+
+.profile-left,
+.profile-right {
+    flex: 1; 
+    display: flex;
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
