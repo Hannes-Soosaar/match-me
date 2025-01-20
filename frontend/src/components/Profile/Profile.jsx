@@ -288,7 +288,7 @@ const Profile = () => {
             <section className="profile-left" style={{Align: 'centre'}}>
                 {/* Profile Picture Section */}
                         <div className='input-profile-pic'>
-                            <p>click on the image to select a new profile image</p>
+                            
                             <label htmlFor="file-input" className="profile-pic-label">
                                 {previewPic ? (
                                     <img src={previewPic} alt="Preview" />
@@ -304,6 +304,7 @@ const Profile = () => {
                                 style={{ display: 'none' }}
                             />
                         </div>
+                        <p className='suggestion'>click on the image to select a new profile image</p>
                         <div className='submit-container'>
                             <button
                                 className='submit'
@@ -317,6 +318,7 @@ const Profile = () => {
                             >
                                 Remove Picture
                             </button>
+                            
                         </div>
                 {/* Username Section */}
                         <div className='profile-text'>{usernameText}</div>
