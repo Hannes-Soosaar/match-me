@@ -3,6 +3,7 @@ import axios from 'axios';
 import './Dashboard.css';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
 import { Link } from 'react-router-dom';
+import Matches from '../Matches/Matches';
 
 /* 
 
@@ -89,10 +90,9 @@ const Dashboard = () => {
                         <p>{`${userData?.user_nation}, ${userData?.user_region}, ${userData?.user_city}`}</p>
                         <p>{userData?.about_me}</p>
                         <button onClick={handleEditProfile} >Edit profile</button>
-
                     </div>
-
                 </div>
+                <Matches></Matches>
             </div>
         </>
     );

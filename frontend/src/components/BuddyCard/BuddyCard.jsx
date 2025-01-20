@@ -4,7 +4,7 @@ import axios from 'axios';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
 import Modal from '../Modal/Modal.jsx';
 import Chat from '../Chat/Chat.jsx';
-
+import InterestPresenter from '../InterestPresenter/InterestPresenter.jsx';
 
 const authToken = localStorage.getItem('token');
 
@@ -121,39 +121,45 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
     return (
         <>
             <div className="match-card">
-                <div className="match-card-status">
-                <div className="user-name" >{matched_user_name}</div>  
-                {is_online ? <img src={onlineURL} alt="User online" className="status-icon"></img>
-                    :
-                <img src={offlineURL} alt="User offline" className="status-icon"></img>
-                }
+                <div className="profile-left"> 
+                    <div className="match-card-status">
+
+                    <div className="user-name" >{matched_user_name}</div>  
+                    {is_online ? <img src={onlineURL} alt="User online" className="status-icon"></img>
+                        :
+                    <img src={offlineURL} alt="User offline" className="status-icon"></img>
+                    }
+                    </div>
+
+
+                    <div className="match-card-info">
+                        <img className="match-card-image" src={userProfilePic} alt ="User"></img>
+
+                        <h2>{matched_user_location }</h2>
+                        <h3>MatchScore:</h3>
+                        <p>{match_score}</p>
+                        <p>{isLoading ? (
+                            <p>Loading interests...</p>
+                            ) : userInterests.length > 0 ? (
+                                <p>{userInterests.join(', ')}</p> // Join array elements with commas and spaces
+                                ) : (
+                                    <p>No interests available</p>
+                                    )}</p>
+                    </div>
+
+                    <div className="match-card-buttons">
+                        {renderButtons()}   
+                        <button onClick= {() => console.log("open chat")}   className="match-card-button">
+                            Chat
+                        </button>
+                    </div>
+                </div>                 
+
+                <div className = "profile-right">
+                <InterestPresenter/>
                 </div>
 
-                <div className="match-card-info">
-                    <img className="match-card-image" src={userProfilePic} alt ="User"></img>
-
-                    <h2>{matched_user_location }</h2>
-                    <h3>MatchScore:</h3>
-                    <p>{match_score}</p>
-                    <p>{isLoading ? (
-                        <p>Loading interests...</p>
-                        ) : userInterests.length > 0 ? (
-                            <p>{userInterests.join(', ')}</p> // Join array elements with commas and spaces
-                            ) : (
-                                <p>No interests available</p>
-                                )}</p>
-                </div>
-
-                <div className="match-card-buttons">
-                    {renderButtons()}   
-                    <button onClick={handleViewMatchedProfile} className="match-card-button">
-                        Chat
-                    </button>
-                </div>
-            </div>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <Chat></Chat>
-            </Modal>
+            </div>  
         </>
 );
 

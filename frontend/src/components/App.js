@@ -47,7 +47,6 @@ function App() {
             <Route
               path='/chat'
               element={isAuthenticated && profileExists ? <Chat /> : <Navigate to="/" />} />
-            
             <Route
                 path='/Requests'
                 element={isAuthenticated && profileExists ? <Requests/> : <Navigate to="/" />} />

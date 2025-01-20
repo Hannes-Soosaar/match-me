@@ -38,8 +38,6 @@ const Matches = () => {
     }
 
     return (
-
-        // There is an issue with getting a undefined value when requesting a connection.
         <>
             <h1>Matches</h1>
             <div className="body-div">
