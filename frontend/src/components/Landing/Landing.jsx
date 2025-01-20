@@ -39,7 +39,6 @@ const Landing = () => {
         
     // </div>
     <>
-    <LoginSignup />
     </>
     );
 };
