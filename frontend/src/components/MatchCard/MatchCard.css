@@ -64,7 +64,9 @@
     height: fit-content;
     width: fit-content;
     border: 1px solid black;
-    background-color: hsl(271, 83%, 72%);
+    font-size: 14px;
+    color: black;
+    background-color: #FF6969;
 } 
 
 .status-icon {
