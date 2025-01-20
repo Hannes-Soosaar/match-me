@@ -77,7 +77,7 @@ const handleInterestClick = (interestId) => {
 
   return (
         <div className='interest-section' > 
-        <p className='heading'>Select your interest and matching parameters</p>
+        <p className='heading'>Interests & Parameters</p>
             {categories.map((category) => (
               <React.Fragment key={category.category_id}>
                 <div className ='category-section' key={category.category_id}>
@@ -95,8 +95,8 @@ const handleInterestClick = (interestId) => {
                 <br/>
                 </React.Fragment>
               ))}
-            <button key={save} className='save-button' onClick={() =>  window.location.reload() }>
-            Save interest and exit
+            <button key={save} className='submit' style={{Align: 'centre'}} onClick={() =>  window.location.reload() }>
+            Save & Exit
             </button>
         </div>
   );

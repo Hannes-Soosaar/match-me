@@ -143,11 +143,11 @@
     justify-content: center;
     align-items: center;
     width: 200px;
-    height: 40px;
+    height: 60px;
     color: whitesmoke;
     background: #FF6969;
     border-radius: 50px;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: bold;
     cursor: pointer;
 }

@@ -1,27 +1,32 @@
 .selected {
-    background-color: hsla(276, 94%, 75%, 0.5);
-    }
+  font-size: 12px;
+  font-weight: bold;
+  color: aliceblue;
+  
+  background-color: #FF6969;
+  }
 
 .unselected {
     background-color: hsla(0, 0%, 55%, 0.3);
     }
 
-  button{
-    margin: 5px;
-    padding: 5px;
-    border-radius: 15px;
-    height: fit-content;
-    width: fit-content;
-    border: 1px solid black;
-  }
+    button{
+      margin: 5px;
+      padding: 7px;
+      border-radius: 20px;
+      height: fit-content;
+      width: fit-content;
+      border: 1px solid black;
+    }
 
   .interest-section {
+    background: linear-gradient(#FFF9DE, #FFD3B0);
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
     justify-content: left;
     justify-items: left ;
-    margin: 10px;
+    border-block-color: linear-gradient(#FFF9DE, #FFD3B0);
   }
 
   .category-section {
@@ -33,10 +38,12 @@
 
   .button-section {
     display: flex;
-    flex-direction: row;
-    justify-content: start;
+    flex-direction: center;
+    justify-content: center;
     margin: 10px;
+    justify-content: center;
   }
+  
   .title-section {
     display: flex;
     flex-direction: row;
@@ -44,9 +51,31 @@
     min-width: 125px;
     margin: 10px;
     margin-right: 10px;
+    color: #FF6969;
+    font-size: 20px;
+    font-weight: bold;
   }
 
   .heading {
-    font-size: 1.5em;
+    font-size: 2.5em;
     font-weight: bold;
   }
+
+  .submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    height: 60px;
+    color: whitesmoke;
+    background: #FF6969;
+    border-radius: 50px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.submit:hover {
+    color: hsla(0, 0%, 96%, 0.8);
+    background: hsl(0, 100%, 71%, 0.8);
+}

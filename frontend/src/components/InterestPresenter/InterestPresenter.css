@@ -1,8 +1,9 @@
 .selected {
   font-size: 15px;
   font-weight: bold;
+  color: aliceblue;
   
-  background-color: hsla(241, 95%, 63%, 0.685);
+  background-color: #FF6969;
   }
 
 .unselected {
@@ -25,6 +26,7 @@
     justify-content: left;
     justify-items: left ;
     margin: 10px;
+    
   }
 
   .category-section {
@@ -39,6 +41,7 @@
     flex-direction: row;
     justify-content: start;
     margin: 10px;
+    justify-content: center;
   }
   .title-section {
     display: flex;

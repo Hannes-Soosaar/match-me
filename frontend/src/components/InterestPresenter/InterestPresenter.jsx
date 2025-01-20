@@ -29,7 +29,7 @@ const InterestPresenter = () => {
   }, [authToken]);
 
   return (
-    <div className="interest-section">
+    <div className="interest-sections">
       {bioValues.length > 0 ? (
         <div className="interests-container">
           {bioValues.map((value, index) => (
