@@ -6,12 +6,7 @@ import { Link } from 'react-router-dom';
 import Matches from '../Matches/Matches';
 
 /* 
-
-
-userData = {
-    "user_id": 1,  
-    "username": "testuser",
-    
+This page is not used, as it did not provide any additional functionality to the project.
 */
 const Dashboard = () => {
     const [userData, setUserData] = useState(null); // Store user data
@@ -92,7 +87,6 @@ const Dashboard = () => {
                         <button onClick={handleEditProfile} >Edit profile</button>
                     </div>
                 </div>
-                <Matches></Matches>
             </div>
         </>
     );

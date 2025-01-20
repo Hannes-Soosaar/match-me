@@ -2,9 +2,10 @@ import React, { useEffect, useState, useContext } from 'react';
 import './BuddyCard.css';
 import axios from 'axios';
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
-import Modal from '../Modal/Modal.jsx';
-import Chat from '../Chat/Chat.jsx';
-import InterestPresenter from '../InterestPresenter/InterestPresenter.jsx';
+import InterestPresenter from '../InterestPresenter/InterestPresenter';
+
+
+
 
 const authToken = localStorage.getItem('token');
 
@@ -24,6 +25,10 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
         matched_user_picture,
         matched_user_description, 
         matched_user_location } = buddyProfile;  
+
+        console.log("buddy profile: " + buddyProfile.matched_user_id)
+        console.log("buddy profile: " + buddyProfile.requester)
+
 
         const basePictureURL = "http://localhost:4000/uploads/";
         const onlineURL = "/images/OnlineIconPNG.png"
@@ -121,46 +126,37 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
     return (
         <>
             <div className="match-card">
-                <div className="profile-left"> 
                     <div className="match-card-status">
-
-                    <div className="user-name" >{matched_user_name}</div>  
+                    <h3 className="user-name" >{matched_user_name}</h3>  
                     {is_online ? <img src={onlineURL} alt="User online" className="status-icon"></img>
                         :
                     <img src={offlineURL} alt="User offline" className="status-icon"></img>
                     }
                     </div>
-
-
                     <div className="match-card-info">
                         <img className="match-card-image" src={userProfilePic} alt ="User"></img>
-
-                        <h2>{matched_user_location }</h2>
-                        <h3>MatchScore:</h3>
-                        <p>{match_score}</p>
-                        <p>{isLoading ? (
-                            <p>Loading interests...</p>
-                            ) : userInterests.length > 0 ? (
-                                <p>{userInterests.join(', ')}</p> // Join array elements with commas and spaces
-                                ) : (
-                                    <p>No interests available</p>
-                                    )}</p>
+                        <h3>Location: {matched_user_location }</h3>
+                        <h3>MatchScore: {match_score}</h3>
+                        <p>{matched_user_description}</p>
+                       
+                    <div >
+                        {userInterests.map((interest) => (
+                        <button className="interest-button"
+                        key={interest.id}
+                        >
+                        {interest}
+                        </button>
+                        ))} 
+                    </div>  
                     </div>
-
                     <div className="match-card-buttons">
                         {renderButtons()}   
-                        <button onClick= {() => console.log("open chat")}   className="match-card-button">
+                        <button onClick= {() => window.location.href = '/chat'}   className="match-card-button">
                             Chat
                         </button>
                     </div>
                 </div>                 
-
-                <div className = "profile-right">
-                <InterestPresenter/>
-                </div>
-
-            </div>  
-        </>
+    </>
 );
 
 }

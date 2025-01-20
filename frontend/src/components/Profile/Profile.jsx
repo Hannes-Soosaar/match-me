@@ -108,11 +108,12 @@ const Profile = () => {
                     },
                 }
             );
-            alert('Username updated successfully!');
+            // alert('Username updated successfully!');
         } catch (error) {
             console.error('Error updating username:', error);
             alert('Failed to update username.');
         }
+        window.location.reload();
     };
 
     const handleSubmitAboutMe = async () => {
@@ -126,7 +127,7 @@ const Profile = () => {
                     },
                 }
             );
-            alert('About Me updated successfully!');
+            // alert('About Me updated successfully!');
         } catch (error) {
             console.error('Error updating About Me:', error);
             alert('Failed to update About Me.');
@@ -148,7 +149,7 @@ const Profile = () => {
                     },
                 }
             );
-            alert('Birthdate updated successfully!');
+            // alert('Birthdate updated successfully!');
         } catch (error) {
             console.error('Error updating birthdate:', error);
             alert('Failed to update birthdate.');
@@ -158,6 +159,7 @@ const Profile = () => {
     const handleSubmitProfilePic = async () => {
         if (!profilePic) {
             alert('Please select a profile picture.');
+            console.log('No profile picture selected');
             return;
         }
 
@@ -171,7 +173,7 @@ const Profile = () => {
                     Authorization: `Bearer ${authToken}`,
                 },
             });
-            alert('Profile picture updated successfully!');
+            // alert('Profile picture updated successfully!');
         } catch (error) {
             console.error('Error updating profile picture:', error);
             alert('Failed to update profile picture.');
@@ -189,7 +191,7 @@ const Profile = () => {
                     },
                 }
             );
-            alert('Profile picture removed successfully!');
+            window.location.reload();
         } catch (error) {
             console.error('Error removing profile picture:', error);
             alert('Failed to remove profile picture.');
@@ -218,7 +220,7 @@ const Profile = () => {
                     },
                 }
             );
-            alert('Location updated successfully!');
+            // alert('Location updated successfully!');
             setIsEditingLocation(false);
         } catch (error) {
             console.error('Error updating location:', error);
@@ -271,6 +273,7 @@ const Profile = () => {
             setPreviewPic(reader.result);
         };
         reader.readAsDataURL(file);
+        handleSubmitProfilePic();
     };
 
     useEffect(() => {
@@ -285,6 +288,7 @@ const Profile = () => {
             <section className="profile-left" style={{Align: 'centre'}}>
                 {/* Profile Picture Section */}
                         <div className='input-profile-pic'>
+                            <p>click on the image to select a new profile image</p>
                             <label htmlFor="file-input" className="profile-pic-label">
                                 {previewPic ? (
                                     <img src={previewPic} alt="Preview" />
@@ -305,7 +309,7 @@ const Profile = () => {
                                 className='submit'
                                 onClick={handleSubmitProfilePic}
                             >
-                                Submit Picture
+                                Update Picture
                             </button>
                             <button
                                 className='submit'
@@ -331,7 +335,7 @@ const Profile = () => {
                                className='submit'
                                onClick={handleSubmitUsername}
                            >
-                               Submit Username
+                            Update Username
                            </button>
                        </div>
                        {/* About Me Section */}
@@ -350,7 +354,7 @@ const Profile = () => {
                                 className='submit'
                                 onClick={handleSubmitAboutMe}
                             >
-                                Submit About Me
+                                Update About Me
                             </button>
                         </div>
             </section>
@@ -361,7 +365,7 @@ const Profile = () => {
                         <InterestPresenter/>
                             <div className="submit-container">
                                 <button className='submit' onClick={handleEditUserInterests}>
-                                    Open Interests
+                                    Edit Interests
                                 </button>
                             </div>
     
@@ -385,7 +389,7 @@ const Profile = () => {
                                 className='submit'
                                 onClick={handleSubmitBirthdate}
                             >
-                                Submit Birthdate
+                                Update Birthdate
                             </button>
                         </div>
                         </div>
@@ -442,7 +446,7 @@ const Profile = () => {
                                                 setIsEditingLocation(false);
                                             }}
                                         >
-                                            Save Location
+                                            Update Location
                                         </button>
                                         <button
                                             className='submit'

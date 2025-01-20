@@ -111,27 +111,27 @@ function Header() {
 
                     {isAuthenticated ? (
                         <>
-                            <Link to="/dashboard" className="nav-link">
+                            <Link to="/profile" className="nav-link">
                                 Dashboard
                             </Link>
                             {/* <Link to="/profile" className="nav-link">
                                     Profile
                                 </Link> */}
                             <Link to="/matches" className="nav-link">
-                                Matches
+                                Recommendations
                             </Link>
                             <Link to="/Requests" className="nav-link">
                                 Requests
                             </Link>
                             <Link to="/connections" className="nav-link">
-                                Buddies
+                                Matches
                             </Link>
                             <Link to="/chat" className="nav-link">
                                 Chat
                             </Link>
                         </>
                     ) : (
-                        <Link to='/' className="logo">
+                        <Link to='/login' className="logo">
                             Gamers Pot
                         </Link>
 

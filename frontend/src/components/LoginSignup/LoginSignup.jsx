@@ -32,7 +32,7 @@ const LoginSignup = () => {
                 localStorage.setItem('token', response.data.token)
                 //alert('Login successful') - probably don't need alerts, just use errorMessage to send a message and then redirect
                 setErrorMessage('Login successful')
-                window.location.href = '/dashboard';
+                window.location.href = '/profile';
             } else {
                 //alert('Sign-up successful, please log in')
                 setErrorMessage('Sign-up successful, please log in')

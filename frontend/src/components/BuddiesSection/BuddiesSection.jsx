@@ -29,8 +29,8 @@ const Matches = () => {
                 if (response.data === null) {
                     response.data = [];
                 }
-                console.log(response.data);
                 setMatches(response.data);
+                console.log(response.data);
             }
             catch (error) {
                 console.error('Error fetching data: ', error)
@@ -41,7 +41,7 @@ const Matches = () => {
 
     return (
         <>
-            <h1>Buddies</h1>
+            <h1>Matches</h1>
             <div className="body-div">
                 <div className="body-sides"></div>
                 <div className='body-content'>

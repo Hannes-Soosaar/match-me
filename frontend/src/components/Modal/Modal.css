@@ -17,7 +17,7 @@
     padding: 20px;
     border-radius: 30px;
     position: relative;
-    max-width: auto;
+    max-width: fit-content;
     width:auto;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
 }

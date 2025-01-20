@@ -31,25 +31,25 @@ function App() {
               element={isAuthenticated && !profileExists ? <Navigate to="/profile" /> : <Landing />} />
             <Route
               path='/login'
-              element={!isAuthenticated ? <LoginSignup /> : <Navigate to="/" />} />
-            <Route
+              element={!isAuthenticated ? <LoginSignup /> : <Navigate to="/login" />} />
+            {/* <Route
               path='/dashboard'
-              element={isAuthenticated && profileExists ? <Dashboard /> : <Navigate to="/profile" />} />
+              element={isAuthenticated && profileExists ? <Dashboard /> : <Navigate to="/profile" />} /> */}
             <Route
               path='/profile'
-              element={isAuthenticated ? <Profile /> : <Navigate to="/" />} />
+              element={isAuthenticated ? <Profile /> : <Navigate to="/login" />} />
             <Route
               path='/matches'
-              element={isAuthenticated && profileExists ? <Matches /> : <Navigate to="/" />} />
+              element={isAuthenticated && profileExists ? <Matches /> : <Navigate to="/login" />} />
             <Route
               path='/connections'
-              element={isAuthenticated && profileExists ? <BuddiesSection /> : <Navigate to="/" />} />
+              element={isAuthenticated && profileExists ? <BuddiesSection /> : <Navigate to="/login" />} />
             <Route
               path='/chat'
-              element={isAuthenticated && profileExists ? <Chat /> : <Navigate to="/" />} />
+              element={isAuthenticated && profileExists ? <Chat /> : <Navigate to="/login" />} />
             <Route
                 path='/Requests'
-                element={isAuthenticated && profileExists ? <Requests/> : <Navigate to="/" />} />
+                element={isAuthenticated && profileExists ? <Requests/> : <Navigate to="/login" />} />
             </Routes>
         </div>
       </BrowserRouter >

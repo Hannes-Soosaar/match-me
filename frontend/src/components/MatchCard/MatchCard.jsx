@@ -26,6 +26,10 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         matched_user_description, 
         matched_user_location } = userProfile;  
 
+
+        console.log("buddy profile: " + userProfile.matched_user_id)
+        console.log("buddy profile: " + userProfile.requester)
+
     const basePictureURL = "http://localhost:4000/uploads/";
     const onlineURL = "/images/OnlineIconPNG.png"
     const offlineURL = "/images/OfflineIconPNG.png"
@@ -117,71 +121,56 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         window.location.reload()
     };
 
-    const handleBlockMatch = async () => {
-        try {
-            const response = await axios.put('/matches/block', { match_id }, {
-                headers: {
-                    Authorization: `Bearer ${authToken}`,
-                },
-            });
-            console.log('Match Blocked:', response.data);
-            onUpdate(match_id);
-            // You can implement additional logic like updating the UI or showing a success message
-        } catch (error) {
-            console.error('Error blocking user:', error);
-        }
-        window.location.reload()
-    };
-
-
     const isRequester = requester === "true";
 
     const renderButtons = () => {
         switch (status) {
             case 'new':
                 return (
-                    <>
+                    <div className="match-card">
                         <button onClick={handleRequestMatch} className="match-card-button">
                             Request
                         </button>
                         <button onClick={handleRemoveMatch} className="match-card-button">
                             Dismiss match
                         </button>
-                    </>
+                    </div>
                 );
             case 'requested':
                 return (
                     <>
                     {!isRequester && (
-                        <>
-                            <button onClick={handleConnectMatch} className="match-card-button">
+                        <div className="match-card-buttons">
+                            <button onClick={handleConnectMatch} className="">
                                 Connect
                             </button>
-                        </>
+                        </div>
                     )}
                     {isRequester && (
                         <>
-                        <div>Your Buddy Request is pending</div>
+                        <div className="match-card-requested-info">
+                        <h3 className="message" >Your Buddy Request is pending</h3>
+                        </div>
                         </>
                     )}
-                    <div>
+                    <div className="match-card-buttons">
                             <button onClick={handleRemoveMatch} className="match-card-button">
-                                Delete
+                                Cancel Request
                             </button>
                     </div>
-                    </>
+                </>
                 );
             case 'blocked':
                 return (
-                    <>
+                    <div className="match-card-buttons">
                         <p>
                             You are not authorized to contact this user.
                         </p>
-                    </>
+                    </div>
                 );
             default:
                 return (
-                    <>
+                    <div className="match-card-buttons">
                         <button onClick={handleRequestMatch} className="match-card-button">
                             Request
                         </button>
@@ -189,7 +178,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                         <button onClick={handleRemoveMatch} className="match-card-button">
                             Dismiss match
                         </button>
-                    </>
+                    </div>
                 );
         }
     };
@@ -209,28 +198,25 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                     <img className="match-card-image" src={userProfilePic} alt ="User"></img>
 
                     <h2>{matched_user_location }</h2>
-                    <h3>MatchScore:</h3>
-                    <p>{match_score}</p>
-                    <p>{isLoading ? (
-                        <p>Loading interests...</p>
-                        ) : userInterests.length > 0 ? (
-                            <p>{userInterests.join(', ')}</p> // Join array elements with commas and spaces
-                            ) : (
-                                <p>No interests available</p>
-                                )}</p>
+                    <h3>MatchScore: {match_score}</h3>
                     
-                </div>
 
-                <div className="match-card-buttons">
-                    {renderButtons()}   
-                    <button onClick={handleViewMatchedProfile} className="match-card-button">
-                        View Profile
-                    </button>
                 </div>
+                {renderButtons()}
+                <h3>Interest:</h3>
+                <div>
+                        {userInterests.map((interest) => (
+                        <button className="interest-button"
+                        key={interest.id}
+                        >
+                        {interest}
+                        </button>
+                        ))} 
+                </div> 
             </div>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            {/* <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                 <BuddyCard buddyProfile={userProfile} />
-            </Modal>
+            </Modal> */}
         </>
     )
 }

@@ -28,6 +28,12 @@
     justify-items: left ;
     border-block-color: linear-gradient(#FFF9DE, #FFD3B0);
   }
+  .save-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+  }
 
   .category-section {
     display: flex;

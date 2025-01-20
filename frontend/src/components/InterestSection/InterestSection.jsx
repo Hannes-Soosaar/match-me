@@ -95,9 +95,12 @@ const handleInterestClick = (interestId) => {
                 <br/>
                 </React.Fragment>
               ))}
+            <div className='save-section'>
             <button key={save} className='submit' style={{Align: 'centre'}} onClick={() =>  window.location.reload() }>
             Save & Exit
             </button>
+
+            </div>
         </div>
   );
 
