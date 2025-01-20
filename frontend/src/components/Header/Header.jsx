@@ -132,7 +132,6 @@ function Header() {
                         </>
                     ) : (
                         <Link to='/login' className="logo">
-                            Gamers Pot
                         </Link>
 
                     )}

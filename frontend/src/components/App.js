@@ -28,7 +28,7 @@ function App() {
           <Routes>
             <Route exact
               path='/'
-              element={isAuthenticated && !profileExists ? <Navigate to="/profile" /> : <Landing />} />
+              element={isAuthenticated && !profileExists ? <Navigate to="/profile" /> : <LoginSignup />} />
             <Route
               path='/login'
               element={!isAuthenticated ? <LoginSignup /> : <Navigate to="/login" />} />
