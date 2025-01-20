@@ -141,7 +141,7 @@ function Header() {
                 <div className="nav-right">
                     {isAuthenticated && (
                         <div className="online-status">
-                            <span className="indicator-text">{isOnline === true ? `${displayName} ` : isOnline === false ? `${displayName} ` : 'Loading...'}</span>
+                            <span className="nav-link">{isOnline === true ? `${displayName} ` : isOnline === false ? `${displayName} ` : 'Loading...'}</span>
                             <span
                                 className={`status-light ${isOnline === true
                                     ? 'online' // Green if online

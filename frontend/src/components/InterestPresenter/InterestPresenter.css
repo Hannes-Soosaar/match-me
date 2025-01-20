@@ -1,5 +1,8 @@
 .selected {
-    background-color: hsla(276, 94%, 75%, 0.5);
+  font-size: 15px;
+  font-weight: bold;
+  text-color:
+    background-color: hsla(241, 95%, 63%, 0.685);
     }
 
 .unselected {
@@ -8,8 +11,8 @@
 
   button{
     margin: 5px;
-    padding: 5px;
-    border-radius: 15px;
+    padding: 7px;
+    border-radius: 20px;
     height: fit-content;
     width: fit-content;
     border: 1px solid black;

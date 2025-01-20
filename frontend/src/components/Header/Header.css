@@ -66,6 +66,10 @@
 }
 
 .status-light {
+    display: flex;
+    margin-bottom: 0px;
+    font-size: calc(0.8vw + 0.8vh);
+    text-decoration: none;
     width: 10px;
     height: 10px;
     background-color: gray;
