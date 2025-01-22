@@ -33,7 +33,7 @@ const InterestPresenter = () => {
       {bioValues.length > 0 ? (
         <div className="interests-container">
           {bioValues.map((value, index) => (
-            <button key={index} className="selected">
+            <button key={index} className="selected-interest-presenter">
               {value}
             </button>
           ))}
@@ -43,7 +43,7 @@ const InterestPresenter = () => {
       )}
     </div>
   );
-  
+
 };
 
 export default InterestPresenter;

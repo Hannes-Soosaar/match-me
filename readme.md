@@ -22,7 +22,7 @@
 ```npm install```.
 4. Add a JWT secret key in the backend .env file ```JWT_SECRET = "a5b39010c7r7894jf8d8n98a83750t4gs6d5h54aq903831085ja1s5d6df4"```
 5. Run ```docker-compose build``` in project directory.
-6. Start the database, backend, and frontend servers all at the same time by running ```make start``` in the project root directory.
+6. Start the database, backend, and frontend servers all at the same time by running ```make start``` in the project root directory. (Run once, if exits with error then wait a few seconds, then run again).
 7. Close the backend and frontend servers by pressing ```Ctrl+C``` in the terminal.
 8. Close the database server with ```make stop-db```.
 
@@ -33,16 +33,14 @@ Reset the database with ```make reset-db``` in the project root directory.<br>
 
 ## Demo bots.
 
-To create 100 demo users send a request localhost:4000/spawn/bots to the backend server.By default the backend server <br>
-will be running on localhost:4000 for the default case running  in the browser <br>
-of machine that is running the server will create 100 demo users.
+By default, the backend server will be running on localhost:4000<br>
+To create 100 demo users, send a request localhost:4000/spawn/bots (backend server) and wait for the request to finish.<br>
 
-the demo users will be named as numbers. Example 1@1.com will be user1 and the password will be 1. starting from user 0@0.com
+The demo users will be named as numbers. Example: 1@1.com will be user1 and the password will be 1. starting from user 0@0.com<br>
 
-The amount of demo users created can be modified from the backend backend/db/const.go file by modifying the <br>
-"DEMO_USER_COUNT" constant. As the demo accounts are created using the same paths as creating a regular user <br>
-with all the matching scores calculated for each connection adding a lot of demo users at once can take <br>
-a while.
+The amount of demo users created can be modified from the backend backend/db/const.go file by modifying the "DEMO_USER_COUNT" constant. <br>
+As the demo accounts are created using the same paths as creating a regular user, <br>
+with all the matching scores calculated for each connection, adding a lot of demo users at once can take a while.
 
 ## API
 
@@ -56,7 +54,7 @@ http://localhost:4000/login/api?email=1@1.com&password=1
 
 This will return a string, this is you Bearer Token.
 
-To access endpoints that require authentication you must include the Bearer token with any requests <br>
+To access endpoints that require authentication you must include the Bearer token with any requests, <br>
 including the Bearer Token in the authorization header.
 
 **For testing purposes it is suggested to use the free postman app more information on https://web.postman.co/home**

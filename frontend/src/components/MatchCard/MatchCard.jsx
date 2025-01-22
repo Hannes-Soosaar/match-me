@@ -1,5 +1,5 @@
 import React from "react";
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import "./MatchCard.css";
 import defaultProfilePic from '../Assets/ProfilePictures/default_profile_pic.png';
 import axios from 'axios';
@@ -13,7 +13,7 @@ const offlineURL = "/images/OfflineIconPNG.png"
 
 const MatchCard = ({ userProfile, onUpdate }) => {
 
-    console.log( "User profile from requests: ", userProfile);
+    console.log("User profile from requests: ", userProfile);
 
     const { match_id,
         match_score,
@@ -21,14 +21,14 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         is_online,
         requester,
         matched_user_id,
-        matched_user_name, 
+        matched_user_name,
         matched_user_picture,
-        matched_user_description, 
-        matched_user_location } = userProfile;  
+        matched_user_description,
+        matched_user_location } = userProfile;
 
 
-        console.log("buddy profile: " + userProfile.matched_user_id)
-        console.log("buddy profile: " + userProfile.requester)
+    console.log("buddy profile: " + userProfile.matched_user_id)
+    console.log("buddy profile: " + userProfile.requester)
 
     const basePictureURL = "http://localhost:4000/uploads/";
     const onlineURL = "/images/OnlineIconPNG.png"
@@ -139,26 +139,26 @@ const MatchCard = ({ userProfile, onUpdate }) => {
             case 'requested':
                 return (
                     <>
-                    {!isRequester && (
+                        {!isRequester && (
+                            <div className="match-card-buttons">
+                                <button onClick={handleConnectMatch} className="">
+                                    Connect
+                                </button>
+                            </div>
+                        )}
+                        {isRequester && (
+                            <>
+                                <div className="match-card-requested-info">
+                                    <h3 className="message" >Your Buddy Request is pending</h3>
+                                </div>
+                            </>
+                        )}
                         <div className="match-card-buttons">
-                            <button onClick={handleConnectMatch} className="">
-                                Connect
-                            </button>
-                        </div>
-                    )}
-                    {isRequester && (
-                        <>
-                        <div className="match-card-requested-info">
-                        <h3 className="message" >Your Buddy Request is pending</h3>
-                        </div>
-                        </>
-                    )}
-                    <div className="match-card-buttons">
                             <button onClick={handleRemoveMatch} className="match-card-button">
                                 Cancel Request
                             </button>
-                    </div>
-                </>
+                        </div>
+                    </>
                 );
             case 'blocked':
                 return (
@@ -174,7 +174,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                         <button onClick={handleRequestMatch} className="match-card-button">
                             Request
                         </button>
-                        
+
                         <button onClick={handleRemoveMatch} className="match-card-button">
                             Dismiss match
                         </button>
@@ -187,32 +187,32 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         <>
             <div className="match-card">
                 <div className="match-card-status">
-                <div className="user-name" >{matched_user_name}</div>  
-                {is_online ? <img src={onlineURL} alt="User online" className="status-icon"></img>
-                    :
-                <img src={offlineURL} alt="User offline" className="status-icon"></img>
-                }
+                    <div className="user-name" ><h3>{matched_user_name}</h3></div>
+                    {is_online ? <img src={onlineURL} alt="User online" className="status-icon"></img>
+                        :
+                        <img src={offlineURL} alt="User offline" className="status-icon"></img>
+                    }
                 </div>
 
                 <div className="match-card-info">
-                    <img className="match-card-image" src={userProfilePic} alt ="User"></img>
+                    <img className="match-card-image" src={userProfilePic} alt="User"></img>
 
-                    <h2>{matched_user_location }</h2>
+                    <h2>{matched_user_location}</h2>
                     <h3>MatchScore: {match_score}</h3>
-                    
+
 
                 </div>
                 {renderButtons()}
                 <h3>Interest:</h3>
                 <div>
-                        {userInterests.map((interest) => (
+                    {userInterests.map((interest) => (
                         <button className="interest-button"
-                        key={interest.id}
+                            key={interest.id}
                         >
-                        {interest}
+                            {interest}
                         </button>
-                        ))} 
-                </div> 
+                    ))}
+                </div>
             </div>
             {/* <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                 <BuddyCard buddyProfile={userProfile} />
