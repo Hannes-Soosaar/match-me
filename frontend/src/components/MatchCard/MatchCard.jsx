@@ -127,7 +127,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
         switch (status) {
             case 'new':
                 return (
-                    <div className="match-card">
+                    <div className="match-card-button-section">
                         <button onClick={handleRequestMatch} className="match-card-button">
                             Request
                         </button>
@@ -139,6 +139,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
             case 'requested':
                 return (
                     <>
+                    <div className="match-card-button-section">
                         {!isRequester && (
                             <div className="match-card-buttons">
                                 <button onClick={handleConnectMatch} className="">
@@ -148,7 +149,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                         )}
                         {isRequester && (
                             <>
-                                <div className="match-card-requested-info">
+                                <div className="match-card-buttons">
                                     <h3 className="message" >Your Buddy Request is pending</h3>
                                 </div>
                             </>
@@ -158,11 +159,12 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                                 Cancel Request
                             </button>
                         </div>
+                    </div>
                     </>
                 );
             case 'blocked':
                 return (
-                    <div className="match-card-buttons">
+                    <div className="match-card-button-section">
                         <p>
                             You are not authorized to contact this user.
                         </p>
@@ -170,7 +172,7 @@ const MatchCard = ({ userProfile, onUpdate }) => {
                 );
             default:
                 return (
-                    <div className="match-card-buttons">
+                    <div className="match-card-button-section">
                         <button onClick={handleRequestMatch} className="match-card-button">
                             Request
                         </button>

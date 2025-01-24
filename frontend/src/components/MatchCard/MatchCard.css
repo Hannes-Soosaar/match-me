@@ -48,7 +48,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
-    padding: 10px;
+    /* padding: 10px; */
 }
 
 .interest-button {
@@ -100,6 +100,13 @@
 .match-card-info {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.match-card-button-section {
+    display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
 }

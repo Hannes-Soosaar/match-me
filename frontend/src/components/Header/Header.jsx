@@ -105,10 +105,9 @@ function Header() {
     };
     return (
         <>
-            <div className='body-side'></div>
+
             <header className="header">
                 <div className="nav-left">
-
                     {isAuthenticated ? (
                         <>
                             <Link to="/profile" className="nav-link">
@@ -170,7 +169,7 @@ function Header() {
                     )}
                 </div>
             </header>
-            <div className='body-side'></div>
+
         </>
     );
 }

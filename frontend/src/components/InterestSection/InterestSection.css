@@ -2,7 +2,6 @@
   font-size: 12px;
   font-weight: bold;
   color: aliceblue;
-
   background-color: #FF6969;
 }
 
@@ -27,7 +26,6 @@ button {
   justify-content: left;
   justify-items: left;
   border-block-color: linear-gradient(#FFF9DE, #FFD3B0);
-  max-height: 90vh;
 }
 
 .save-section {
@@ -87,8 +85,74 @@ button {
   color: hsla(0, 0%, 96%, 0.8);
   background: hsl(0, 100%, 71%, 0.8);
 }
-
 .selected-interest:hover,
 .unselected-interest:hover {
   cursor: pointer;
+}
+
+@media (max-width: 600px) {
+  .category-section {
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+  }
+  .title-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    min-width: 125px;
+    margin: 0;
+    margin: 1vh+1vw;
+    margin-right:0;
+    color: #FF6969;
+    font-size: 5vh + 5vw;
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 768px) {
+  .category-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 10px;
+  }
+
+    .title-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    min-width: 125px;
+    margin: 0;
+    margin: 1vh+1vw;
+    margin-right:0;
+    color: #FF6969;
+    font-size: 5vh + 5vw;
+    font-weight: bold;
+  }
+}
+
+@media (max-width: 1024px) {
+  .category-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+  }
+  .title-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    min-width: 125px;
+    margin: 0;
+    margin: 1vh+1vw;
+    margin-right:0;
+    color: #FF6969;
+    font-size: 5vh + 5vw;
+    font-weight: bold;
+  }
 }

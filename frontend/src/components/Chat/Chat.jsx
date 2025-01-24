@@ -468,11 +468,14 @@ const Chat = () => {
                             )) : null
                         }
                     </div>
+                    <div>
+                    <div className="typing-status-container">
+                                <p1>{typingStatus}</p1>
+                            </div>
+                    </div>
                     <div className="chat-input-container">
-                        <div className="typing-status-container">
-                            <p1>{typingStatus}</p1>
-                        </div>
                         <div className="input-container">
+
                             <input
                                 type="text"
                                 value={newMessage}
@@ -482,9 +485,8 @@ const Chat = () => {
                                 onKeyDown={handleKeyDown}
                                 onKeyPress={handleTyping}
                             />
-                            <button onClick={sendMessage}>Send</button>
+                            <button className="chat-button" onClick={sendMessage}>Send</button>
                         </div>
-                        <div className="typing-status-container"></div>
                     </div>
                 </div>
             </div>
