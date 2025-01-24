@@ -137,8 +137,7 @@ const BuddyCard = ({ buddyProfile, onUpdate }) => {
                         <img className="match-card-image" src={userProfilePic} alt ="User"></img>
                         <h3>Location: {matched_user_location }</h3>
                         <h3>MatchScore: {match_score}</h3>
-                        <p>{matched_user_description}</p>
-                       
+                        <p>{matched_user_description}</p>                   
                     <div >
                         {userInterests.map((interest) => (
                         <button className="interest-button"

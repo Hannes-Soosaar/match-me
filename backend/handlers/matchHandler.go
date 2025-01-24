@@ -297,12 +297,16 @@ func GetConnections(w http.ResponseWriter, r *http.Request) {
 	userID1, err := GetCurrentUserID(r)
 	if err != nil {
 		log.Println("Error getting user Id from token:", err)
+		http.Error(w, "HTTP Status: 404 (not found) ", http.StatusNotFound)
+		return
 	}
 	connectionsUUIDs, err := db.GetConnectionsID(userID1)
 	if err != nil {
 		log.Println("Error getting connections UUID from db:", err)
+		http.Error(w, "HTTP Status: 404 (not found) ", http.StatusNotFound)
+		return
+		
 	}
-
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(connectionsUUIDs)
